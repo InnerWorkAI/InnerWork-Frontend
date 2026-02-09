@@ -1,0 +1,7 @@
+{
+  "name": "InnerWork",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
