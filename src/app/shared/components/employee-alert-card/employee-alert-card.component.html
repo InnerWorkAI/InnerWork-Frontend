@@ -1,0 +1,25 @@
+<ion-card class="critical-card">
+  <ion-card-content>
+    <div class="card-header">
+      <div class="user-info">
+        <ion-avatar>
+          <img [src]="photo()" alt="employee photo" />
+        </ion-avatar>
+        <h2 class="employee-name">{{ name() }}</h2>
+      </div>
+      <div class="severity-badge">{{ severity() }}</div>
+    </div>
+
+    <div class="card-body">
+      <p class="label-text">Last Check-in: <span class="white-text">{{ lastCheckIn() }}</span></p>
+      <p class="label-text">Reason: <span class="white-text">{{ reason() }}</span></p>
+    </div>
+
+    <div class="card-footer">
+      <ion-button fill="clear" (click)="onDetailsClick()" class="btn-details">
+        View Details 
+        <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>
