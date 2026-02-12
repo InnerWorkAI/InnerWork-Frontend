@@ -19,7 +19,6 @@ export class LoginFormComponent  implements OnInit {
   email = signal('');
   password = signal('');
 
-  // Output event con Signals usando el modelo LoginCredentials
   submitForm = output<LoginCredentials>();
 
   isFormInvalid = computed(() => {
