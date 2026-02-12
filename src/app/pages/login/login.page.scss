@@ -1,0 +1,38 @@
+:host {
+  --purple-pastel: #B794F4;
+  --purple-pastel-light: #D6BCFA;
+  --purple-pastel-dark: #9F7AEA;
+}
+
+.custom-input {
+  --background: #fff;
+  --color: #000 !important; 
+  --placeholder-color: #9ca3af;
+  --border-color: #e5e7eb;
+  --border-radius: 12px;
+  --padding-start: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-top: 4px;
+
+  &.ion-focused {
+      --border-color: var(--purple-pastel) !important;
+      border-color: var(--purple-pastel) !important;
+      transition: all 0.3s ease;
+  }
+}
+
+.login-button {
+  --background: var(--purple-pastel);
+  --background-hover: var(--purple-pastel-light);
+  --background-activated: var(--purple-pastel-dark);
+  --background-focused: var(--purple-pastel-light);
+  --border-radius: 12px;
+  --box-shadow: none;
+  --color: white;
+  font-weight: 700;
+}
+
+ion-content {
+  --background: #f9fafb;
+}

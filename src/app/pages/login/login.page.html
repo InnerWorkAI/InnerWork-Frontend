@@ -1,0 +1,50 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="flex items-center justify-center min-h-full bg-gray-50">
+    
+    <div class="bg-white p-8 rounded-[32px] shadow-lg border border-gray-100 w-full max-w-[400px]">
+      
+      <div class="flex flex-col items-center mb-6">
+        <div class="flex items-center gap-2 mb-4">
+          <!--<ion-icon name="heart" class="text-3xl text-[#B794F4]"></ion-icon>  Icono de la aplicación -->
+          <span class="text-2xl font-bold text-[#B794F4]">InnerWork</span>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-800">Welcome to InnerWork</h1>
+        <p class="text-gray-500 mt-1">Log in to your account</p>
+      </div>
+
+      <form (ngSubmit)="login()" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2 ml-1">Email</label>
+          <ion-input 
+            type="email" 
+            placeholder="john.doe@example.com" 
+            class="custom-input"
+            [value]="email()"
+            (ionInput)="email.set($any($event).target.value)">
+          </ion-input>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2 ml-1">Password</label>
+          <ion-input 
+            type="password" 
+            placeholder="**********"
+            class="custom-input"
+            [value]="password()"
+            (ionInput)="password.set($any($event).target.value)">
+          </ion-input>
+        </div>
+
+        <ion-button 
+          type="submit"
+          expand="block" 
+          mode="ios"
+          class="login-button h-12 font-bold normal-case mt-6"
+          [disabled]="isFormInvalid()">
+          Log In
+        </ion-button>
+      </form>
+
+    </div>
+  </div>
+</ion-content>
