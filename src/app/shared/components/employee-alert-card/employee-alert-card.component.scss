@@ -1,0 +1,82 @@
+.critical-card {
+  --background: #fbe4e9; /* El fondo rosado de tu imagen */
+  border: 1px solid #f7c3ce;
+  border-radius: 20px;
+  margin: 16px;
+  box-shadow: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-body {
+  text-align: left; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 10px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: flex-start; 
+  width: 100%;
+  margin-top: 15px;
+  padding-left: 10px; 
+}
+
+.btn-details {
+  --color: #d9536d;
+  font-weight: bold;
+  text-transform: none;
+  margin: 0; 
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  ion-avatar {
+    width: 45px;
+    height: 45px;
+    border: 2px solid white;
+  }
+  
+  .employee-name {
+    color: rgb(0, 0, 0); /* Texto blanco sobre el rosa */
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0;
+  }
+}
+
+.severity-badge {
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid #f0aeb7;
+  color: #d9536d;
+  padding: 4px 14px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.label-text {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 0.95rem;
+  margin: 6px 0;
+}
+
+.white-text {
+  color: rgb(0, 0, 0); 
+}
+
+.btn-details {
+  --color: #d9536d;
+  font-weight: bold;
+  text-transform: none;
+}
