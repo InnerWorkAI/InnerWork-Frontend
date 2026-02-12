@@ -2,36 +2,45 @@ import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonText, IonInput, IonIcon, IonButton, IonToggle } from '@ionic/angular/standalone';
+import { LoginFormComponent } from 'src/app/shared/components/login-form/login-form.component';
+import { AuthService } from 'src/app/core/services/auth-service';
+import { LoginCredentials } from 'src/app/shared/models/User';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonToggle, IonButton, IonIcon, IonInput, IonText, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, LoginFormComponent]
 })
 export class LoginPage implements OnInit {
-
-  email = signal('');
-  password = signal('');
-
+  isLoading = signal(false);
+  errorMessage = signal('');
   
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
   }
 
-  login() {
-    const userData = {
-      email: this.email(),
-      password: this.password()
-    };
-    // Implement login logic here
-    console.log(userData);
+  handleSubmit(credentials: LoginCredentials): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.authService.login(credentials.email, credentials.password).subscribe({
+      next: (user) => {
+        this.isLoading.set(false);
+        console.log('Login exitoso:', user);
+        // Aquí puedes navegar a la página principal
+        // this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.errorMessage.set('Error en el login. Intenta nuevamente.');
+        console.error('Error en login:', error);
+      }
+    });
   }
 
-  isFormInvalid = computed(() => {
-  return !this.email().includes('@') || this.password().length < 6;
-  });
+
 
 }
