@@ -1,0 +1,23 @@
+.innerwork-searchbar {
+  /* Fondo blanco puro y bordes redondeados como los inputs de registro [cite: 33, 40] */
+  --background: #ffffff;
+  --border-radius: 8px;
+  
+  /* El púrpura de tus botones principales  */
+  --icon-color: #8b5cf6; 
+  --clear-button-color: #8b5cf6;
+  
+  /* Placeholder en gris suave [cite: 106, 115] */
+  --placeholder-color: #9ca3af;
+  --placeholder-font-weight: 400;
+
+  /* Sombra sutil para dar relieve sobre el fondo grisáceo */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  padding: 0;
+}
+
+/* Estilo cuando el input está enfocado para que brille en púrpura */
+.innerwork-searchbar.searchbar-has-focus {
+  border: 2px solid #8b5cf6;
+}
