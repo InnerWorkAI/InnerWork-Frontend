@@ -1,28 +1,44 @@
-<div class="flex flex-col items-center justify-center p-4">
+<div class="bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 h-full flex flex-col">
   
-  <div class="relative w-[640px] h-[480px] bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center">
+  <h2 class="text-3xl font-bold text-gray-900 mb-8 tracking-tight">Video Journaling</h2>
+  
+  <div class="flex-grow flex flex-col justify-center">
+    <div class="relative w-full aspect-video bg-[#1a1c26] rounded-3xl overflow-hidden flex items-center justify-center border-4 border-gray-800 shadow-inner">
+      
+      @if (isLoading) {
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-purple-500 mt-4 font-medium animate-pulse">Loading AI...</p>
+        </div>
+      }
+
+      <video #videoElement 
+             [class.hidden]="isLoading"
+             autoplay playsinline muted 
+             class="absolute inset-0 w-full h-full object-cover -scale-x-100">
+      </video>
+
+      @if (!isLoading && faceDetected) {
+        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-black z-20 shadow-lg tracking-widest">
+          ● FACE DETECTED
+        </div>
+      }
+    </div>
     
-    <div *ngIf="isLoading" class="flex flex-col items-center">
-      <div class="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-      <p class="text-blue-400 mt-4 font-medium animate-pulse">Cargando Inteligencia Artificial...</p>
-    </div>
-
-    <video #videoElement 
-           [class.hidden]="isLoading"
-           autoplay playsinline muted 
-           class="absolute inset-0 w-full h-full object-cover -scale-x-100">
-    </video>
-
-    <div *ngIf="!isLoading && faceDetected" 
-         class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold z-20 shadow-lg">
-      ROSTRO DETECTADO
-    </div>
+    <p class="text-gray-400 text-center text-sm leading-relaxed px-6 mt-6">
+      Use the webcam to record a short video journal entry. Reflect on your day...
+    </p>
   </div>
 
-  <button 
-    [disabled]="isLoading"
-    (click)="startWebcam()" 
-    class="mt-6 px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold rounded-xl transition-all shadow-lg active:scale-95">
-    {{ isLoading ? 'Cargando...' : 'Iniciar Cámara' }}
-  </button>
+  <div class="mt-12">
+    <ion-button 
+      (click)="startWebcam()" 
+      [disabled]="isLoading"
+      expand="block"
+      shape="round"
+      color="primary"
+      class="h-16 font-bold text-lg">
+      {{ isLoading ? 'Loading...' : 'Start Camera' }}
+    </ion-button>
+  </div>
 </div>

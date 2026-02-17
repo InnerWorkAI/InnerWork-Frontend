@@ -1,2 +1,13 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+:root {
+  /** Primary - El Púrpura de tu App **/
+  --ion-color-primary: #9333ea;
+  --ion-color-primary-rgb: 147, 51, 234;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #812dd0; /* Para el estado 'activated' */
+  --ion-color-primary-tint: #9e47ed;  /* Para el estado 'hover' */
+
+}
