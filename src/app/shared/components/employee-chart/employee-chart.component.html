@@ -1,0 +1,25 @@
+<div class="chart-wrapper">
+  <div class="chart-header">
+    <div class="title-section">
+      <h3>Your Well-being Trends</h3>
+      <p>Last {{series[0].data?.length}} Days</p>
+    </div>
+    <div class="btn-group">
+      <button (click)="cargarDatos(7)">7 Days</button>
+      <button (click)="cargarDatos(30)">30 Days</button>
+    </div>
+  </div>
+
+  <apx-chart
+    [series]="series"
+    [chart]="chart"
+    [xaxis]="xaxis"
+    [yaxis]="yaxis"
+    [stroke]="stroke"
+    [colors]="colors"
+    [fill]="fill"
+    [dataLabels]="dataLabels"
+    [legend]="legend"
+    [tooltip]="tooltip"
+  ></apx-chart>
+</div>
