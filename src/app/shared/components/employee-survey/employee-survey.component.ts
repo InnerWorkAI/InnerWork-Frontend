@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonIcon, IonButton } from "@ionic/angular/standalone";
 
@@ -8,11 +8,11 @@ import { IonIcon, IonButton } from "@ionic/angular/standalone";
   templateUrl: './employee-survey.component.html',
   styleUrls: ['./employee-survey.component.scss'],
   standalone: true,
-  imports: [IonButton, FormsModule, CommonModule, NgClass, IonIcon]
+  imports: [IonButton, FormsModule, CommonModule, IonIcon]
 })
 export class EmployeeSurveyComponent {
 
-  constructor() { }
+  onSurveyFinished = output<void>();
 
   currentStep = 1;
   totalSteps = 6;
@@ -37,6 +37,7 @@ export class EmployeeSurveyComponent {
 
   submit() {
     console.log('Datos enviados:', this.formData);
+    this.onSurveyFinished.emit();
   }
 
 }

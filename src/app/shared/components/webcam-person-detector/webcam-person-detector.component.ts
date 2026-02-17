@@ -2,12 +2,13 @@ import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
 import * as faceDetection from '@tensorflow-models/face-detection';
 import { CommonModule } from '@angular/common';
+import { IonButton, IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-webcam-person-detector',
   standalone: true,
   templateUrl: './webcam-person-detector.component.html',
-  imports: [CommonModule]
+  imports: [IonIcon, IonButton, CommonModule]
 })
 export class WebcamPersonDetectorComponent {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
@@ -20,7 +21,11 @@ export class WebcamPersonDetectorComponent {
   refreshTime = 250; // Tiempo entre predicciones en ms
 
   constructor() {
-    this.initModel();
+  
+  }
+
+  async ngAfterViewInit() {
+    await this.initModel();
   }
 
   async initModel() {
@@ -32,8 +37,10 @@ export class WebcamPersonDetectorComponent {
       console.log('Backend actual:', tf.getBackend());
       
       const model = faceDetection.SupportedModels.MediaPipeFaceDetector;
-      const detectorConfig: faceDetection.MediaPipeFaceDetectorTfjsModelConfig = {
-        runtime: 'tfjs',
+      const detectorConfig: faceDetection.MediaPipeFaceDetectorMediaPipeModelConfig = {
+        runtime: 'mediapipe',
+        solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection`,
+        modelType: 'short',
         maxFaces: 1,
       };
 
