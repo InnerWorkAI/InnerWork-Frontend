@@ -1,13 +1,19 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="flex items-center justify-center min-h-full bg-gray-50">
+    
+    <div class="bg-white p-8 rounded-[32px] shadow-lg border border-gray-100 w-full max-w-[600px]">
+      
+      <div class="flex flex-col items-center mb-6">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="assets/images/innerwork-logo.png" class="h-9 w-9 object-contain" alt="Logo">
+          <span class="text-2xl font-bold text-[#B794F4]">InnerWork</span>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-800">Welcome to InnerWork</h1>
+        <p class="text-gray-500 mt-1">Create your company</p>
+      </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <app-register-form (submitForm)="handleSubmit($event)"></app-register-form>
+
+    </div>
+  </div>
 </ion-content>
