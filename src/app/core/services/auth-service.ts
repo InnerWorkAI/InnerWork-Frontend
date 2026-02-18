@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { User } from 'src/app/shared/models/User';
+import { RegisterCompanyCredentials, User } from 'src/app/shared/models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,13 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
 
-    login(email: string, password: string): Observable<User> {
+    
+  register(credentials: RegisterCompanyCredentials): Observable<User> {
+    console.log('Registering user:', credentials);
+    return this.login(credentials.email, credentials.password);
+  }
+
+  login(email: string, password: string): Observable<User> {
 
     console.log(email, password);
 

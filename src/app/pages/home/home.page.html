@@ -1,20 +1,94 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="bg-white">
+  <nav class="flex items-center justify-center pt-12 pb-6 px-6 max-w-7xl mx-auto">
+    
+    <div class="flex items-center gap-4"> 
+      
+      <div class="w-20 h-20 p-3.5 rounded-2xl flex items-center justify-center shrink-0">
+        <img src="assets/images/innerwork-logo.png" 
+            alt="InnerWork Logo" 
+            class="max-w-full max-h-full object-contain" />
+      </div>
+      
+      <span class="text-4xl font-black text-[#9333ea] tracking-tighter font-sans uppercase">
+        InnerWork
+      </span>
+    </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  </nav>
 
-  <div id="container">   
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <section class="text-center px-6 max-w-4xl mx-auto">
+    <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-6">
+      Prevent Burnout & Improve Workplace Climate with AI
+    </h1>
+    <p class="text-lg md:text-xl text-gray-500 leading-relaxed mb-10 px-4 md:px-12">
+      InnerWork leverages cutting-edge AI to measure job satisfaction, prevent employee burnout, and provide actionable insights for a thriving organizational culture.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+      <ion-button 
+        (click)="goToLogin()"
+        color="primary" 
+        shape="round" 
+        expand="block"
+        class="h-14 font-bold text-lg w-full sm:w-72">
+        Login
+      </ion-button>
+      
+      <ion-button 
+        (click)="goToRegister()"
+        color="primary" 
+        shape="round" 
+        expand="block"
+        class="h-14 font-bold text-lg w-full sm:w-72">
+        Create a company
+      </ion-button>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-6 py-8 mb-6 flex justify-center">
+    <img src="assets/images/landing-page-brain.jpg" 
+        alt="AI Brain Analysis" 
+        class="max-h-[500px] w-auto rounded-[3rem] shadow-xl animate-float object-cover" />
+    </div>
+  </section>
+
+  <section class="bg-gray-50 px-6">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-black text-center text-gray-900 mb-16">
+        Transforming Workplace Well-being
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+          <div class="text-[#9333ea] text-4xl mb-6">
+            <ion-icon name="videocam-outline"></ion-icon>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Daily AI Video Journaling</h3>
+          <p class="text-gray-500 leading-relaxed">
+            Employees record short video reflections, and our AI analyzes emotional tone and linguistic patterns to identify stressors.
+          </p>
+        </div>
+
+        <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+          <div class="text-[#9333ea] text-4xl mb-6">
+            <ion-icon name="trending-up-outline"></ion-icon>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Real-time Satisfaction Metrics</h3>
+          <p class="text-gray-500 leading-relaxed">
+            Gain instant insights into team sentiment, engagement, and potential burnout risks through aggregated analytics.
+          </p>
+        </div>
+
+        <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300">
+          <div class="text-[#9333ea] text-4xl mb-6">
+            <ion-icon name="bulb-outline"></ion-icon>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Actionable Company Insights</h3>
+          <p class="text-gray-500 leading-relaxed">
+            Receive tailored recommendations for HR and management to foster a healthier, more productive environment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </ion-content>
