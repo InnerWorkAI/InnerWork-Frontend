@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { RegisterCompanyCredentials, User } from 'src/app/shared/models/User';
+import { ApiService } from './api-service';
 
 
 export type UserRole = 'admin' | 'user' | 'guest';
@@ -10,6 +11,7 @@ export type UserRole = 'admin' | 'user' | 'guest';
   providedIn: 'root',
 })
 export class AuthService {
+  private apiService = inject(ApiService);
 
 
   private router = inject(Router);

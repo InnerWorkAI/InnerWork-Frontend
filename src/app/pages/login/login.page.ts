@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonText, IonInput, IonIcon, IonButton, IonToggle } from '@ionic/angular/standalone';
@@ -11,21 +11,19 @@ import { LoginCredentials } from 'src/app/shared/models/User';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, LoginFormComponent]
+  imports: [IonContent, CommonModule, FormsModule, LoginFormComponent]
 })
-export class LoginPage implements OnInit {
+export class LoginPage  {
+
   isLoading = signal(false);
   errorMessage = signal('');
   
-  constructor(private authService: AuthService) { }
-
-  ngOnInit() {
-  }
+  private authService = inject(AuthService);
 
   handleSubmit(credentials: LoginCredentials): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
-
+    
     this.authService.login(credentials.email, credentials.password).subscribe({
       next: (user) => {
         this.isLoading.set(false);
