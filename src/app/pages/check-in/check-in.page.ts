@@ -12,7 +12,7 @@ import { checkmarkCircle } from 'ionicons/icons';
   templateUrl: './check-in.page.html',
   styleUrls: ['./check-in.page.scss'],
   standalone: true,
-  imports: [IonButton, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, WebcamPersonDetectorComponent, EmployeeSurveyComponent]
+  imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, WebcamPersonDetectorComponent, EmployeeSurveyComponent]
 })
 export class CheckInPage implements OnInit {
 

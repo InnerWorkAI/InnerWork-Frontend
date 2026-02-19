@@ -1,9 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { RegisterCompanyCredentials, User } from 'src/app/shared/models/User';
 import { ApiService } from './api-service';
-
+import { HttpParams } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
 
 export type UserRole = 'admin' | 'user' | 'guest';
 
@@ -13,38 +14,61 @@ export type UserRole = 'admin' | 'user' | 'guest';
 export class AuthService {
   private apiService = inject(ApiService);
 
-
   private router = inject(Router);
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
 
-  private userSignal = signal<User | null>(null);
+  public currentUser = computed<User | null>(() => {
+      const token = this.tokenSignal();
+      if (!token) return null;
 
-  public userRole = computed<UserRole>(() => {
-    const user = this.userSignal();
-    if (!user) return 'guest';
+      try {
+        const decoded: any = jwtDecode(token);
+        return {
+          email: decoded.email || '',
+          name: decoded.name || 'Usuario',
+          role: decoded.role,
+          id: decoded.sub
+        };
+      } catch (e) {
+        return null;
+      }
+    });
 
-    return user.role;
-  });
+  private tokenSignal = signal<string | null>(localStorage.getItem('auth_token'));
 
-  register(credentials: RegisterCompanyCredentials): Observable<User> {
-    console.log('Registering user:', credentials);
-    return this.login(credentials.email, credentials.password);
+  public userRole = computed(() => this.currentUser()?.role || 'guest');
+
+
+  registerCompany(credentials: RegisterCompanyCredentials): Observable<User> {
+    return this.apiService.post<any>('companies', credentials).pipe(
+        switchMap(() => this.login(credentials.email, credentials.password))
+    );
   }
 
-  login(email: string, password: string): Observable<User> {
-    const fakeUser: User = { email, name: 'Usuario Demo', role: 'user' };
+  login(email: string, password: string): Observable<any> {
+      const body = new HttpParams()
+        .set('username', email)
+        .set('password', password);
 
-    this.userSignal.set(fakeUser);
-    this.currentUserSubject.next(fakeUser);
-    this.router.navigate(['/check-in']);
-    return of(fakeUser);
-  }
+      return this.apiService.post<any>('auth/login', body).pipe(
+        tap((response) => {
+          localStorage.setItem('auth_token', response.access_token);
+          
+          this.tokenSignal.set(response.access_token);
+          
+          if (this.userRole() === 'admin') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/check-in']);
+          }
+        })
+      );
+    }
 
   logout(): void {
-    this.userSignal.set(null);
-    this.currentUserSubject.next(null);
+    localStorage.removeItem('auth_token');
+    this.tokenSignal.set(null);
+    this.router.navigate(['/login']);
   }
 
-  isAuthenticated = computed(() => this.userSignal() !== null);
+  isAuthenticated = computed(() => this.tokenSignal() !== null);
 }

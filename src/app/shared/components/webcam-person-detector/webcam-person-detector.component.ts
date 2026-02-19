@@ -8,7 +8,7 @@ import { IonButton, IonIcon } from "@ionic/angular/standalone";
   selector: 'app-webcam-person-detector',
   standalone: true,
   templateUrl: './webcam-person-detector.component.html',
-  imports: [IonIcon, IonButton, CommonModule]
+  imports: [IonButton, CommonModule]
 })
 export class WebcamPersonDetectorComponent {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
