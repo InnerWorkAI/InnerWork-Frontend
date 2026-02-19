@@ -1,0 +1,48 @@
+.chart-wrapper {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    .title-section {
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: #1a1a1a;
+        font-weight: 600;
+      }
+      p {
+        margin: 4px 0 0;
+        font-size: 0.85rem;
+        color: #717171;
+      }
+    }
+  }
+}
+
+::ng-deep .apexcharts-bar-area {
+  transition: all 0.3s ease;
+  transform: translateZ(0); /* Forzar aceleración por hardware */
+}
+
+
+::ng-deep {
+  .apexcharts-bar-area {
+    transition: none !important; 
+    shape-rendering: crispEdges;
+  }
+  
+  .apexcharts-canvas {
+    backface-visibility: hidden;
+    perspective: 1000;
+  }
+}
