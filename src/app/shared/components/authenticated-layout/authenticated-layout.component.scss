@@ -1,0 +1,32 @@
+.nav-toolbar {
+  --background: #a855f7; 
+  --border-style: none;
+  --min-height: 70px;
+}
+
+.nav-link {
+  --color: rgba(255, 255, 255, 0.85);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: 0.025em;
+
+  &:hover {
+    --color: #ffffff;
+    --background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.logout-pill {
+  --color: #ffffff;
+  --border-color: rgba(255, 255, 255, 0.4);
+  --border-radius: 9999px;
+  --border-width: 1.5px;
+  
+  &:hover {
+    --background: rgba(255, 255, 255, 0.15);
+    --border-color: #ffffff;
+  }
+}
