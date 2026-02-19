@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -15,7 +15,13 @@ export class ApiService {
   }
 
   post<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body);
+    let headers = new HttpHeaders();
+    
+    if (body instanceof HttpParams) {
+      headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
+    }
+
+    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, body, { headers });
   }
 
   put<T>(endpoint: string, body: any): Observable<T> {

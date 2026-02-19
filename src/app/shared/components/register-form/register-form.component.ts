@@ -52,7 +52,7 @@ export class RegisterFormComponent {
       email: this.email(),
       password: this.password(),
       name: this.name(),
-      address: this.companyLocation()
+      address: this.companyLocation().address
     });
   }
 

@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/services/auth-service';
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonContent, CommonModule, FormsModule, RegisterFormComponent]
+  imports: [IonContent, CommonModule, FormsModule, RegisterFormComponent]
 })
 export class RegisterPage implements OnInit {
 
@@ -26,7 +26,7 @@ export class RegisterPage implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    this.authService.register(credentials).subscribe({
+    this.authService.registerCompany(credentials).subscribe({
       next: (user) => {
         this.isLoading.set(false);
         console.log('Login exitoso:', user);

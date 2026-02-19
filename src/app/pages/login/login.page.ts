@@ -25,16 +25,9 @@ export class LoginPage  {
     this.errorMessage.set('');
     
     this.authService.login(credentials.email, credentials.password).subscribe({
-      next: (user) => {
-        this.isLoading.set(false);
-        console.log('Login exitoso:', user);
-        // Aquí puedes navegar a la página principal
-        // this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set('Error en el login. Intenta nuevamente.');
-        console.error('Error en login:', error);
+      next: (res) => console.log('Éxito:', res),
+      error: (err) => {
+        console.error('DETALLE DEL ERROR 422:', err.error);
       }
     });
   }
