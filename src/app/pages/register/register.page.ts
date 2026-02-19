@@ -15,7 +15,6 @@ import { AuthService } from 'src/app/core/services/auth-service';
 })
 export class RegisterPage implements OnInit {
 
-  isLoading = signal(false);
   errorMessage = signal('');
   
   constructor(private authService: AuthService) { }
@@ -23,20 +22,16 @@ export class RegisterPage implements OnInit {
   }
 
   handleSubmit(credentials: RegisterCompanyCredentials): void {
-    this.isLoading.set(true);
     this.errorMessage.set('');
 
     this.authService.registerCompany(credentials).subscribe({
       next: (user) => {
-        this.isLoading.set(false);
-        console.log('Login exitoso:', user);
-        // Aquí puedes navegar a la página principal
-        // this.router.navigate(['/home']);
+        console.log('Registro exitoso:', user);
       },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set('Error en el login. Intenta nuevamente.');
-        console.error('Error en login:', error);
+      error: (err) => {
+        const message = err.error?.detail || 'Correo o contraseña incorrectos';
+        this.errorMessage.set(message);
+        console.log(message)
       }
     });
   }

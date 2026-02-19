@@ -15,19 +15,19 @@ import { LoginCredentials } from 'src/app/shared/models/User';
 })
 export class LoginPage  {
 
-  isLoading = signal(false);
   errorMessage = signal('');
   
   private authService = inject(AuthService);
 
   handleSubmit(credentials: LoginCredentials): void {
-    this.isLoading.set(true);
     this.errorMessage.set('');
     
     this.authService.login(credentials.email, credentials.password).subscribe({
       next: (res) => console.log('Éxito:', res),
       error: (err) => {
-        console.error('DETALLE DEL ERROR 422:', err.error);
+        const message = err.error?.detail || 'Correo o contraseña incorrectos';
+        this.errorMessage.set(message);
+        console.log(message)
       }
     });
   }

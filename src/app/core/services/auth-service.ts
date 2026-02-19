@@ -55,8 +55,11 @@ export class AuthService {
           
           this.tokenSignal.set(response.access_token);
           
-          console.log(this.userRole+ "ROLe");
-          this.router.navigate(['/check-in']);
+          if (this.userRole() === 'admin') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/check-in']);
+          }
         })
       );
     }
