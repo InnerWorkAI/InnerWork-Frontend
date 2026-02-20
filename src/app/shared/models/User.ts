@@ -13,7 +13,7 @@ export interface RegisterCompanyCredentials {
   email: string;
   password: string;
   name: string;
-  address: Address;
+  address: string;
 }
 
 export interface Address {
