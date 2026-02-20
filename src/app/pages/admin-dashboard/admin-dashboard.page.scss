@@ -1,0 +1,78 @@
+.dashboard-container {
+  padding: 32px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.btn-view-all {
+  background: white !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  
+  border: 1px solid #d1d5db !important; 
+  border-radius: 8px !important;
+  
+  padding: 10px 20px !important; 
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  
+  /* Texto */
+  color: #64748b !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f8fafc !important;
+    border-color: #94a3b8 !important;
+  }
+}
+
+/* Latabla para que se vea con huecos */
+.table-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    background: #f9fafb;
+    padding: 16px 24px;
+    text-align: left;
+    color: #94a3b8;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    padding: 20px 24px;
+    border-top: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+}
+
+.btn-view-profile {
+  background: transparent;
+  border: none;
+  color: #111827;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px;
+
+  &:hover {
+    color: #9334EA;
+    text-decoration: underline;
+  }
+}
