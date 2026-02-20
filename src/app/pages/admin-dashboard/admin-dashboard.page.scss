@@ -1,3 +1,10 @@
+// Variables locales para no repetir
+$bg-color: #f8fafc;
+$border-color: #e5e7eb;
+$text-main: #111827;
+$text-muted: #6b7280;
+$purple-corp: #a855f7;
+
 .dashboard-container {
   padding: 32px 24px;
   max-width: 1200px;
@@ -25,12 +32,12 @@
   transition: all 0.2s;
 
   &:hover {
-    background-color: #f8fafc !important;
+    background-color: $bg-color !important;
     border-color: #94a3b8 !important;
   }
 }
 
-/* Latabla para que se vea con huecos */
+// Latabla para que se vea con huecos
 .table-card {
   background: white;
   border-radius: 16px;
@@ -65,7 +72,7 @@
 .btn-view-profile {
   background: transparent;
   border: none;
-  color: #111827;
+  color: $text-main;
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
@@ -76,13 +83,6 @@
     text-decoration: underline;
   }
 }
-
-// Variables locales para no repetir
-$bg-color: #f8fafc;
-$border-color: #e5e7eb;
-$text-main: #111827;
-$text-muted: #6b7280;
-$purple-corp: #a855f7;
 
 ion-content {
   --background: #{$bg-color};
@@ -235,8 +235,6 @@ table {
   display: inline-block;
   min-width: 45px;
 }
-
-
 
 // Gráfica
 .full-width-chart {

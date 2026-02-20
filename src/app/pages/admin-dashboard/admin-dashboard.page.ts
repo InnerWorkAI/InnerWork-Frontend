@@ -2,17 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component'
+import { ModalController } from '@ionic/angular';
+import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component' 
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, EmployeeChartComponent]
+  imports: [CommonModule, IonicModule, EmployeeChartComponent, AddEditEmployeeModalComponent ]
 })
 export class AdminDashboardPage implements OnInit {
 
-  // Estos son los datos que mañana vendrán de tu API
+  // Estos son los datos que mañana vendrán de la API
   employees = [
     { id: 1, name: 'Alice Johnson', dept: 'Marketing', lastEv: '2024-05-10', score: 85 },
     { id: 2, name: 'Bob Williams', dept: 'Sales', lastEv: '2024-05-12', score: 62 },
@@ -21,16 +23,9 @@ export class AdminDashboardPage implements OnInit {
     { id: 5, name: 'Marcus Thorne', dept: 'Finance', lastEv: '2024-05-15', score: 92 },
     { id: 6, name: 'Sophia Loren', dept: 'Design', lastEv: '2024-05-11', score: 54 }
   ];
-
   user = "Admin";
 
-
-  addEmployee() {
-    console.log('Abriendo formulario para añadir empleado...');
-    // Aquí es donde más adelante abriremos el Modal
-  }
-
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
 
@@ -54,4 +49,15 @@ export class AdminDashboardPage implements OnInit {
     console.log('Navegando al perfil del empleado:', id);
     // Aquí iría tu router.navigate
   }
+
+  async editEmployee(emp?: any) {
+    const modal = await this.modalCtrl.create({
+      component: AddEditEmployeeModalComponent,
+      componentProps: {
+        employee: emp 
+      }
+    });
+    await modal.present();
+  }
+
 }
