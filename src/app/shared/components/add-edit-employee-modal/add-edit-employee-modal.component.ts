@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
-  selector: 'edit-add-edit-employee-modal',
+  selector: 'add-edit-employee-modal',
   templateUrl: './add-edit-employee-modal.component.html',
   styleUrls: ['./add-edit-employee-modal.component.scss'],
   standalone: true,
