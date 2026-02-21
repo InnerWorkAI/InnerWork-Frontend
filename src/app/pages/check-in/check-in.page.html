@@ -12,11 +12,11 @@
       <div class="flex flex-col lg:flex-row gap-8 items-stretch w-full animate-in slide-in-from-bottom-8 duration-700">
         
         <div class="flex-1">
-          <app-webcam-person-detector class="block h-full"></app-webcam-person-detector>
+          <app-webcam-person-detector class="block h-full" (onJournalFinished)="handleJournalFinished($event)"></app-webcam-person-detector>
         </div>
 
         <div class="flex-1">
-          <app-employee-survey class="block h-full" (onSurveyFinished)="hasPendingSurvey = false"></app-employee-survey>
+          <app-employee-survey class="block h-full" (onSurveyFinished)="handleSurveyFinished($event)"></app-employee-survey>
         </div>
 
       </div>
@@ -29,8 +29,7 @@
           </div>
           <h2 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">All caught up!</h2>
           <p class="text-gray-500 text-xl leading-relaxed">
-            You have already completed your daily check-in. <br>
-            Come back tomorrow to reflect on your day.
+            You have already completed your check-in.
           </p>
           <div class="mt-10">
             <ion-button routerLink="/home" expand="block" shape="round" class="h-16 font-bold text-lg">
