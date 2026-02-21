@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthenticatedLayoutComponent } from './shared/components/authenticated-layout/authenticated-layout.component';
+import { userGuard } from './core/guards/user-guard';
 
 export const routes: Routes = [
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
   {
     path: '',
     component: AuthenticatedLayoutComponent,
+    canActivate: [userGuard],
     children: [
       {
         path: 'check-in',
