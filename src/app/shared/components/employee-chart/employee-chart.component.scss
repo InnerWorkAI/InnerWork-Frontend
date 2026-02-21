@@ -1,14 +1,14 @@
 .chart-wrapper {
   background: #ffffff;
-  border-radius: 20px;
-  padding: 24px;
-  margin: 16px;
+  border-radius: 20px;  
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   font-family: sans-serif;
 
   .chart-header {
     display: flex;
     justify-content: space-between;
+    padding: 24px;
+    margin: 16px;
     align-items: flex-start;
     margin-bottom: 20px;
 

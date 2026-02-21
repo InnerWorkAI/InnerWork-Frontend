@@ -1,0 +1,59 @@
+<ion-content>
+  <div class="dashboard-container">
+    
+    <header class="main-header">
+      <div class="header-text">
+        <h1>Welcome, {{ user }}</h1>
+        <p>Monitor employees satisfaction and potential burnout indicators</p>
+      </div>
+      <button class="btn-add" (click)="editEmployee()">
+        + Add Employee
+      </button>
+    </header>
+
+    <section class="table-card">
+      <div class="table-header">
+        <h2>Employee Well-being Overview</h2>
+        <p>Monitor employees satisfaction and potential burnout indicators</p>
+        <button class="btn-secondary">View All</button>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Last Evaluation Date</th>
+              <th>Well-being Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of employees">
+              <td class="emp-name">{{ emp.name }}</td>
+              <td class="emp-dept">{{ emp.dept }}</td>
+              <td class="last-ev">{{ emp.lastEv }}</td>
+              <td>
+                <span class="score-badge" 
+                      [style.background-color]="getScoreBg(emp.score)" 
+                      [style.color]="getScoreColor(emp.score)">
+                  {{ emp.score }}
+                </span>
+              </td>
+              <td>
+                <button class="btn-link" (click)="viewProfile(emp.id)">
+                  View Profile
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="table-card">
+      <app-employee-chart class="full-width-chart"></app-employee-chart>
+    </section>
+
+  </div>
+</ion-content>

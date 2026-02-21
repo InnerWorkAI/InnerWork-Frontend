@@ -28,7 +28,7 @@ export class EmployeeChartComponent {
     animations: { enabled: true }
   };
   
-  public colors = ["#9334EA", "#141414"]; 
+  public colors = ["#a855f7", "#141414"]; 
   public stroke: ApexStroke = { curve: "smooth", width: 2 };
   public xaxis: ApexXAxis = { categories: [] };
   
@@ -54,8 +54,8 @@ export class EmployeeChartComponent {
       stops: [0, 50, 100],
       colorStops: [
         [
-          { offset: 0, color: "#9334EA", opacity: 1 },
-          { offset: 50, color: "#9334EA", opacity: 1 },
+          { offset: 0, color: "#a855f7", opacity: 1 },
+          { offset: 50, color: "#a855f7", opacity: 1 },
           { offset: 51, color: "#aa0b0b", opacity: 1 },
           { offset: 100, color: "#aa0b0b", opacity: 1 }
         ],
@@ -77,7 +77,7 @@ export class EmployeeChartComponent {
       const stressVal = series[1][dataPointIndex];
 
       // Los puntos (dots) se quedan FIJOS con sus colores originales
-      const hDotColor = '#9334EA'; 
+      const hDotColor = '#a855f7'; 
       const sDotColor = '#141414';
 
       // Solo los números cambian a rojo #aa0b0b si hay alerta
