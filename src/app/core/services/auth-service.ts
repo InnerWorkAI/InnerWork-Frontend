@@ -56,7 +56,7 @@ export class AuthService {
           this.tokenSignal.set(response.access_token);
           
           if (this.userRole() === 'admin') {
-            this.router.navigate(['/admin']);
+            this.router.navigate(['/admin/dashboard']);
           } else {
             this.router.navigate(['/check-in']);
           }
