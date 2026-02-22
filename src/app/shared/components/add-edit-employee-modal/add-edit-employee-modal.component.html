@@ -1,33 +1,81 @@
 <div class="modal-wrapper">
   <header class="modal-header">
-    <h2>{{ isEditMode ? 'Edit Employee' : 'Add New Employee' }}</h2>
+    <h2 [style.color]="'#a855f7'">Add New Employee'</h2>
     <button (click)="cancel()" class="btn-close">×</button>
   </header>
 
-  <div class="modal-content">
-    <div class="input-group">
-      <label>Full Name</label>
-      <input type="text" [(ngModel)]="formData.name" placeholder="Alice Johnson">
+  <ion-content>
+    <div class="form ion-padding">
+      <div class="input-group">
+        <label>First Name</label>
+        <input type="text" [(ngModel)]="formData.first_name"
+        placeholder="Name"
+        class="custom-input">
+        
+      </div>
+      <div class="input-group">
+        <label>Last Name</label>
+        <input type="text" [(ngModel)]="formData.last_name" 
+        placeholder="Family Name" 
+        class="custom-input">
+      </div>
+      <div class="input-group">
+        <label>Monthly Salary (€)</label>
+        <input type="number" [(ngModel)]="formData.monthly_salary">
+      </div>
+      <div class="input-group">
+        <label>Department</label>
+        <select [(ngModel)]="formData.department">
+          <option [ngValue]="0">Research & Development</option>
+          <option [ngValue]="1">Human Resources</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Gender</label>
+        <select [(ngModel)]="formData.gender">
+          <option [ngValue]="0">Female</option>
+          <option [ngValue]="1">Male</option>
+        </select>
+      </div>
+      <div class="input-group full-width">
+        <label>Home Address</label>
+        <input type="text" [(ngModel)]="formData.home_address"
+        placeholder="Street, City, Country"
+        class="custom-input">
+      </div>
+      <div class="input-group full-width">
+        <label>Education</label>
+        <select [(ngModel)]="formData.education">
+          <option [ngValue]="0">Below College</option>
+          <option [ngValue]="1">College</option>
+          <option [ngValue]="2">Bachelor</option>
+          <option [ngValue]="3">Master</option>
+          <option [ngValue]="4">Doctor</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="formData.email"
+        placeholder="joe.doe@example.com"
+        class="custom-input">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" [(ngModel)]="formData.password"
+        placeholder="******"
+        class="custom-input">
+      </div>
     </div>
+  </ion-content>
 
-    <div class="input-group">
-      <label>Full Name</label>
-      <input type="text" [(ngModel)]="formData.name" placeholder="Alice Johnson">
-    </div>
-
-    <div class="input-group">
-      <label>Department</label>
-      <select [(ngModel)]="formData.dept">
-        <option value="Marketing">Marketing</option>
-        <option value="Sales">Sales</option>
-        <option value="Engineering">Engineering</option>
-        <option value="Finance">Finance</option>
-        <option value="Hola">Hola</option>
-      </select>
-    </div>
-
-    <button class="btn-save" (click)="save()">
+  <footer class="modal-footer">
+    <ion-button 
+      (click)="save()"
+      [disabled]="isFormInvalid()"
+      expand="block" 
+      mode="ios" 
+      class="btn-save-ionic">
       {{ isEditMode ? 'Update Changes' : 'Register Employee' }}
-    </button>
-  </div>
+    </ion-button>
+  </footer>
 </div>
