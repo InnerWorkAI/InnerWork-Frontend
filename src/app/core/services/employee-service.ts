@@ -18,7 +18,6 @@ export class EmployeeService {
     const token = localStorage.getItem('token');
     return this.api.get<Employee[]>(this.endpoint);
   }
-  
 
   // POST: Para mandar la chicha del modal (Crear)
   createEmployee(employee: Employee): Observable<Employee> {

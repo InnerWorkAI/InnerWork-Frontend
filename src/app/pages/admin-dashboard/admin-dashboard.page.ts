@@ -65,7 +65,6 @@ export class AdminDashboardPage implements OnInit {
     });
   }
 
-  // --- Tus funciones de estilo que ya tenías ---
   getScoreBg(score: number): string {
     if (score >= 80) return '#f0fdf4'; 
     if (score < 50) return '#fee2e2';  

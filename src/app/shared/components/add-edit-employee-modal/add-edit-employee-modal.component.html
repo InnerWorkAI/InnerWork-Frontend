@@ -1,6 +1,6 @@
 <div class="modal-wrapper">
   <header class="modal-header">
-    <h2 [style.color]="'#a855f7'">Add New Employee'</h2>
+    <h2 [style.color]="'#a855f7'">Add New Employee</h2>
     <button (click)="cancel()" class="btn-close">×</button>
   </header>
 
@@ -8,64 +8,378 @@
     <div class="form ion-padding">
       <div class="input-group">
         <label>First Name</label>
-        <input type="text" [(ngModel)]="formData.first_name"
+        <input type="text" 
+        [(ngModel)]="formData.first_name"
+        #firstName="ngModel"
         placeholder="Name"
+        required
         class="custom-input">
+        @if (firstName.invalid && firstName.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            First name is required.
+          </div>
+        }
         
       </div>
+
       <div class="input-group">
         <label>Last Name</label>
-        <input type="text" [(ngModel)]="formData.last_name" 
+        <input type="text" 
+        [(ngModel)]="formData.last_name" 
+        #lastName="ngModel"
         placeholder="Family Name" 
+        required
+        class="custom-input">
+        @if (lastName.invalid && lastName.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Last name is required.
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" 
+        [(ngModel)]="formData.email"
+        #email="ngModel"
+        required
+        placeholder="joe.doe@example.com"
+        class="custom-input">
+        @if (email.invalid && email.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Email is required and must be valid.
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Phone</label>
+        <input type="text" 
+        [(ngModel)]="formData.phone" 
+        placeholder="Phone Number" 
         class="custom-input">
       </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" 
+        [(ngModel)]="formData.password"
+        #password="ngModel"
+        required
+        placeholder="******"
+        class="custom-input">
+        @if (password.invalid && password.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Password must be at least 6 characters.
+          </div>
+        }
+      </div>
+
       <div class="input-group">
         <label>Monthly Salary (€)</label>
-        <input type="number" [(ngModel)]="formData.monthly_salary">
+        <input type="number" 
+        [(ngModel)]="formData.monthly_salary"
+        #salary="ngModel"
+        required
+        min="1"
+        placeholder="0"
+        class="custom-input">
+        @if (salary.invalid && salary.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Salary must be greater than 0.
+          </div>
+        }
       </div>
+
+      <div class="input-group">
+        <label>Percent Salary Hike (%)</label>
+        <input type="number" 
+        [(ngModel)]="formData.percent_salary_hike"
+        #salaryHike="ngModel"
+        required
+        min="0"
+        max="100"
+        placeholder="0"
+        class="custom-input">
+        @if (salaryHike.invalid && salaryHike.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Salary hike must be between 0 and 100.
+          </div>
+        }
+      </div>
+
       <div class="input-group">
         <label>Department</label>
-        <select [(ngModel)]="formData.department">
-          <option [ngValue]="0">Research & Development</option>
-          <option [ngValue]="1">Human Resources</option>
+        <select [(ngModel)]="formData.department"
+        name="department" 
+        #departmentRef="ngModel"
+        required
+        class="custom-input"
+        [class.is-placeholder]="formData.department === null">
+          <option [ngValue]="null" disabled selected hidden>Select Department</option>
+          <option [ngValue]="0">Sales</option>
+          <option [ngValue]="1">Research & Development</option>
+          <!-- <option [ngValue]="2">Human Resources</option> -->
         </select>
+        @if (departmentRef.invalid && departmentRef.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Select a department.
+          </div>
+        }
       </div>
+
       <div class="input-group">
         <label>Gender</label>
-        <select [(ngModel)]="formData.gender">
+        <select [(ngModel)]="formData.gender"
+        name="gender" 
+        #genderRef="ngModel"
+        required
+        class="custom-input"
+        [class.is-placeholder]="formData.gender === null">
+          <option [ngValue]="null" disabled selected hidden>Select Gender</option>
           <option [ngValue]="0">Female</option>
           <option [ngValue]="1">Male</option>
         </select>
+        @if (genderRef.invalid && genderRef.touched) {
+          <div class="text-sm text-red-600 mt-1">Select a gender.</div>
+        }
       </div>
-      <div class="input-group full-width">
+
+      <div class="input-group">
+        <label>Birth Date</label>
+        <input 
+          type="text" 
+          [(ngModel)]="formData.birth_date"
+          #dateRef="ngModel"
+          name="birth_date"
+          required
+          placeholder="YYYY-MM-DD"
+          class="custom-input">
+        @if (dateRef.touched && (dateRef.invalid || !isValidDate(formData.birth_date))) {
+          <div class="text-sm text-red-600 mt-1 ml-1" style="color: #aa0b0b;">
+            Please enter a valid date (YYYY-MM-DD).
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
         <label>Home Address</label>
-        <input type="text" [(ngModel)]="formData.home_address"
+        <input type="text" 
+        [(ngModel)]="formData.home_address"
+        #homeAddress="ngModel"
+        required
         placeholder="Street, City, Country"
         class="custom-input">
+        @if (homeAddress.invalid && homeAddress.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Home address is required.
+          </div>
+        }
       </div>
-      <div class="input-group full-width">
+
+      <div class="input-group">
         <label>Education</label>
-        <select [(ngModel)]="formData.education">
+        <select [(ngModel)]="formData.education"
+        name="education" 
+        #educationRef="ngModel"
+        required
+        class="custom-input"
+        [class.is-placeholder]="formData.education === null">
+          <option [ngValue]="null" disabled selected hidden>Select Education Level</option>
           <option [ngValue]="0">Below College</option>
           <option [ngValue]="1">College</option>
           <option [ngValue]="2">Bachelor</option>
           <option [ngValue]="3">Master</option>
           <option [ngValue]="4">Doctor</option>
         </select>
+        @if (educationRef.invalid && educationRef.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Select an education level.
+          </div>
+        }
       </div>
+
       <div class="input-group">
-        <label>Email</label>
-        <input type="email" [(ngModel)]="formData.email"
-        placeholder="joe.doe@example.com"
-        class="custom-input">
+        <label>Education Field</label>
+        <select [(ngModel)]="formData.education_field"
+        name="education_field" 
+        #educationFieldRef="ngModel"
+        required
+        class="custom-input"
+        [class.is-placeholder]="formData.education_field === null">
+          <option [ngValue]="null" disabled hidden>Select Education Field</option>
+          <option [ngValue]="0">Life Sciences</option>
+          <option [ngValue]="1">Medical</option>
+          <option [ngValue]="2">Marketing</option>
+          <option [ngValue]="3">Technical Degree</option>
+          <option [ngValue]="4">Human Resources</option>
+          <!-- <option [ngValue]="5">Other</option>> -->
+        </select>
+        @if (educationFieldRef.invalid && educationFieldRef.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Select an education field.
+          </div>
+        }
       </div>
+
       <div class="input-group">
-        <label>Password</label>
-        <input type="password" [(ngModel)]="formData.password"
-        placeholder="******"
-        class="custom-input">
+        <label>Job Role</label>
+        <select [(ngModel)]="formData.job_role"
+        name="job_role" 
+        #jobRoleRef="ngModel"
+        required
+        class="custom-input"
+        [class.is-placeholder]="formData.job_role === null">
+          <option [ngValue]="null" disabled hidden>Select Job Role</option>
+          <option [ngValue]="0">Sales Executive</option>
+          <option [ngValue]="1">Research Scientist</option>
+          <option [ngValue]="2">Laboratory Technician</option>
+          <option [ngValue]="3">Manufacturing Director</option>
+          <option [ngValue]="4">Healthcare Representative</option>
+          <option [ngValue]="5">Manager</option>
+          <option [ngValue]="6">Sales Representative</option>
+          <option [ngValue]="7">Research Director</option>
+          <!-- <option [ngValue]="8">Human Resources</option> -->
+        </select>
+        @if (jobRoleRef.invalid && jobRoleRef.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Select a job role.
+          </div>
+        }
       </div>
-    </div>
+
+      <div class="input-group">
+        <label>Marital Status</label>
+        <select [(ngModel)]="formData.marital_status"
+        name="marital_status" 
+        #maritalStatusRef="ngModel"
+        required
+        class="custom-input"
+        [class.is-placeholder]="formData.marital_status === null">
+          <option [ngValue]="null" disabled selected hidden>Select Marital Status</option>
+          <option [ngValue]="0">Single</option>
+          <option [ngValue]="1">Married</option>
+          <option [ngValue]="2">Divorced</option>
+        </select>
+        @if (maritalStatusRef.invalid && maritalStatusRef.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Select marital status.
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+      <label class="range-label">
+        Job Level
+      </label>
+      <div class="flex justify-between items-center max-w-sm mx-auto">
+        @for (level of [1, 2, 3, 4, 5]; track level) {
+          <label class="relative cursor-pointer group">
+            <input type="radio" 
+                  name="job_level" 
+                  [value]="level" 
+                  [(ngModel)]="formData.job_level"
+                  class="peer sr-only">
+            
+            <div class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-200 bg-white transition-all
+                        peer-checked:border-[#a855f7] peer-checked:bg-[#a855f7]
+                        group-hover:border-gray-300">
+              
+              <span class="text-sm font-bold transition-colors"
+                    [class.text-white]="formData.job_level === level"
+                    [class.text-gray-500]="formData.job_level !== level">
+                {{ level }}
+              </span>
+            </div>
+          </label>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Number of Companies Worked</label>
+        <input type="number" 
+        [(ngModel)]="formData.number_of_companies_worked"
+        #companiesWorked="ngModel"
+        required
+        min="1"
+        placeholder="0"
+        class="custom-input">
+        @if (companiesWorked.invalid && companiesWorked.touched) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Number of companies must be greater than 0.
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Contract Start Date</label>
+        <input 
+          type="text" 
+          [(ngModel)]="formData.contract_start_date"
+          #contractDateRef="ngModel"
+          name="contract_start_date"
+          required
+          placeholder="YYYY-MM-DD"
+          class="custom-input">
+        @if (contractDateRef.touched && !isValidDate(formData.contract_start_date) && formData.contract_start_date !== '') {
+          <div class="text-sm text-red-600 mt-1 ml-1" style="color: #aa0b0b;">
+            Please enter a valid date (YYYY-MM-DD).
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Current Role Start Date</label>
+        <input 
+          type="text" 
+          [(ngModel)]="formData.current_role_start_date"
+          #currentRoleDateRef="ngModel"
+          name="current_role_start_date"
+          required
+          placeholder="YYYY-MM-DD"
+          class="custom-input">
+        @if (currentRoleDateRef.touched && !isValidDate(formData.current_role_start_date) && formData.current_role_start_date !== '') {
+          <div class="text-sm text-red-600 mt-1 ml-1" style="color: #aa0b0b;">
+            Please enter a valid date (YYYY-MM-DD).
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Last Promotion Date</label>
+        <input 
+          type="text" 
+          [(ngModel)]="formData.last_promotion_date"
+          #lastPromotionDateRef="ngModel"
+          name="last_promotion_date"
+          required
+          placeholder="YYYY-MM-DD"
+          class="custom-input">
+        @if (lastPromotionDateRef.touched && !isValidDate(formData.last_promotion_date) && formData.last_promotion_date !== '') {
+          <div class="text-sm text-red-600 mt-1 ml-1" style="color: #aa0b0b;">
+            Please enter a valid date (YYYY-MM-DD).
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Last Manager Date</label>
+        <input 
+          type="text" 
+          [(ngModel)]="formData.last_manager_date"
+          #lastManagerDateRef="ngModel"
+          name="last_manager_date"
+          required
+          placeholder="YYYY-MM-DD"
+          class="custom-input">
+        @if (lastManagerDateRef.touched && !isValidDate(formData.last_manager_date) && formData.last_manager_date !== '') {
+          <div class="text-sm text-red-600 mt-1 ml-1" style="color: #aa0b0b;">
+            Please enter a valid date (YYYY-MM-DD).
+          </div>
+        }
+      </div>
+  </div>
+</div>
   </ion-content>
 
   <footer class="modal-footer">

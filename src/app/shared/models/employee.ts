@@ -17,6 +17,10 @@ export interface Employee {
     number_of_companies_worked: number;
     monthly_salary: number;
     percent_salary_hike: number;
+    contract_start_date: string;
+    current_role_start_date: string;
+    last_promotion_date: string;
+    last_manager_date: string;
     company_id: number;
     user_id?: number;
 }
