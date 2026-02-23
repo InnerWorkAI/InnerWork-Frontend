@@ -14,11 +14,9 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
   imports: [CommonModule, IonicModule, EmployeeChartComponent] // El modal no hace falta en imports si se usa en ModalController
 })
 export class AdminDashboardPage implements OnInit {
-  // Inyectamos los servicios de forma moderna
   private modalCtrl = inject(ModalController);
   private employeeService = inject(EmployeeService);
 
-  // Esta lista ahora se llenará con la "chicha" del back
   employees: Employee[] = [];
   user = "Admin";
 
@@ -41,7 +39,8 @@ export class AdminDashboardPage implements OnInit {
   async editEmployee() {
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
-      mode: 'ios'
+      mode: 'ios',
+      backdropDismiss: false,
     });
 
     await modal.present();

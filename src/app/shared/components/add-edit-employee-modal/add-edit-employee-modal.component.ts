@@ -2,8 +2,9 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { Employee } from '../../models/employee';
+import { Employee, Gender, Department, JobLevel, JobRole, MaritalStatus, EducationLevel, EducationField } from '../../models/employee';
 import { AuthService } from '../../../core/services/auth-service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-edit-employee-modal',
@@ -17,6 +18,7 @@ export class AddEditEmployeeModalComponent implements OnInit {
 
   private modalCtrl = inject(ModalController);
   private authService = inject(AuthService);
+  private toastCtrl = inject(ToastController);
   public isEditMode = false;
   
   public formData: Employee = {
@@ -62,7 +64,11 @@ export class AddEditEmployeeModalComponent implements OnInit {
       this.formData.job_level === null ||
       this.formData.job_role === null ||
       this.formData.gender === null ||
-      this.formData.monthly_salary <= 0
+      this.formData.monthly_salary <= 0 ||
+      this.isValidDate(this.formData.current_role_start_date) === false ||
+      this.isValidDate(this.formData.contract_start_date) === false ||
+      this.isValidDate(this.formData.last_promotion_date) === false ||
+      this.isValidDate(this.formData.last_manager_date) === false
     );
   }
 
@@ -78,25 +84,32 @@ export class AddEditEmployeeModalComponent implements OnInit {
   }
 
   save() {
-    if (this.isFormInvalid()) return;
+    if (this.isFormInvalid()) {
+      this.presentToast('Please fill all required fields correctly', 'danger');
+      return;
+    } 
 
     const user = this.authService.currentUser();
 
     // Si no hay usuario o no hay ID, lanzamos un error y paramos todo
     if (!user || !user.id) {
-      console.error('ERROR CRÍTICO: No se puede registrar sin un ID de empresa válido.');
-      alert('Sesión caducada o inválida. Por favor, vuelve a loguearte.');
-      return; // Salimos de la función, el modal no se cierra
+      this.presentToast('Session expired. Please login again.', 'danger');
+      return;
     }
 
     const dataToSave = { 
       ...this.formData,
-      job_level: this.formData.job_level - 1, // Ajustamos el nivel para el backend
-      company_id: user.id, // ID real del token
-      
+      gender: Number(this.formData.gender),
+      marital_status: Number(this.formData.marital_status),
+      department: Number(this.formData.department),
+      education: Number(this.formData.education),
+      education_field: Number(this.formData.education_field),
+      job_level: Number(this.formData.job_level),
+      job_role: Number(this.formData.job_role),
+      company_id: user.id, 
     };
 
-    console.log('Paquete final enviado al dismiss:', dataToSave);
+    this.presentToast('Employee data prepared successfully', 'success');
     return this.modalCtrl.dismiss(dataToSave, 'confirm');
   }
 
@@ -110,5 +123,16 @@ export class AddEditEmployeeModalComponent implements OnInit {
     
     if (!dNum && dNum !== 0) return false; 
     return d.toISOString().slice(0, 10) === dateString;
+  }
+
+  // Creamos el toast para mostrar mensajes al usuario
+  async presentToast(message: string, color: 'success' | 'danger') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 2000,
+      color: color,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }
