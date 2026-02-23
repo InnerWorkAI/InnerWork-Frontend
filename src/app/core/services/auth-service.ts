@@ -5,6 +5,7 @@ import { RegisterCompanyCredentials, User } from 'src/app/shared/models/User';
 import { ApiService } from './api-service';
 import { HttpParams } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from 'src/environments/environment';
 
 export type UserRole = 'admin' | 'user' | 'guest';
 
@@ -71,4 +72,11 @@ export class AuthService {
   }
 
   isAuthenticated = computed(() => this.tokenSignal() !== null);
+
+  completeSetup(token: string, password: string) {
+  return this.apiService.post(`users/reset-password`, { 
+    'token': token, 
+    'new_password': password 
+  });
+}
 }
