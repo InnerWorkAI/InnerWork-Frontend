@@ -36,6 +36,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/check-in/check-in.page').then(m => m.CheckInPage),
       },
       {
+        path: 'dashboard',
+        //canActivate: [userGuard],
+        loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage),
+      },
+      {
         path: 'admin',
         canActivate: [adminGuard],
         children: [
@@ -47,4 +52,5 @@ export const routes: Routes = [
       }
     ]
   }
+
 ];
