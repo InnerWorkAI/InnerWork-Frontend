@@ -11,11 +11,11 @@ import { IonIcon, IonButton } from "@ionic/angular/standalone";
   imports: [IonButton, FormsModule, CommonModule, IonIcon]
 })
 export class EmployeeSurveyComponent {
-
-  onSurveyFinished = output<void>();
+  onSurveyFinished = output<any>();
 
   currentStep = 1;
   totalSteps = 6;
+  isSurveySubmitted = false;
 
   formData = {
     environment: 3,
@@ -23,7 +23,7 @@ export class EmployeeSurveyComponent {
     satisfaction: 3,
     performance: 3,
     balance: 3,
-    overtime: 'No',
+    overtime: false,
     travel: 'No Travel'
   };
 
@@ -36,8 +36,11 @@ export class EmployeeSurveyComponent {
   }
 
   submit() {
-    console.log('Datos enviados:', this.formData);
-    this.onSurveyFinished.emit();
-  }
+    console.log('Datos finales del cuestionario:', this.formData);
+    
+    this.isSurveySubmitted = true;
 
+
+    this.onSurveyFinished.emit(this.formData);
+  }
 }

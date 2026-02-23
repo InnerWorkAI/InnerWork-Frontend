@@ -1,7 +1,9 @@
 <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-10 h-full flex flex-col font-sans">
   
   <h2 class="text-3xl font-bold text-gray-900 mb-8 tracking-tight">Check-in Questionnaire</h2>
+  @if (!isSurveySubmitted) {
 
+  
   <div class="mb-12">
     <div class="flex justify-between items-center mb-4">
       <span class="text-xs font-bold uppercase tracking-widest text-purple-600">Step {{currentStep}} of {{totalSteps}}</span>
@@ -179,7 +181,7 @@
       BACK
     </ion-button>
   }
-
+  
   <ion-button (click)="currentStep === totalSteps ? submit() : nextStep()"
               fill="solid" 
               shape="round"
@@ -187,5 +189,20 @@
               class="flex-1">
     {{ currentStep === totalSteps ? 'SUBMIT CHECK-IN' : 'CONTINUE' }}
   </ion-button>
-
+  
 </div>
+  } @else {
+    <div class="flex-grow flex flex-col items-center justify-center animate-in zoom-in-95 duration-500">
+      <div class="bg-green-50 rounded-[3rem] p-12 w-full text-center border border-green-100 shadow-sm">
+        <div class="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+          <ion-icon name="checkmark-circle" style="font-size: 64px;"></ion-icon>
+        </div>
+        <h2 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">Formulary Saved!</h2>
+        
+                <p class="text-gray-500 text-xl leading-relaxed max-w-md mx-auto">
+                  Your formulary has been saved successfully. Great job on maintaining a healthy work-life balance today!
+                </p>
+              </div>
+            </div>
+          }
+        
