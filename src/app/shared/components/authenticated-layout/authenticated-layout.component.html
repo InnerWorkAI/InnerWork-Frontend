@@ -1,34 +1,70 @@
-<ion-header class="ion-no-border shadow-md">
-  <ion-toolbar class="nav-toolbar px-4">
-    <div class="flex items-center justify-between w-full max-w-7xl mx-auto h-16">
-      
-      <div class="flex items-center cursor-pointer group">
-        <div class="p-2 bg-white rounded-lg shadow-sm group-hover:shadow-md transition-all">
-          <img src="assets/images/innerwork-logo.png" class="h-7 w-7 object-contain" alt="Logo">
+<ion-menu contentId="main-content" type="overlay" class="mobile-only-menu" [disabled]="isDesktop">
+  <div class="p-6 pt-12 bg-[#a855f7] shadow-lg">
+    <h2 class="text-white font-black text-lg uppercase tracking-tighter">Menu</h2>
+  </div>
+  <ion-content class="bg-slate-50">
+    <ion-list lines="none" class="p-4 bg-transparent">
+      @if (authService.userRole() === 'admin') {
+        <ion-item button routerLink="/admin/dashboard" class="menu-item" (click)="closeMenu()">
+          <ion-label>Dashboard</ion-label>
+        </ion-item>
+        <ion-item button routerLink="/admin/employees" class="menu-item" (click)="closeMenu()">
+          <ion-label>Employees</ion-label>
+        </ion-item>
+      } @else {
+        <ion-item button routerLink="/dashboard" class="menu-item" (click)="closeMenu()">
+          <ion-label>My Dashboard</ion-label>
+        </ion-item>
+        <ion-item button routerLink="/check-in" class="menu-item" (click)="closeMenu()">
+          <ion-label>Check-In</ion-label>
+        </ion-item>
+      }
+      <ion-button (click)="authService.logout()" expand="block" fill="clear" color="danger" class="mt-4 font-bold">
+        Logout
+      </ion-button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="main-content">
+  <ion-header class="ion-no-border">
+    <ion-toolbar class="nav-toolbar px-4 lg:px-6">
+      <div class="flex items-center justify-between w-full h-full">
+        
+        <div class="flex items-center">
+          <ion-buttons slot="start" class="md:hidden mr-2">
+            <ion-menu-button style="--color: white;"></ion-menu-button>
+          </ion-buttons>
+
+          <div class="flex items-center cursor-pointer">
+            <div class="p-1 bg-white rounded-md">
+              <img src="assets/images/innerwork-logo.png" class="h-5 w-5 object-contain" alt="Logo">
+            </div>
+            <span class="ml-2.5 text-lg font-black text-white uppercase tracking-tighter">InnerWork</span>
+          </div>
         </div>
-        <span class="ml-3 text-xl font-bold tracking-tight text-white uppercase">InnerWork</span>
+
+        <nav class="hidden md:flex items-center ml-10 space-x-1 flex-1">
+          @if (authService.userRole() === 'admin') {
+            <ion-button fill="clear" routerLink="/admin/dashboard" class="nav-link">Dashboard</ion-button>
+            <ion-button fill="clear" routerLink="/admin/employees" class="nav-link">Employees</ion-button>
+          } @else {
+            <ion-button fill="clear" routerLink="/dashboard" class="nav-link">My Dashboard</ion-button>
+            <ion-button fill="clear" routerLink="/check-in" class="nav-link">Check-In</ion-button>
+          }
+        </nav>
+
+        <div class="hidden md:flex items-center">
+          <ion-button (click)="authService.logout()" fill="outline" class="logout-pill font-bold text-[10px]">
+            Logout
+          </ion-button>
+        </div>
+
       </div>
+    </ion-toolbar>
+  </ion-header>
 
-      <nav class="hidden md:flex items-center ml-10 space-x-2 flex-1">
-        @if (authService.userRole() === 'admin') {
-          <ion-button fill="clear" routerLink="/admin/dashboard" class="nav-link">Dashboard</ion-button>
-          <ion-button fill="clear" routerLink="/admin/employees" class="nav-link">Employees</ion-button>
-        } @else {
-          <ion-button fill="clear" routerLink="/my-dashboard" class="nav-link">My Dashboard</ion-button>
-          <ion-button fill="clear" routerLink="/check-in" class="nav-link">Check-In</ion-button>
-        }
-      </nav>
-
-      <div class="flex items-center">
-        <ion-button (click)="authService.logout()" fill="outline" class="logout-pill font-bold text-xs">
-          Logout
-        </ion-button>
-      </div>
-
-    </div>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-router-outlet></ion-router-outlet> 
-</ion-content>
+  <ion-content>
+    <ion-router-outlet></ion-router-outlet> 
+  </ion-content>
+</div>

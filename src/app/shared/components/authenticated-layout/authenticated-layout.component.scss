@@ -1,7 +1,19 @@
 .nav-toolbar {
   --background: #a855f7; 
   --border-style: none;
-  --min-height: 70px;
+  
+  /* REDUCIMOS EL GROSOR DE LA BARRA */
+  --min-height: 56px; /* Altura estándar de una navbar moderna */
+  height: 56px;        /* Refuerzo para asegurar el tamaño */
+
+  position: relative;
+  z-index: 999; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+ion-header {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  overflow: visible !important;
 }
 
 .nav-link {

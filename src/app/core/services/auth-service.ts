@@ -37,6 +37,7 @@ export class AuthService {
   private tokenSignal = signal<string | null>(localStorage.getItem('auth_token'));
 
   public userRole = computed(() => this.currentUser()?.role || 'guest');
+  public userName = computed(() => this.currentUser()?.name || 'Usuario');
 
 
   registerCompany(credentials: RegisterCompanyCredentials): Observable<User> {
