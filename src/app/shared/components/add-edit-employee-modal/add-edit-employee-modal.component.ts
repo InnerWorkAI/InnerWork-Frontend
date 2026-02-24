@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
-import { Employee, Gender, Department, JobLevel, JobRole, MaritalStatus, EducationLevel, EducationField } from '../../models/employee';
+import { IonicModule, ModalController, ToastController } from '@ionic/angular';
+import { Employee } from '../../models/employee';
 import { AuthService } from '../../../core/services/auth-service';
-import { ToastController } from '@ionic/angular';
 import { MapBrowserComponent } from '../map-browser/map-browser.component';
 
 @Component({
@@ -15,132 +14,156 @@ import { MapBrowserComponent } from '../map-browser/map-browser.component';
   imports: [CommonModule, FormsModule, IonicModule, MapBrowserComponent]
 })
 export class AddEditEmployeeModalComponent implements OnInit {
-  @Input() employee?: Employee; 
+  @Input() employee?: Employee;
 
   private modalCtrl = inject(ModalController);
   private authService = inject(AuthService);
   private toastCtrl = inject(ToastController);
-  public isEditMode = false;
-  
-  public formData: Employee = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
-    birth_date: '',
-    gender: null as any,
-    marital_status: null as any,
-    home_address: '',
-    phone: '',
-    department: null as any,
-    education: null as any,
-    education_field: null as any,
-    job_level: null as any,
-    job_role: null as any,
-    number_of_companies_worked: null as any,
-    monthly_salary: null as any,
-    percent_salary_hike: null as any,
-    contract_start_date: null as any,
-    current_role_start_date: null as any,
-    last_promotion_date: null as any,
-    last_manager_date: null as any,
-    company_id: null as any
-  };
 
-  isFormInvalid() {
+  public isEditMode = signal(false);
+  public locationTouched = signal(false);
+
+  firstName = signal('');
+  lastName = signal('');
+  email = signal('');
+  password = signal('');
+  birthDate = signal('');
+  gender = signal<number | null>(null);
+  maritalStatus = signal<number | null>(null);
+  homeAddress = signal('');
+  phone = signal('');
+  department = signal<number | null>(null);
+  education = signal<number | null>(null);
+  educationField = signal<number | null>(null);
+  jobLevel = signal<number | null>(null);
+  jobRole = signal<number | null>(null);
+  numCompanies = signal<number | null>(null);
+  monthlySalary = signal<number | null>(null);
+  salaryHike = signal<number | null>(null);
+  contractStart = signal('');
+  roleStart = signal('');
+  lastPromotion = signal('');
+  lastManagerDate = signal('');
+
+  isFormInvalid = computed(() => {
     return (
-      !this.formData.first_name?.trim() || 
-      !this.formData.last_name?.trim() ||
-      this.formData.monthly_salary <= 0 ||
-      this.formData.percent_salary_hike < 0 ||
-      this.formData.percent_salary_hike > 100 ||
-      this.formData.number_of_companies_worked <= 0 ||
-      !this.formData.home_address?.trim() ||
-      !this.formData.email?.includes('@') || 
-      this.formData.password?.length < 6 ||
-      this.isValidDate(this.formData.birth_date) === false ||
-      this.formData.department === null ||
-      this.formData.education === null ||
-      this.formData.education_field === null ||
-      this.formData.job_level === null ||
-      this.formData.job_role === null ||
-      this.formData.gender === null ||
-      this.formData.monthly_salary <= 0 ||
-      this.isValidDate(this.formData.current_role_start_date) === false ||
-      this.isValidDate(this.formData.contract_start_date) === false ||
-      this.isValidDate(this.formData.last_promotion_date) === false ||
-      this.isValidDate(this.formData.last_manager_date) === false
+      !this.firstName()?.trim() ||
+      !this.lastName()?.trim() ||
+      (this.monthlySalary() ?? 0) <= 0 ||
+      (this.salaryHike() ?? 0) < 0 ||
+      (this.salaryHike() ?? 0) > 100 ||
+      (this.numCompanies() ?? 0) <= 0 ||
+      !this.homeAddress()?.trim() ||
+      !this.email()?.includes('@') ||
+      (!this.isEditMode() && this.password()?.length < 6) ||
+      !this.isValidDate(this.birthDate()) ||
+      this.department() === null ||
+      this.education() === null ||
+      this.educationField() === null ||
+      this.jobLevel() === null ||
+      this.jobRole() === null ||
+      this.gender() === null ||
+      !this.isValidDate(this.roleStart()) ||
+      !this.isValidDate(this.contractStart()) ||
+      !this.isValidDate(this.lastPromotion()) ||
+      !this.isValidDate(this.lastManagerDate())
     );
-  }
+  });
 
   ngOnInit() {
     if (this.employee) {
-      this.isEditMode = true;
-      this.formData = { ...this.employee };
+      this.isEditMode.set(true);
+      this.fillFormWithEmployee(this.employee);
     }
   }
 
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel');
+  private fillFormWithEmployee(emp: Employee) {
+    this.firstName.set(emp.first_name);
+    this.lastName.set(emp.last_name);
+    this.email.set(emp.email);
+    this.birthDate.set(emp.birth_date);
+    this.gender.set(emp.gender);
+    this.maritalStatus.set(emp.marital_status);
+    this.homeAddress.set(emp.home_address);
+    this.phone.set(emp.phone);
+    this.department.set(emp.department);
+    this.education.set(emp.education);
+    this.educationField.set(emp.education_field);
+    this.jobLevel.set(emp.job_level);
+    this.jobRole.set(emp.job_role);
+    this.numCompanies.set(emp.number_of_companies_worked);
+    this.monthlySalary.set(emp.monthly_salary);
+    this.salaryHike.set(emp.percent_salary_hike);
+    this.contractStart.set(emp.contract_start_date);
+    this.roleStart.set(emp.current_role_start_date);
+    this.lastPromotion.set(emp.last_promotion_date);
+    this.lastManagerDate.set(emp.last_manager_date);
+  }
+
+  onLocationSelected(location: { lat: number, lng: number, address: string }) {
+    this.locationTouched.set(true);
+    this.homeAddress.set(location.address);
   }
 
   save() {
     if (this.isFormInvalid()) {
       this.presentToast('Please fill all required fields correctly', 'danger');
       return;
-    } 
+    }
 
     const user = this.authService.currentUser();
-
-    // Si no hay usuario o no hay ID, lanzamos un error y paramos todo
-    if (!user || !user.id) {
+    if (!user?.id) {
       this.presentToast('Session expired. Please login again.', 'danger');
       return;
     }
 
-    const dataToSave = { 
-      ...this.formData,
-      gender: Number(this.formData.gender),
-      marital_status: Number(this.formData.marital_status),
-      department: Number(this.formData.department),
-      education: Number(this.formData.education),
-      education_field: Number(this.formData.education_field),
-      job_level: Number(this.formData.job_level),
-      job_role: Number(this.formData.job_role),
-      company_id: user.id, 
+    const dataToSave: Employee = {
+      ...this.employee, 
+      first_name: this.firstName(),
+      last_name: this.lastName(),
+      email: this.email(),
+      password: this.password(),
+      birth_date: this.birthDate(),
+      gender: Number(this.gender()),
+      marital_status: Number(this.maritalStatus()),
+      home_address: this.homeAddress(),
+      phone: this.phone(),
+      department: Number(this.department()),
+      education: Number(this.education()),
+      education_field: Number(this.educationField()),
+      job_level: Number(this.jobLevel()),
+      job_role: Number(this.jobRole()),
+      number_of_companies_worked: Number(this.numCompanies()),
+      monthly_salary: Number(this.monthlySalary()),
+      percent_salary_hike: Number(this.salaryHike()),
+      contract_start_date: this.contractStart(),
+      current_role_start_date: this.roleStart(),
+      last_promotion_date: this.lastPromotion(),
+      last_manager_date: this.lastManagerDate(),
+      company_id: user.id,
     };
 
     this.presentToast('Employee data prepared successfully', 'success');
     return this.modalCtrl.dismiss(dataToSave, 'confirm');
   }
 
-  // Función para validar que la fecha esté en formato YYYY-MM-DD y sea una fecha real
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel');
+  }
+
   isValidDate(dateString: string): boolean {
+    if (!dateString) return false;
     const regEx = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateString.match(regEx)) return false;
-
     const d = new Date(dateString);
-    const dNum = d.getTime();
-    
-    if (!dNum && dNum !== 0) return false; 
-    return d.toISOString().slice(0, 10) === dateString;
+    return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === dateString;
   }
 
-  public locationTouched = false;
-
-  onLocationSelected(location: { lat: number, lng: number, address: string }) {
-    this.locationTouched = true; // El usuario ya interactuó con el mapa
-    this.formData.home_address = location.address;
-    
-    console.log('Location selected:', this.formData.home_address);
-  }
-
-  // Creamos el toast para mostrar mensajes al usuario
   async presentToast(message: string, color: 'success' | 'danger') {
     const toast = await this.toastCtrl.create({
-      message: message,
+      message,
       duration: 2000,
-      color: color,
+      color,
       position: 'bottom'
     });
     await toast.present();
