@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'; // Añadimos inject
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component';
@@ -11,31 +11,22 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, EmployeeChartComponent] // El modal no hace falta en imports si se usa en ModalController
+  imports: [CommonModule, IonicModule, EmployeeChartComponent]
 })
 export class AdminDashboardPage implements OnInit {
   private modalCtrl = inject(ModalController);
-  private employeeService = inject(EmployeeService);
+  // Hacemos el servicio público para que el HTML pueda leer la señal .employees() directamente
+  public employeeService = inject(EmployeeService);
 
-  employees: Employee[] = [];
   user = "Admin";
 
   ngOnInit() {
-    this.loadEmployees(); // Nada más entrar, pedimos los datos
+    // Solo necesitamos pedirle al servicio que cargue una vez.
+    // La señal se actualizará y la pantalla reaccionará sola.
+    this.employeeService.loadEmployees();
   }
 
-  // 1. CARGAR: Traer empleados del back (GET)
-  loadEmployees() {
-    this.employeeService.getEmployees().subscribe({
-      next: (res) => {
-        this.employees = res;
-        console.log('Empleados cargados del back:', res);
-      },
-      error: (err) => console.error('Error al traer datos:', err)
-    });
-  }
-
-  // 2. ABRIR MODAL: Solo para crear (por ahora)
+  // ABRIR MODAL: He simplificado esto porque el modal ya llama al servicio por dentro
   async editEmployee() {
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
@@ -45,30 +36,17 @@ export class AdminDashboardPage implements OnInit {
 
     await modal.present();
 
-    const { data, role } = await modal.onDidDismiss();
-
-    // Si el usuario guardó, mandamos al servicio
-    if (role === 'confirm' && data) {
-      this.saveNewEmployee(data);
-    }
+    // No hace falta llamar a saveNewEmployee aquí después del dismiss, 
+    // porque tu ModalComponent ya llama al servicio .createEmployee() y 
+    // la señal se actualiza automáticamente.
   }
 
-  // 3. MANDAR: Enviar a la base de datos (POST)
-  saveNewEmployee(newEmployee: Employee) {
-    this.employeeService.createEmployee(newEmployee).subscribe({
-      next: (res) => {
-        console.log('¡Guardado en Docker!', res);
-        this.loadEmployees(); // <--- Recargamos la tabla para ver al nuevo
-      },
-      error: (err) => console.error('Error al crear:', err)
-    });
-  }
-
+  // Estilos de Score (Estos se quedan igual, están perfectos)
   getScoreBg(score: number): string {
     if (score >= 80) return '#f0fdf4'; 
     if (score < 50) return '#fee2e2';  
     if (score < 70) return '#fffbeb';  
-    return '#f3f4f6';                 
+    return '#f3f4f6';                  
   }
 
   getScoreColor(score: number): string {
