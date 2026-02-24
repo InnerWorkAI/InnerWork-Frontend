@@ -1,39 +1,47 @@
-// Variables locales para no repetir
 $border-color: #e5e7eb;
 $text-main: #111827;
 $purple-corp: #a855f7;
-
-ion-modal {
-  --height: auto;
-  --border-radius: 5px;
-  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-}
+$placeholder: #9ca3af;
 
 .modal-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: white;
-  padding: 32px;
-
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    
-    h2 { margin: 0; font-weight: 800; color: $text-main; }
-    .btn-close { all: unset; font-size: 24px; cursor: pointer; color: #9ca3af; }
-  }
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid $border-color;
+  flex-shrink: 0;
+  h2 { margin: 0; font-weight: 800; color: $text-main; }
+  .btn-close { all: unset; font-size: 28px; cursor: pointer; color: #9ca3af; }
+}
+
+ion-content { --background: white; }
+
+.full-width { grid-column: span 2; }
+
 .input-group {
-  margin-bottom: 20px;
-  label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; }
+  margin-bottom: 15px;
+  label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px; color: $text-main; }
   input, select {
     width: 100%;
     padding: 12px;
     border: 1px solid $border-color;
     border-radius: 12px;
     background: #f9fafb;
+    &:focus { outline: none; border-color: $purple-corp; }
   }
+}
+
+.modal-footer {
+  padding: 20px 32px;
+  border-top: 1px solid $border-color;
+  flex-shrink: 0;
 }
 
 .btn-save {
@@ -45,14 +53,53 @@ ion-modal {
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 10px;
-  &:hover {
-    background: color-mix(in srgb, #b05cff 90%, transparent);
+  &:hover { background: darken($purple-corp, 5%); }
+}
+
+.custom-input::placeholder{
+  color: $placeholder;
+}
+
+.custom-input {
+  // 1. Color por defecto para cuando YA hay una opción elegida
+  color: #1a1a1a; 
+  background-color: white;
+
+  // 2. Aplicamos el gris solo cuando la clase está activa (valor null)
+  &.is-placeholder {
+    color: #a1a1aa; 
+  }
+
+  // 3. Forzamos que las opciones del interior siempre sean legibles
+  option {
+    color: #1a1a1a !important;
+    background-color: white;
+    
+    // La opción que está deshabilitada (el placeholder) puede quedarse gris
+    &:disabled {
+      color: #a1a1aa;
+    }
   }
 }
 
-ion-modal::part(backdrop) {
-  // Mezclamos negro con un poco de tu morado
-  background: color-mix(in srgb, #a855f7 20%, #000000);
-  opacity: 0.5;
+// Barra del scroll personalizada para el contenido del modal
+ion-content::part(scroll) {
+  &::-webkit-scrollbar {
+    width: 8px; /* Un poco más fina de lo normal */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f3f4f6; /* Gris muy clarito para el fondo de la barra */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #a855f7; /* Tu morado corporativo */
+    border-radius: 10px;
+    border: 2px solid #f3f4f6; /* Crea un pequeño efecto de separación */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9334ea; /* Un morado más oscuro al pasar el ratón */
+  }
 }

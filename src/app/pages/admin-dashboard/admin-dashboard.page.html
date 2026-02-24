@@ -31,18 +31,18 @@
           </thead>
           <tbody>
             <tr *ngFor="let emp of employees">
-              <td class="emp-name">{{ emp.name }}</td>
-              <td class="emp-dept">{{ emp.dept }}</td>
-              <td class="last-ev">{{ emp.lastEv }}</td>
+              <td class="emp-name">{{ emp.first_name }}</td>
+              <td class="emp-dept">{{ emp.department }}</td>
+              <!--<td class="last-ev">{{ emp.last_evaluation_date }}</td>>
               <td>
                 <span class="score-badge" 
                       [style.background-color]="getScoreBg(emp.score)" 
                       [style.color]="getScoreColor(emp.score)">
                   {{ emp.score }}
                 </span>
-              </td>
+              </td> -->
               <td>
-                <button class="btn-link" (click)="viewProfile(emp.id)">
+                <button class="btn-link" > <!--(click)="viewProfile(emp.id)" --> 
                   View Profile
                 </button>
               </td>

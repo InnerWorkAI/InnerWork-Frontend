@@ -1,35 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core'; // Añadimos inject
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component'
-import { ModalController } from '@ionic/angular';
-import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component' 
+import { IonicModule, ModalController } from '@ionic/angular';
+import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component';
+import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
+import { Employee } from 'src/app/shared/models/employee';
+import { EmployeeService } from 'src/app/core/services/employee-service'; 
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, EmployeeChartComponent, AddEditEmployeeModalComponent ]
+  imports: [CommonModule, IonicModule, EmployeeChartComponent] // El modal no hace falta en imports si se usa en ModalController
 })
 export class AdminDashboardPage implements OnInit {
+  private modalCtrl = inject(ModalController);
+  private employeeService = inject(EmployeeService);
 
-  // Estos son los datos que mañana vendrán de la API
-  employees = [
-    { id: 1, name: 'Alice Johnson', dept: 'Marketing', lastEv: '2024-05-10', score: 85 },
-    { id: 2, name: 'Bob Williams', dept: 'Sales', lastEv: '2024-05-12', score: 62 },
-    { id: 3, name: 'Diana Miller', dept: 'Human Resources', lastEv: '2024-05-14', score: 71 },
-    { id: 4, name: 'Eve Davis', dept: 'Engineering', lastEv: '2024-05-07', score: 45 },
-    { id: 5, name: 'Marcus Thorne', dept: 'Finance', lastEv: '2024-05-15', score: 92 },
-    { id: 6, name: 'Sophia Loren', dept: 'Design', lastEv: '2024-05-11', score: 54 }
-  ];
+  employees: Employee[] = [];
   user = "Admin";
 
-  constructor(private modalCtrl: ModalController) {}
+  ngOnInit() {
+    this.loadEmployees(); // Nada más entrar, pedimos los datos
+  }
 
-  ngOnInit() {}
+  // 1. CARGAR: Traer empleados del back (GET)
+  loadEmployees() {
+    this.employeeService.getEmployees().subscribe({
+      next: (res) => {
+        this.employees = res;
+        console.log('Empleados cargados del back:', res);
+      },
+      error: (err) => console.error('Error al traer datos:', err)
+    });
+  }
 
-  // Lógica de colores para el fondo del badge
+  // 2. ABRIR MODAL: Solo para crear (por ahora)
+  async editEmployee() {
+    const modal = await this.modalCtrl.create({
+      component: AddEditEmployeeModalComponent,
+      mode: 'ios',
+      backdropDismiss: false,
+    });
+
+    await modal.present();
+
+    const { data, role } = await modal.onDidDismiss();
+
+    // Si el usuario guardó, mandamos al servicio
+    if (role === 'confirm' && data) {
+      this.saveNewEmployee(data);
+    }
+  }
+
+  // 3. MANDAR: Enviar a la base de datos (POST)
+  saveNewEmployee(newEmployee: Employee) {
+    this.employeeService.createEmployee(newEmployee).subscribe({
+      next: (res) => {
+        console.log('¡Guardado en Docker!', res);
+        this.loadEmployees(); // <--- Recargamos la tabla para ver al nuevo
+      },
+      error: (err) => console.error('Error al crear:', err)
+    });
+  }
+
   getScoreBg(score: number): string {
     if (score >= 80) return '#f0fdf4'; 
     if (score < 50) return '#fee2e2';  
@@ -37,27 +71,10 @@ export class AdminDashboardPage implements OnInit {
     return '#f3f4f6';                 
   }
 
-  // Lógica de colores para el texto del badge
   getScoreColor(score: number): string {
     if (score >= 80) return '#16a34a'; 
     if (score < 50) return '#ef4444'; 
     if (score < 70) return '#d97706'; 
     return '#374151';
   }
-
-  viewProfile(id: number) {
-    console.log('Navegando al perfil del empleado:', id);
-    // Aquí iría tu router.navigate
-  }
-
-  async editEmployee(emp?: any) {
-    const modal = await this.modalCtrl.create({
-      component: AddEditEmployeeModalComponent,
-      componentProps: {
-        employee: emp 
-      }
-    });
-    await modal.present();
-  }
-
 }
