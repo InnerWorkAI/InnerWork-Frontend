@@ -1,6 +1,5 @@
 $border-color: #e5e7eb;
 $text-main: #111827;
-$purple-corp: #a855f7;
 $placeholder: #9ca3af;
 
 .modal-wrapper {
@@ -34,7 +33,7 @@ ion-content { --background: white; }
     border: 1px solid $border-color;
     border-radius: 12px;
     background: #f9fafb;
-    &:focus { outline: none; border-color: $purple-corp; }
+    &:focus { outline: none; border-color: var(--ion-color-primary); }
   }
 }
 
@@ -46,14 +45,11 @@ ion-content { --background: white; }
 
 .btn-save {
   width: 100%;
-  background: $purple-corp; 
   color: white;
   border: none;
   padding: 14px;
   border-radius: 12px;
   font-weight: 700;
-  cursor: pointer;
-  &:hover { background: darken($purple-corp, 5%); }
 }
 
 .custom-input::placeholder{
@@ -94,12 +90,12 @@ ion-content::part(scroll) {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #a855f7; /* Tu morado corporativo */
+    background: var(--ion-color-primary); /* Tu morado corporativo */
     border-radius: 10px;
     border: 2px solid #f3f4f6; /* Crea un pequeño efecto de separación */
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #9334ea; /* Un morado más oscuro al pasar el ratón */
+    background: var(--ion-color-primary-tint);
   }
 }

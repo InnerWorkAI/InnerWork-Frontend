@@ -162,7 +162,7 @@
         }
       </div>
 
-      <div class="input-group">
+      <!-- <div class="input-group">
         <label>Home Address</label>
         <input type="text" 
         [(ngModel)]="formData.home_address"
@@ -175,7 +175,7 @@
             Home address is required.
           </div>
         }
-      </div>
+      </div> -->
 
       <div class="input-group">
         <label>Education</label>
@@ -378,12 +378,26 @@
           </div>
         }
       </div>
+
+      <div class="input-group">
+        <label class="custom-label">Home Address</label>
+        
+        <app-map-browser (onLocationChanged)="onLocationSelected($event)"></app-map-browser>
+
+        @if (locationTouched && !formData.home_address) {
+          <div class="text-sm text-red-600 mt-1 ml-1">
+            Please select a location on the map.
+          </div>
+        }
+      </div>
+      
   </div>
 </div>
   </ion-content>
 
   <footer class="modal-footer">
     <ion-button 
+      color="primary"
       (click)="save()"
       [disabled]="isFormInvalid()"
       expand="block" 

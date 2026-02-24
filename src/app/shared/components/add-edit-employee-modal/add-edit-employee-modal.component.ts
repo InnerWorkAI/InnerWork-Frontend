@@ -5,13 +5,14 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { Employee, Gender, Department, JobLevel, JobRole, MaritalStatus, EducationLevel, EducationField } from '../../models/employee';
 import { AuthService } from '../../../core/services/auth-service';
 import { ToastController } from '@ionic/angular';
+import { MapBrowserComponent } from '../map-browser/map-browser.component';
 
 @Component({
   selector: 'app-add-edit-employee-modal',
   templateUrl: './add-edit-employee-modal.component.html',
   styleUrls: ['./add-edit-employee-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [CommonModule, FormsModule, IonicModule, MapBrowserComponent]
 })
 export class AddEditEmployeeModalComponent implements OnInit {
   @Input() employee?: Employee; 
@@ -123,6 +124,15 @@ export class AddEditEmployeeModalComponent implements OnInit {
     
     if (!dNum && dNum !== 0) return false; 
     return d.toISOString().slice(0, 10) === dateString;
+  }
+
+  public locationTouched = false;
+
+  onLocationSelected(location: { lat: number, lng: number, address: string }) {
+    this.locationTouched = true; // El usuario ya interactuó con el mapa
+    this.formData.home_address = location.address;
+    
+    console.log('Location selected:', this.formData.home_address);
   }
 
   // Creamos el toast para mostrar mensajes al usuario
