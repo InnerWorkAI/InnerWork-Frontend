@@ -5,6 +5,7 @@ import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { Employee } from '../../models/employee';
 import { AuthService } from '../../../core/services/auth-service';
 import { MapBrowserComponent } from '../map-browser/map-browser.component';
+import { EmployeeService } from '../../../core/services/employee-service';
 
 @Component({
   selector: 'app-add-edit-employee-modal',
@@ -16,6 +17,7 @@ import { MapBrowserComponent } from '../map-browser/map-browser.component';
 export class AddEditEmployeeModalComponent implements OnInit {
   @Input() employee?: Employee;
 
+  private employeeService = inject(EmployeeService);
   private modalCtrl = inject(ModalController);
   private authService = inject(AuthService);
   private toastCtrl = inject(ToastController);
@@ -143,8 +145,23 @@ export class AddEditEmployeeModalComponent implements OnInit {
       company_id: user.id,
     };
 
-    this.presentToast('Employee data prepared successfully', 'success');
-    return this.modalCtrl.dismiss(dataToSave, 'confirm');
+    const action = this.isEditMode() 
+    ? this.employeeService.updateEmployee(this.employee!.id!, dataToSave)
+    : this.employeeService.createEmployee(dataToSave);
+
+    action.subscribe({
+      next: () => {
+        this.presentToast(
+          this.isEditMode() ? 'Employee updated!' : 'Employee registered!', 
+          'success'
+        );
+        this.modalCtrl.dismiss(null, 'confirm'); 
+      },
+      error: (err) => {
+        this.presentToast('Error saving employee data', 'danger');
+        console.error(err);
+      }
+    });
   }
 
   cancel() {
