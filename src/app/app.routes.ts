@@ -25,6 +25,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/register/register.page').then(m => m.RegisterPage),
   },
+    {
+    path: 'reset-password',
+    loadComponent: () => import('./pages/reset-password/reset-password.page').then( m => m.ResetPasswordPage)
+  },
 
 {
     path: '',
@@ -37,7 +41,7 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        //canActivate: [userGuard],
+        canActivate: [userGuard],
         loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage),
       },
       {
@@ -51,6 +55,7 @@ export const routes: Routes = [
         ]
       }
     ]
-  }
+  },
+
 
 ];
