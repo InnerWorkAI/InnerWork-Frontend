@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { IonIcon, IonSpinner } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { send, sparkles } from 'ionicons/icons';
@@ -6,6 +6,7 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from '@angular/common';
 import { Message } from '../../models/Message';
 import { FormsModule } from '@angular/forms';
+import { GroqService } from 'src/app/core/services/groq-service';
 
 @Component({
   selector: 'app-ai-chat',
@@ -14,52 +15,59 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, IonIcon, IonSpinner, FormsModule],
 })
 export class AiChatComponent {
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-
+@ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   
+  private groqService = inject(GroqService);
+
   messages: Message[] = [];
   userInput: string = '';
   isTyping = false;
   
   constructor() {
-    addIcons({
-      send,
-      sparkles
-    });
+    addIcons({ send, sparkles });
     this.messages.push({
       role: 'assistant',
-      content: 'Hola. He analizado tu check-in de hoy. Parece que ha sido un día intenso, ¿cómo te sientes realmente?',
+      content: 'Hello, I am InnerWork AI, your occupational psychology assistant. How can I help you today?',
       timestamp: new Date()
     });
   }
 
-async sendMessage() {
+  async sendMessage() {
     const trimmedInput = this.userInput.trim();
     if (!trimmedInput || this.isTyping) return;
 
-    this.messages.push({ 
+    const userMessage: Message = { 
       role: 'user', 
       content: trimmedInput, 
       timestamp: new Date() 
-    });
+    };
+    this.messages.push(userMessage);
     
     this.userInput = '';
     this.isTyping = true;
     this.scrollToBottom();
 
-    this.simulateAiResponse();
-  }
-
-  private simulateAiResponse() {
-    setTimeout(() => {
-      this.messages.push({ 
-        role: 'assistant', 
-        content: 'Entiendo. Es importante identificar esos momentos de tensión. ¿Sientes que el estrés es algo puntual de hoy o se ha vuelto una constante en tu semana?', 
-        timestamp: new Date() 
-      });
-      this.isTyping = false;
-      this.scrollToBottom();
-    }, 1500);
+    this.groqService.getChatResponse(this.messages).subscribe({
+      next: (aiResponse) => {
+        this.messages.push({
+          role: 'assistant',
+          content: aiResponse,
+          timestamp: new Date()
+        });
+        this.isTyping = false;
+        this.scrollToBottom();
+      },
+      error: (error) => {
+        console.error('Error with Groq:', error);
+        this.isTyping = false;
+        this.messages.push({
+          role: 'assistant',
+          content: 'Sorry, there was an error processing your message. Please try again.',
+          timestamp: new Date()
+        });
+        this.scrollToBottom();
+      }
+    });
   }
 
   private scrollToBottom() {
