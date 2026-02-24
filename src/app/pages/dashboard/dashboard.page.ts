@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from '@ionic/angular/standalone';
@@ -6,6 +6,7 @@ import { EmployeeChartComponent } from "src/app/shared/components/employee-chart
 import { AiChatComponent } from "src/app/shared/components/ai-chat/ai-chat.component";
 import { addIcons } from 'ionicons';
 import { alertCircle, checkmarkCircle } from 'ionicons/icons';
+import { AuthService } from 'src/app/core/services/auth-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,8 @@ export class DashboardPage implements OnInit {
       alertCircle
     });
   }
+
+  authService = inject(AuthService);
 
   ngOnInit() {
   }
