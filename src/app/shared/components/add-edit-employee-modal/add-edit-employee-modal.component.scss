@@ -52,30 +52,18 @@ ion-content { --background: white; }
   font-weight: 700;
 }
 
-.custom-input::placeholder{
-  color: $placeholder;
+input:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.custom-input {
-  // 1. Color por defecto para cuando YA hay una opción elegida
-  color: #1a1a1a; 
+input::placeholder {
+  color: #9ca3af; 
+}
+
+select option {
+  color: #111827 !important;
   background-color: white;
-
-  // 2. Aplicamos el gris solo cuando la clase está activa (valor null)
-  &.is-placeholder {
-    color: #a1a1aa; 
-  }
-
-  // 3. Forzamos que las opciones del interior siempre sean legibles
-  option {
-    color: #1a1a1a !important;
-    background-color: white;
-    
-    // La opción que está deshabilitada (el placeholder) puede quedarse gris
-    &:disabled {
-      color: #a1a1aa;
-    }
-  }
 }
 
 // Barra del scroll personalizada para el contenido del modal

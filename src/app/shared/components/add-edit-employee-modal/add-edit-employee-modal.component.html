@@ -1,219 +1,432 @@
-<div class="modal-wrapper">
-  <header class="modal-header">
-    <h2 [style.color]="'var(--ion-color-primary)'">{{ isEditMode() ? 'Edit Employee' : 'Add New Employee' }}</h2>
-    <button (click)="cancel()" class="btn-close">×</button>
+<div class="modal-wrapper bg-gray-50 min-h-full">
+  <header class="flex justify-between items-center p-6 bg-white border-b border-gray-200">
+    <h2 class="text-xl font-black" [style.color]="'#a855f7'">
+      {{ isEditMode() ? 'Edit Employee' : 'Add New Employee' }}
+    </h2>
+    <button (click)="cancel()" class="text-2xl text-gray-400 hover:text-gray-600">×</button>
   </header>
 
-  <ion-content>
-    <div class="form ion-padding">
-      
-      <div class="input-group">
-        <label>First Name</label>
-        <input type="text" [ngModel]="firstName()" (ngModelChange)="firstName.set($event)" #fnRef="ngModel" required placeholder="Name" class="custom-input">
+  <ion-content class="ion-padding">
+    <div class="space-y-6 max-w-2xl mx-auto px-4 py-6">
+
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">First Name</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="text" 
+            placeholder="Enter first name" 
+            class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="firstName()" 
+            (ngModelChange)="firstName.set($event)" 
+            #fnRef="ngModel" 
+            required>
+        </div>
         @if (fnRef.invalid && fnRef.touched) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">First name is required.</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Last Name</label>
-        <input type="text" [ngModel]="lastName()" (ngModelChange)="lastName.set($event)" #lnRef="ngModel" required placeholder="Family Name" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Last Name</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="text" 
+            placeholder="Enter last name" 
+            class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="lastName()" 
+            (ngModelChange)="lastName.set($event)" 
+            #lnRef="ngModel" 
+            required>
+        </div>
         @if (lnRef.invalid && lnRef.touched) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Last name is required.</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" [ngModel]="email()" (ngModelChange)="email.set($event)" #emRef="ngModel" required placeholder="joe.doe@example.com" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Email Address</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="email" 
+            placeholder="john.doe@example.com" 
+            class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="email()" 
+            (ngModelChange)="email.set($event)" 
+            #emRef="ngModel" 
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+        </div>
         @if (emRef.invalid && emRef.touched) {
-          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Email is required and must be valid.</div>
+          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Enter a valid email.</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Phone</label>
-        <input type="text" [ngModel]="phone()" (ngModelChange)="phone.set($event)" placeholder="Phone Number" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Phone Number</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="text" 
+            placeholder="Enter phone number" 
+            class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="phone()" 
+            (ngModelChange)="phone.set($event)">
+        </div>
       </div>
 
       @if (!isEditMode()) {
-        <div class="input-group">
-          <label>Password</label>
-          <input type="password" [ngModel]="password()" (ngModelChange)="password.set($event)" #passRef="ngModel" required placeholder="******" class="custom-input">
-          @if (passRef.invalid && passRef.touched) {
+        <div class="flex flex-col mb-5">
+          <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Password</label>
+          <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+            <input 
+              type="password" 
+              placeholder="**********" 
+              class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+              [ngModel]="password()" 
+              (ngModelChange)="password.set($event)"
+              #pwRef="ngModel"
+              required
+              minlength="6">
+          </div>
+          @if (pwRef.invalid && pwRef.touched) {
             <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Password must be at least 6 characters.</div>
           }
         </div>
       }
 
-            <div class="input-group">
-        <label>Monthly Salary ($)</label>
-        <input type="number" [ngModel]="monthlySalary()" (ngModelChange)="monthlySalary.set($event)" #salRef="ngModel" required min="1" placeholder="0" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Monthly Salary (€)</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="number" 
+            placeholder="0" 
+            class="w-full text-lg bg-transparent border-none outline-none transition-colors" 
+            [ngModel]="monthlySalary()" 
+            (ngModelChange)="monthlySalary.set($event)"
+            #salRef="ngModel"
+            required
+            min="1"
+            [style.color]="monthlySalary() === 0 || monthlySalary() === null ? '#9ca3af' : '#111827'">
+        </div>
         @if (salRef.invalid && salRef.touched) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Salary must be greater than 0.</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Percent Salary Hike (%)</label>
-        <input type="number" [ngModel]="salaryHike()" (ngModelChange)="salaryHike.set($event)" #hikeRef="ngModel" required min="0" max="100" placeholder="0" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Percent Salary Hike (%)</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="number" 
+            placeholder="0" 
+            class="w-full text-lg bg-transparent border-none outline-none transition-colors" 
+            [ngModel]="salaryHike()" 
+            (ngModelChange)="salaryHike.set($event)"
+            #hikeRef="ngModel"
+            required
+            min="0"
+            max="100"
+            [style.color]="salaryHike() === 0 || salaryHike() === null ? '#9ca3af' : '#111827'"> 
+        </div>
         @if (hikeRef.invalid && hikeRef.touched) {
-          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Salary hike must be between 0 and 100.</div>
+          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Percent Salary Hike must be between 0 and 100.</div>
         }
-      </div>
+      </div>     
       
-      <div class="input-group">
-        <label>Department</label>
-        <select [ngModel]="department()" (ngModelChange)="department.set($event)" #depRef="ngModel" required class="custom-input" [class.is-placeholder]="department() === null">
-          <option [ngValue]="null" disabled hidden>Select Department</option>
-          <option [ngValue]="0">Sales</option>
-          <option [ngValue]="1">Research & Development</option>
-          <option [ngValue]="2">Human Resources</option>
-        </select>
-        @if (depRef.invalid && depRef.touched) {
-          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select a department.</div>
-        }
-      </div>
+      <div class="flex flex-col mb-5">
+  <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Department</label>
+    <div class="flex items-center w-full h-14 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all relative">
+      
+      <select 
+        [ngModel]="department()" 
+        (ngModelChange)="department.set($event)" 
+        #depRef="ngModel"
+        required
+        class="w-full h-full bg-transparent border-none text-lg focus:outline-none appearance-none cursor-pointer z-10 px-4"
+        [style.color]="department() === null ? '#9ca3af' : '#111827'">
+        
+        <option [ngValue]="null" disabled hidden>Select Department</option>
+        <option [ngValue]="0">Sales</option>
+        <option [ngValue]="1">Research & Development</option>
+        <option [ngValue]="2">Human Resources</option>
+      </select>
 
-      <div class="input-group">
-        <label>Gender</label>
-        <select [ngModel]="gender()" (ngModelChange)="gender.set($event)" #genRef="ngModel" required class="custom-input" [class.is-placeholder]="gender() === null">
-          <option [ngValue]="null" disabled hidden>Select Gender</option>
-          <option [ngValue]="0">Female</option>
-          <option [ngValue]="1">Male</option>
-        </select>
+      <div class="absolute right-4 pointer-events-none z-0">
+        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </div>
+    </div>
+    @if (depRef.invalid && depRef.touched) {
+      <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select a department.</div>
+    }
+  </div>
+
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Gender</label>
+        <div class="flex items-center w-full h-14 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all relative">
+          
+          <select 
+            [ngModel]="gender()" 
+            (ngModelChange)="gender.set($event)" 
+            #genRef="ngModel"
+            required
+            class="w-full h-full bg-transparent border-none text-lg focus:outline-none appearance-none cursor-pointer z-10 px-4"
+            [style.color]="gender() === null ? '#9ca3af' : '#111827'">
+            
+            <option [ngValue]="null" disabled hidden>Select Gender</option>
+            <option [ngValue]="0">Female</option>
+            <option [ngValue]="1">Male</option>
+          </select>
+
+          <div class="absolute right-4 pointer-events-none z-0">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
         @if (genRef.invalid && genRef.touched) {
-          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select a gender.</div>
+          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Please select a gender.</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Birth Date</label>
-        <input type="text" [ngModel]="birthDate()" (ngModelChange)="birthDate.set($event)" #bdRef="ngModel" required placeholder="YYYY-MM-DD" class="custom-input">
-        @if (bdRef.touched && !isValidDate(birthDate())) {
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Birth Date</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="text" 
+            placeholder="YYYY-MM-DD" 
+            class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="birthDate()" 
+            (ngModelChange)="birthDate.set($event)"
+            #bdRef="ngModel"
+            required>
+        </div>
+        @if (bdRef.invalid && bdRef.touched) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Enter a valid date (YYYY-MM-DD).</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Education</label>
-        <select [ngModel]="education()" (ngModelChange)="education.set($event)" #eduRef="ngModel" required class="custom-input" [class.is-placeholder]="education() === null">
-          <option [ngValue]="null" disabled hidden>Select Education Level</option>
-          <option [ngValue]="0">Below College</option>
-          <option [ngValue]="1">College</option>
-          <option [ngValue]="2">Bachelor</option>
-          <option [ngValue]="3">Master</option>
-          <option [ngValue]="4">Doctor</option>
-        </select>
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Education Level</label>
+        <div class="flex items-center w-full h-14 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all relative">
+          
+          <select 
+            [ngModel]="education()" 
+            (ngModelChange)="education.set($event)" 
+            #eduRef="ngModel"
+            required
+            class="w-full h-full bg-transparent border-none text-lg focus:outline-none appearance-none cursor-pointer z-10 px-4"
+            [style.color]="education() === null ? '#9ca3af' : '#111827'">
+            
+            <option [ngValue]="null" disabled hidden>Select Education Level</option>
+            <option [ngValue]="0">Below College</option>
+            <option [ngValue]="1">College</option>
+            <option [ngValue]="2">Bachelor</option>
+            <option [ngValue]="3">Master</option>
+            <option [ngValue]="4">Doctor</option>
+          </select>
+
+          <div class="absolute right-4 pointer-events-none z-0">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
         @if (eduRef.invalid && eduRef.touched) {
-            <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select an education level.</div>
-          }
+          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select an education level.</div>
+        }
       </div>
 
-      <div class="input-group">
-        <label>Education Field</label>
-        <select [ngModel]="educationField()" (ngModelChange)="educationField.set($event)" #edfRef="ngModel" required class="custom-input" [class.is-placeholder]="educationField() === null">
-          <option [ngValue]="null" disabled hidden>Select Education Field</option>
-          <option [ngValue]="0">Life Sciences</option>
-          <option [ngValue]="1">Medical</option>
-          <option [ngValue]="2">Marketing</option>
-          <option [ngValue]="3">Technical Degree</option>
-          <option [ngValue]="4">Human Resources</option>
-          <option [ngValue]="5">Other</option>
-        </select>
-        @if (edfRef.invalid && edfRef.touched) {
-            <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select an education field.</div>
-          }
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Education Field</label>
+        <div class="flex items-center w-full h-14 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all relative">
+          
+          <select 
+            [ngModel]="educationField()" 
+            (ngModelChange)="educationField.set($event)" 
+            #eduFRef="ngModel"
+            required
+            class="w-full h-full bg-transparent border-none text-lg focus:outline-none appearance-none cursor-pointer z-10 px-4"
+            [style.color]="educationField() === null ? '#9ca3af' : '#111827'">
+            
+            <option [ngValue]="null" disabled hidden>Select Education Field</option>
+            <option [ngValue]="0">Life Sciences</option>
+            <option [ngValue]="1">Medical</option>
+            <option [ngValue]="2">Marketing</option>
+            <option [ngValue]="3">Technical Degree</option>
+            <option [ngValue]="4">Human Resources</option>
+            <option [ngValue]="5">Other</option>
+          </select>
+
+          <div class="absolute right-4 pointer-events-none z-0">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        @if (eduFRef.invalid && eduFRef.touched) {
+          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select an education field.</div>
+        }
       </div>
 
-      <div class="input-group">
-        <label>Marital Status</label>
-        <select [ngModel]="maritalStatus()" (ngModelChange)="maritalStatus.set($event)" #marRef="ngModel" required class="custom-input" [class.is-placeholder]="maritalStatus() === null">
-          <option [ngValue]="null" disabled hidden>Select Marital Status</option>
-          <option [ngValue]="0">Single</option>
-          <option [ngValue]="1">Married</option>
-          <option [ngValue]="2">Divorced</option>
-        </select>
-        @if (marRef.invalid && marRef.touched) {
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Marital Status</label>
+        <div class="flex items-center w-full h-14 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all relative">
+          
+          <select 
+            [ngModel]="maritalStatus()" 
+            (ngModelChange)="maritalStatus.set($event)" 
+            #mariRef="ngModel"
+            required
+            class="w-full h-full bg-transparent border-none text-lg focus:outline-none appearance-none cursor-pointer z-10 px-4"
+            [style.color]="maritalStatus() === null ? '#9ca3af' : '#111827'">
+            
+            <option [ngValue]="null" disabled hidden>Select Marital Status</option>
+            <option [ngValue]="0">Single</option>
+            <option [ngValue]="1">Married</option>
+            <option [ngValue]="2">Divorced</option>
+          </select>
+
+          <div class="absolute right-4 pointer-events-none z-0">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        @if (mariRef.invalid && mariRef.touched) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select a marital status.</div>
         }
       </div>
       
-      <div class="input-group">
-        <label>Job Role</label>
-        <select [ngModel]="jobRole()" (ngModelChange)="jobRole.set($event)" #rolRef="ngModel" required class="custom-input" [class.is-placeholder]="jobRole() === null">
-          <option [ngValue]="null" disabled hidden>Select Job Role</option>
-          <option [ngValue]="0">Sales Executive</option>
-          <option [ngValue]="1">Research Scientist</option>
-          <option [ngValue]="2">Laboratory Technician</option>
-          <option [ngValue]="3">Manufacturing Director</option>
-          <option [ngValue]="4">Healthcare Representative</option>
-          <option [ngValue]="5">Manager</option>
-          <option [ngValue]="6">Sales Representative</option>
-          <option [ngValue]="7">Research Director</option>
-          <option [ngValue]="8">Human Resources</option>
-        </select>
-        @if (rolRef.invalid && rolRef.touched) {
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Job Role</label>
+        <div class="flex items-center w-full h-14 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all relative">
+          
+          <select 
+            [ngModel]="jobRole()" 
+            (ngModelChange)="jobRole.set($event)" 
+            #roleRef="ngModel"
+            required
+            class="w-full h-full bg-transparent border-none text-lg focus:outline-none appearance-none cursor-pointer z-10 px-4"
+            [style.color]="jobRole() === null ? '#9ca3af' : '#111827'">
+            
+            <option [ngValue]="null" disabled hidden>Select Job Role</option>
+            <option [ngValue]="0">Sales Executive</option>
+            <option [ngValue]="1">Research Scientist</option>
+            <option [ngValue]="2">Laboratory Technician</option>
+            <option [ngValue]="3">Manufacturing Director</option>
+            <option [ngValue]="4">Healthcare Representative</option>
+            <option [ngValue]="5">Manager</option>
+            <option [ngValue]="6">Sales Representative</option>
+            <option [ngValue]="7">Research Director</option>
+            <option [ngValue]="8">Human Resources</option>
+          </select>
+
+          <div class="absolute right-4 pointer-events-none z-0">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
+        @if (roleRef.invalid && roleRef.touched) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select a job role.</div>
         }
       </div>
 
-      <div class="input-group">
-        <label class="range-label">Job Level</label>
-        <div class="flex justify-between items-center max-w-sm mx-auto">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-4 ml-1">Job Level</label>
+        
+        <div class="flex justify-between items-center w-full px-1">
           @for (level of [1, 2, 3, 4, 5]; track level) {
-            <label class="relative cursor-pointer group">
-              <input type="radio" name="job_level" [value]="level" [ngModel]="jobLevel()" (ngModelChange)="jobLevel.set($event)" class="peer sr-only">
-              <div class="w-10 h-10 flex items-center justify-center rounded-full border-2 border-gray-200 bg-white transition-all peer-checked:border-[#a855f7] peer-checked:bg-[#a855f7]">
-                <span class="text-sm font-bold" [class.text-white]="jobLevel() === level" [class.text-gray-500]="jobLevel() !== level">{{ level }}</span>
+            <label class="relative cursor-pointer">
+              <input 
+                type="radio" 
+                name="job_level" 
+                [value]="level" 
+                [ngModel]="jobLevel()" 
+                (ngModelChange)="jobLevel.set($event)" 
+                class="peer sr-only"
+                required>
+              
+              <div class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-full border-2 border-gray-200 bg-white shadow-sm transition-all 
+                          peer-checked:border-[#a855f7] peer-checked:bg-[#a855f7] peer-focus:ring-2 peer-focus:ring-purple-200">
+                
+                <span class="text-lg font-black transition-colors" 
+                      [class.text-white]="jobLevel() === level" 
+                      [class.text-gray-500]="jobLevel() !== level">
+                  {{ level }}
+                </span>
               </div>
             </label>
           }
         </div>
       </div>
 
-      <div class="input-group">
-        <label>Number of Companies Worked</label>
-        <input type="number" [ngModel]="numCompanies()" (ngModelChange)="numCompanies.set($event)" #compRef="ngModel" required min="1" placeholder="0" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Number of Companies Worked</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input 
+            type="number" 
+            placeholder="0" 
+            class="w-full text-lg bg-transparent border-none outline-none transition-colors" 
+            [ngModel]="numCompanies()" 
+            (ngModelChange)="numCompanies.set($event)"
+            #compRef="ngModel"
+            required
+            min="0"
+            [style.color]="numCompanies() === 0 || numCompanies() === null ? '#9ca3af' : '#111827'">
+        </div>
         @if (compRef.invalid && compRef.touched) {
-          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Must be at least 1.</div>
+          <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Please enter a valid number (0 or more).</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Contract Start Date</label>
-        <input type="text" [ngModel]="contractStart()" (ngModelChange)="contractStart.set($event)" #csRef="ngModel" required placeholder="YYYY-MM-DD" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Contract Start Date</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input type="text" placeholder="YYYY-MM-DD" class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="contractStart()" (ngModelChange)="contractStart.set($event)" #csRef="ngModel" required>
+        </div>
         @if (csRef.touched && !isValidDate(contractStart())) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Enter a valid date (YYYY-MM-DD).</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Current Role Start Date</label>
-        <input type="text" [ngModel]="roleStart()" (ngModelChange)="roleStart.set($event)" #rsRef="ngModel" required placeholder="YYYY-MM-DD" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Current Role Start Date</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input type="text" placeholder="YYYY-MM-DD" class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="roleStart()" (ngModelChange)="roleStart.set($event)" #rsRef="ngModel" required>
+        </div>
         @if (rsRef.touched && !isValidDate(roleStart())) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Enter a valid date (YYYY-MM-DD).</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Last Promotion Date</label>
-        <input type="text" [ngModel]="lastPromotion()" (ngModelChange)="lastPromotion.set($event)" #lpRef="ngModel" required placeholder="YYYY-MM-DD" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Last Promotion Date</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input type="text" placeholder="YYYY-MM-DD" class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="lastPromotion()" (ngModelChange)="lastPromotion.set($event)" #lpRef="ngModel" required>
+        </div>
         @if (lpRef.touched && !isValidDate(lastPromotion())) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Enter a valid date (YYYY-MM-DD).</div>
         }
       </div>
 
-      <div class="input-group">
-        <label>Last Manager Date</label>
-        <input type="text" [ngModel]="lastManagerDate()" (ngModelChange)="lastManagerDate.set($event)" #lmRef="ngModel" required placeholder="YYYY-MM-DD" class="custom-input">
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Last Manager Date</label>
+        <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
+          <input type="text" placeholder="YYYY-MM-DD" class="w-full text-lg bg-transparent border-none outline-none text-gray-900" 
+            [ngModel]="lastManagerDate()" (ngModelChange)="lastManagerDate.set($event)" #lmRef="ngModel" required>
+        </div>
         @if (lmRef.touched && !isValidDate(lastManagerDate())) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Enter a valid date (YYYY-MM-DD).</div>
         }
       </div>
 
-      <div class="input-group">
-        <label class="custom-label">Home Address</label>
+      <div class="flex flex-col mb-5">
+        <label class="text-sm font-bold text-gray-700 mb-1 ml-1">Home Address</label>
         <app-map-browser (onLocationChanged)="onLocationSelected($event)"></app-map-browser>
         @if (locationTouched() && !homeAddress()) {
           <div class="text-sm mt-1 ml-1" style="color: #aa0b0b;">Select a location on the map.</div>
