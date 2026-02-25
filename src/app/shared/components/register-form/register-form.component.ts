@@ -29,14 +29,18 @@ export class RegisterFormComponent {
 
   submitForm = output<RegisterCompanyCredentials>();
 
-  emailValid = computed(() => this.email().includes('@') && this.email().length > 5);
-  passwordValid = computed(() => this.password().length >= 6);
+  isValidEmail = computed(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(this.email());
+  });
+  
+  passwordValid = computed(() => this.password().length >= 8);
   passwordsMatch = computed(() => this.password() === this.confirmPassword());
   nameValid = computed(() => this.name().trim().length > 0);
   locationValid = computed(() => this.companyLocation() !== null && this.companyLocation()?.address !== '');
 
   isFormInvalid = computed(() => {
-    return !(this.emailValid() && this.passwordValid() && this.passwordsMatch() && this.nameValid() && this.locationValid());
+    return !(this.isValidEmail() && this.passwordValid() && this.passwordsMatch() && this.nameValid() && this.locationValid());
   });
 
   onSubmit() {
