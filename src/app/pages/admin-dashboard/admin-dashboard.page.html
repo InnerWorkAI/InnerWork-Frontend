@@ -10,7 +10,29 @@
         + Add Employee
       </button>
     </header>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <app-dashboard-card 
+        title="Company Well-being" 
+        [value]="avgWellBeing()" 
+        description="Average health score"
+        [trend]="'up'">
+      </app-dashboard-card>
 
+      <app-dashboard-card 
+        title="Critical Alerts" 
+        [value]="criticalAlerts()" 
+        [percentage]="criticalAlerts() > 0 ? 'Action required' : 'All clear'"
+        [trend]="criticalAlerts() > 0 ? 'down' : 'neutral'"
+        description="Employees at high risk">
+      </app-dashboard-card>
+
+      <app-dashboard-card 
+        title="Participation" 
+        [value]="participationRate()" 
+        description="Survey completion rate"
+        [trend]="'neutral'">
+      </app-dashboard-card>
+    </div>
     <section class="table-card">
       <div class="table-header">
         <div>

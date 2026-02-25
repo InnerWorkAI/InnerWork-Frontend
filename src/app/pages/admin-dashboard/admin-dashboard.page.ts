@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, effect } from '@angular/core';
+import { Component, OnInit, inject, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component';
@@ -7,17 +7,19 @@ import { Department } from 'src/app/shared/models/employee';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { RouterModule } from '@angular/router';
+import { DashboardCardComponent } from 'src/app/shared/components/dashboard-card/dashboard-card.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, EmployeeChartComponent, RouterModule]
+  imports: [CommonModule, IonicModule, EmployeeChartComponent, RouterModule, DashboardCardComponent]
 })
 export class AdminDashboardPage implements OnInit {
+  private readonly CRITICAL_LIMIT = 70; 
+  private readonly WARNING_LIMIT = 50;
   private modalCtrl = inject(ModalController);
-  // Hacemos el servicio público para que el HTML pueda leer la señal .employees() directamente
   public employeeService = inject(EmployeeService);
   private burnoutService = inject(BurnoutFormService);
   public showAllEmployees = false;
@@ -40,12 +42,48 @@ export class AdminDashboardPage implements OnInit {
   }
 
   ngOnInit() {
-    // Solo necesitamos pedirle al servicio que cargue una vez.
-    // La señal se actualizará y la pantalla reaccionará sola.
+    this.burnoutService.loadAll();
     this.employeeService.loadEmployees();
   }
 
-  // Crea un objeto para guardar los scores: { "id_empleado": score }
+  public avgWellBeing = computed(() => {
+    const forms = this.burnoutService.burnoutForms();
+    if (forms.length === 0) return '0%';
+    
+    const sum = forms.reduce((acc, curr) => acc + (curr.burnout_score || 0), 0);
+    const avg = sum / forms.length;
+    
+    // Invertimos: 100 - burnout = bienestar
+    return Math.round(100 - avg) + '%';
+  });
+
+  // 2. Alertas Críticas (Empleados con score >= 75)
+  public criticalAlerts = computed(() => {
+  const forms = this.burnoutService.burnoutForms();
+  
+  const highRiskForms = forms.filter(f => f.burnout_score >= this.CRITICAL_LIMIT);
+  
+  // 2. Usamos un Set para contar IDs de empleados únicos
+  // Así, si un empleado tiene 5 formularios rojos, solo cuenta como 1 alerta crítica
+  const uniqueEmployeesAtRisk = new Set(highRiskForms.map(f => f.employee_id));
+  
+  return uniqueEmployeesAtRisk.size;
+});
+  // 3. Tasa de Participación (Empleados únicos que han participado)
+  public participationRate = computed(() => {
+    const allEmployees = this.employeeService.employees();
+    const allForms = this.burnoutService.burnoutForms();
+    
+    if (allEmployees.length === 0) return '0%';
+
+    // Usamos un Set para obtener IDs de empleados únicos que han rellenado el form
+    const uniqueParticipants = new Set(allForms.map(f => f.employee_id));
+    
+    const rate = (uniqueParticipants.size / allEmployees.length) * 100;
+    return Math.round(rate) + '%';
+  });
+
+
   public burnoutScores: { [key: number]: any } = {};
 
   private loadBurnoutData(emps: any[]) {
@@ -68,7 +106,7 @@ export class AdminDashboardPage implements OnInit {
     });
   }
 
-  // ABRIR MODAL: He simplificado esto porque el modal ya llama al servicio por dentro
+  // abrir modal
   async editEmployee() {
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
@@ -80,16 +118,17 @@ export class AdminDashboardPage implements OnInit {
   }
 
   getScoreBg(score: number): string {
-    if (score >= 80) return '#fee2e2'; 
+    if (score >= 70) return '#fee2e2'; 
     if (score < 50) return '#f0fdf4';  
     if (score < 70) return '#fffbeb';  
     return '#f3f4f6';                  
   }
 
   getScoreColor(score: number): string {
-    if (score >= 80) return '#ef4444'; 
-    if (score < 50) return '#16a34a'; 
-    if (score < 70) return '#d97706'; 
+    if (score >= this.CRITICAL_LIMIT) return '#ef4444'; 
+    if (score > this.WARNING_LIMIT) return '#d97706'; 
+    else return '#16a34a'; 
+    
     return '#374151';
   }
 
