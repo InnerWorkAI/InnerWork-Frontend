@@ -1,9 +1,13 @@
 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-    <div>
-      <h3 class="text-xl font-bold text-gray-800">Organizational Climate Trends</h3>
-      <p class="text-sm text-gray-500">Trends in overall satisfaction and stress levels over the last month.</p>
-    </div>
+    <div class="mb-8">
+        @if (title()) {
+          <h3 class="text-xl font-bold text-gray-800">{{ title() }}</h3>
+        }
+        @if (subtitle()) {
+          <p class="text-sm text-gray-500">{{ subtitle() }}</p>
+        }
+      </div>
 
     <div class="flex items-center bg-transparent p-1 gap-3">
       <button 
@@ -11,9 +15,9 @@
         [style.background-color]="daysRange() === 7 ? 'var(--ion-color-primary)' : 'transparent'"
         [style.color]="daysRange() === 7 ? 'var(--ion-color-primary-contrast)' : 'var(--ion-color-step-600, #666)'"
         [class.shadow-md]="daysRange() === 7"
-        [class.border-transparent]="daysRange() === 7"
-        [class.border-gray-200]="daysRange() !== 7"
-        class="!px-6 !py-2 !text-xs !font-bold !rounded-full !transition-all !duration-300 !min-w-[70px] !border">
+        class="!px-6 !py-2 !text-xs !font-bold !rounded-full !transition-all !duration-300 !min-w-[70px] !border"
+        [class.!border-transparent]="daysRange() === 7"
+        [class.!border-gray-200]="daysRange() !== 7">
         7 Days
       </button>
 
@@ -22,24 +26,30 @@
         [style.background-color]="daysRange() === 30 ? 'var(--ion-color-primary)' : 'transparent'"
         [style.color]="daysRange() === 30 ? 'var(--ion-color-primary-contrast)' : 'var(--ion-color-step-600, #666)'"
         [class.shadow-md]="daysRange() === 30"
-        [class.border-transparent]="daysRange() === 30"
-        [class.border-gray-200]="daysRange() !== 30"
-        class="!px-6 !py-2 !text-xs !font-bold !rounded-full !transition-all !duration-300 !min-w-[70px] !border">
+        class="!px-6 !py-2 !text-xs !font-bold !rounded-full !transition-all !duration-300 !min-w-[70px] !border"
+        [class.!border-transparent]="daysRange() === 30"
+        [class.!border-gray-200]="daysRange() !== 30">
         30 Days
       </button>
     </div>
   </div>
 
-  <div class="w-full">
-    <apx-chart
-      [series]="series()"
-      [chart]="chart"
-      [xaxis]="xaxis()"
-      [yaxis]="yaxis"
-      [stroke]="stroke"
-      [fill]="fill"
-      [tooltip]="tooltip"
-      [colors]="colors">
-    </apx-chart>
+  <div class="w-full min-h-[350px]">
+    @if (series().length > 0) {
+      <apx-chart
+        [series]="series()"
+        [chart]="chart"
+        [xaxis]="xaxis()"
+        [yaxis]="yaxis"
+        [stroke]="stroke"
+        [fill]="fill"
+        [tooltip]="tooltip"
+        [colors]="colors">
+      </apx-chart>
+    } @else {
+      <div class="flex items-center justify-center h-[350px] text-gray-400 italic">
+        No data available for the selected period.
+      </div>
+    }
   </div>
 </div>

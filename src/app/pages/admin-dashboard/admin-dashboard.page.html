@@ -98,7 +98,12 @@
       </div>
     </section>
     <section class="table-card">
-      <app-employee-chart class="full-width-chart"></app-employee-chart>
+      <app-employee-chart 
+        class="full-width-chart" 
+        [rawData]="burnoutService.burnoutForms()" 
+        title="Organizational Climate Trends"
+        subtitle="Trends in overall satisfaction and stress levels over the last month.">
+      </app-employee-chart>
     </section>
 
   </div>

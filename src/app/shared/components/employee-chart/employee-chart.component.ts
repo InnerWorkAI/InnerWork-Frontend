@@ -1,6 +1,5 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, signal, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { 
   NgApexchartsModule,
   ApexAxisChartSeries, 
@@ -19,137 +18,76 @@ import {
   templateUrl: './employee-chart.component.html',
   styleUrls: ['./employee-chart.component.scss']
 })
-export class EmployeeChartComponent implements OnInit {
-  private burnoutService = inject(BurnoutFormService);
-  
+export class EmployeeChartComponent {
+  public title = input<string>('');
+  public subtitle = input<string>('');
+  public rawData = input<any[]>([]);
   public daysRange = signal<7 | 30>(7);
-  private allForms = this.burnoutService.burnoutForms;
 
-  // Al iniciar, cargamos los datos si el servicio no lo ha hecho ya
-  ngOnInit() {
-    this.burnoutService.loadAll();
-  }
+  // Colores corporativos
+  private primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary').trim() || '#9333ea';
+  private redColor = '#aa0b0b';
 
-  // 1. Datos reactivos mapeados al modelo real
-  // En employee-chart.component.ts
+  // 1. Procesamos los datos para las series (Media de Bienestar)
+  public series = computed<ApexAxisChartSeries>(() => {
+    const forms = this.rawData().filter(f => f?.created_at && f?.burnout_score !== undefined);
+    if (forms.length === 0) return [];
 
-public series = computed<ApexAxisChartSeries>(() => {
-  const forms = this.allForms();
-  
-  // 1. Agrupamos por fecha (YYYY-MM-DD) para evitar duplicados en el eje X
-  const dailyData: { [key: string]: { total: number, count: number } } = {};
+    const dailyData: { [key: string]: { total: number, count: number } } = {};
 
-  forms.forEach(f => {
-    const dateKey = new Date(f.created_at).toISOString().split('T')[0];
-    if (!dailyData[dateKey]) {
-      dailyData[dateKey] = { total: 0, count: 0 };
-    }
-    const wellbeingScore = 100 - f.burnout_score; 
-    dailyData[dateKey].total += wellbeingScore;
-    dailyData[dateKey].count++;
+    forms.forEach(f => {
+      const dateKey = new Date(f.created_at).toISOString().split('T')[0];
+      if (!dailyData[dateKey]) dailyData[dateKey] = { total: 0, count: 0 };
+      
+      dailyData[dateKey].total += (100 - f.burnout_score);
+      dailyData[dateKey].count++;
+    });
+
+    const sortedDates = Object.keys(dailyData).sort();
+    const averages = sortedDates.map(date => Math.round(dailyData[date].total / dailyData[date].count));
+
+    return [{
+      name: 'Company Average',
+      data: averages.slice(-this.daysRange())
+    }];
   });
 
-  // 2. Ordenamos las fechas y calculamos la media
-  const sortedDates = Object.keys(dailyData).sort();
-  const averages = sortedDates.map(date => 
-    Math.round(dailyData[date].total / dailyData[date].count)
-  );
+  // 2. Procesamos el Eje X
+  public xaxis = computed<ApexXAxis>(() => {
+    const forms = this.rawData().filter(f => f?.created_at);
+    const dates = [...new Set(forms.map(f => new Date(f.created_at).toISOString().split('T')[0]))].sort();
 
-  // 3. Aplicamos el rango (7 o 30 días)
-  const finalData = averages.slice(-this.daysRange());
+    const finalDates = dates.slice(-this.daysRange()).map(d => {
+      const dateObj = new Date(d);
+      return `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
+    });
 
-  return [{
-    name: 'Company Average',
-    data: finalData
-  }];
-});
-
-public xaxis = computed<ApexXAxis>(() => {
-  const forms = this.allForms();
-  
-  // Hacemos lo mismo para el eje X para que coincida con las series
-  const dates = [...new Set(forms.map(f => 
-    new Date(f.created_at).toISOString().split('T')[0]
-  ))].sort();
-
-  const finalDates = dates.slice(-this.daysRange()).map(d => {
-    const dateObj = new Date(d);
-    return `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
+    return {
+      categories: finalDates,
+      labels: { style: { colors: '#a4a4a4' } }
+    };
   });
 
-  return {
-    categories: finalDates,
-    labels: { style: { colors: '#a4a4a4' } }
-  };
-});
-
-  // 3. Configuración visual (el "look & feel")
-  public chart: ApexChart = {
-    type: 'line',
-    height: 350,
-    toolbar: { show: false },
-    animations: { enabled: true }
-  };
-
-  private primaryColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--ion-color-primary').trim() || '#9333ea';
-  
-  private redColor = '#aa0b0b'; 
-
-  // Ahora los usamos en las configuraciones
+  // 3. Configuración Visual Estática
+  public chart: ApexChart = { type: 'line', height: 350, toolbar: { show: false }, animations: { enabled: true } };
   public colors = [this.primaryColor];
+  public stroke: ApexStroke = { curve: 'smooth', width: 3 };
+  public yaxis: ApexYAxis = { min: 0, max: 100, tickAmount: 5, labels: { formatter: (val) => val.toFixed(0) + "%", style: { colors: '#a4a4a4' } } };
+  public tooltip: ApexTooltip = { theme: 'light', y: { formatter: (val) => val + "%" } };
 
   public fill: ApexFill = {
-  type: 'gradient',
-  gradient: {
-    type: 'vertical',
-    shadeIntensity: 0.5,
-    inverseColors: false,
-    opacityFrom: 1,
-    opacityTo: 1,
-    colorStops: [
-      {
-        offset: 0,
-        color: this.primaryColor, 
-        opacity: 1
-      },
-      {
-        offset: 60,
-        color: this.primaryColor, 
-        opacity: 1
-      },
-      {
-        offset: 80, 
-        color: this.redColor, 
-        opacity: 1
-      },
-      {
-        offset: 100,
-        color: this.redColor, 
-        opacity: 1
-      }
-    ]
-  }
-};
-  
-  public stroke: ApexStroke = {
-    curve: 'smooth',
-    width: 3
-  };
-
-  public yaxis: ApexYAxis = {
-    min: 0,
-    max: 100,
-    tickAmount: 5,
-    labels: {
-      formatter: (val) => val.toFixed(0) + "%",
-      style: { colors: '#a4a4a4' }
+    type: 'gradient',
+    gradient: {
+      type: 'vertical',
+      shadeIntensity: 0.5,
+      inverseColors: false,
+      colorStops: [
+        { offset: 0, color: this.primaryColor, opacity: 1 },
+        { offset: 60, color: this.primaryColor, opacity: 1 },
+        { offset: 80, color: this.redColor, opacity: 1 },
+        { offset: 100, color: this.redColor, opacity: 1 }
+      ]
     }
-  };
-
-  public tooltip: ApexTooltip = {
-    theme: 'light',
-    y: { formatter: (val) => val + "%" }
   };
 
   toggleRange() {
