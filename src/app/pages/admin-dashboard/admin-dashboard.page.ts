@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, effect, computed } from '@angular/core';
+import { Component, OnInit, inject, effect, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component';
@@ -8,6 +8,7 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { RouterModule } from '@angular/router';
 import { DashboardCardComponent } from 'src/app/shared/components/dashboard-card/dashboard-card.component';
+import { ApexAxisChartSeries } from 'ng-apexcharts';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -31,6 +32,13 @@ export class AdminDashboardPage implements OnInit {
     [Department.SALES]: 'Sales',
     [Department.HUMAN_RESOURCES]: 'Human Resources'
   };
+
+  public daysRange = signal<7 | 30>(7);
+  private primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary').trim() || '#9333ea';
+  
+  public chartLegend = [
+    { label: 'Satisfaction', color: this.primaryColor }
+  ];
 
   constructor() {
     effect(() => {
@@ -57,19 +65,19 @@ export class AdminDashboardPage implements OnInit {
     return Math.round(100 - avg) + '%';
   });
 
-  // 2. Alertas Críticas (Empleados con score >= 75)
+  // Alertas Críticas (Empleados con score >= 70)
   public criticalAlerts = computed(() => {
   const forms = this.burnoutService.burnoutForms();
   
   const highRiskForms = forms.filter(f => f.burnout_score >= this.CRITICAL_LIMIT);
   
-  // 2. Usamos un Set para contar IDs de empleados únicos
+  // Usamos un Set para contar IDs de empleados únicos
   // Así, si un empleado tiene 5 formularios rojos, solo cuenta como 1 alerta crítica
   const uniqueEmployeesAtRisk = new Set(highRiskForms.map(f => f.employee_id));
   
   return uniqueEmployeesAtRisk.size;
 });
-  // 3. Tasa de Participación (Empleados únicos que han participado)
+  // Tasa de Participación (Empleados únicos que han participado)
   public participationRate = computed(() => {
     const allEmployees = this.employeeService.employees();
     const allForms = this.burnoutService.burnoutForms();
@@ -81,6 +89,47 @@ export class AdminDashboardPage implements OnInit {
     
     const rate = (uniqueParticipants.size / allEmployees.length) * 100;
     return Math.round(rate) + '%';
+  });
+
+  public chartSeries = computed<ApexAxisChartSeries>(() => {
+    const forms = this.burnoutService.burnoutForms()
+      .filter(f => f?.created_at && f?.burnout_score !== undefined);
+    
+    if (forms.length === 0) return [];
+
+    const dailyData: { [key: string]: { total: number, count: number } } = {};
+
+    forms.forEach(f => {
+      const dateKey = new Date(f.created_at).toISOString().split('T')[0];
+      if (!dailyData[dateKey]) dailyData[dateKey] = { total: 0, count: 0 };
+      
+      // Invertimos el score para mostrar bienestar (100 - burnout)
+      dailyData[dateKey].total += (100 - f.burnout_score);
+      dailyData[dateKey].count++;
+    });
+
+    const sortedDates = Object.keys(dailyData).sort();
+    const averages = sortedDates.map(date => 
+      Math.round(dailyData[date].total / dailyData[date].count)
+    );
+
+    return [{
+      name: 'Company Average',
+      data: averages.slice(-this.daysRange())
+    }];
+  });
+
+  public chartCategories = computed<string[]>(() => {
+    const forms = this.burnoutService.burnoutForms().filter(f => f?.created_at);
+    
+    const dates = [...new Set(forms.map(f => 
+      new Date(f.created_at).toISOString().split('T')[0]
+    ))].sort();
+
+    return dates.slice(-this.daysRange()).map(d => {
+      const dateObj = new Date(d);
+      return `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
+    });
   });
 
 
@@ -106,7 +155,7 @@ export class AdminDashboardPage implements OnInit {
     });
   }
 
-  // abrir modal
+  // Abrir modal
   async editEmployee() {
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
@@ -131,7 +180,6 @@ export class AdminDashboardPage implements OnInit {
     
     return '#374151';
   }
-
 
   toggleShowAll() {
     this.showAllEmployees = !this.showAllEmployees;

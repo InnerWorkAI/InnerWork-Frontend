@@ -12,7 +12,7 @@
             'bg-red-50 text-red-600': trend() === 'down',
             'bg-gray-50 text-gray-500': trend() === 'neutral'
           }">
-        <ion-icon [name]="trend() === 'up' ? 'arrow-up' : 'arrow-down'" class="text-[10px] mr-0.5"></ion-icon>
+        <ion-text [color]="trend() === 'up' ? 'success' : 'danger'" class="text-[10px] mr-0.5"></ion-text>
         {{ percentage() }}
       </div>
     }
