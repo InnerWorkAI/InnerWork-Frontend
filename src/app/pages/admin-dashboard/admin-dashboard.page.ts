@@ -21,7 +21,7 @@ export class AdminDashboardPage implements OnInit {
   private readonly WARNING_LIMIT = 50;
   private modalCtrl = inject(ModalController);
   public employeeService = inject(EmployeeService);
-  private burnoutService = inject(BurnoutFormService);
+  public burnoutService = inject(BurnoutFormService);
   public showAllEmployees = false;
   user = "Admin";
   
