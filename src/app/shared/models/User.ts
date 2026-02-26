@@ -16,9 +16,3 @@ export interface RegisterCompanyCredentials {
   name: string;
   address: string;
 }
-
-export interface Address {
-  lat: number;
-  lng: number;
-  address: string;
-}

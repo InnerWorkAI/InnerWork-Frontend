@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, computed, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Address, LoginCredentials, RegisterCompanyCredentials } from '../../models/User';
+import { LoginCredentials, RegisterCompanyCredentials } from '../../models/User';
 import { IonicModule } from '@ionic/angular';
-import * as L from 'leaflet';
 import { MapBrowserComponent } from "../map-browser/map-browser.component";
 
 @Component({
@@ -19,7 +18,7 @@ export class RegisterFormComponent {
   confirmPassword = signal('');
   name = signal('');
 
-  companyLocation = signal<Address>({ lat: 0, lng: 0, address: '' });
+  companyLocation = signal<string>('');
   
   emailTouched = signal(false);
   passwordTouched = signal(false);
@@ -37,7 +36,7 @@ export class RegisterFormComponent {
   passwordValid = computed(() => this.password().length >= 8);
   passwordsMatch = computed(() => this.password() === this.confirmPassword());
   nameValid = computed(() => this.name().trim().length > 0);
-  locationValid = computed(() => this.companyLocation() !== null && this.companyLocation()?.address !== '');
+  locationValid = computed(() => this.companyLocation() !== '');
 
   isFormInvalid = computed(() => {
     return !(this.isValidEmail() && this.passwordValid() && this.passwordsMatch() && this.nameValid() && this.locationValid());
@@ -56,12 +55,12 @@ export class RegisterFormComponent {
       email: this.email(),
       password: this.password(),
       name: this.name(),
-      address: this.companyLocation().address
+      address: this.companyLocation()
     });
   }
 
-  onLocationSelected(location: { lat: number, lng: number, address: string }) {
-    this.companyLocation.set(location);
+  onLocationSelected(address: string) {
+    this.companyLocation.set(address);
     console.log('Signal actualizado:', this.companyLocation());
     this.locationTouched.set(true);
   }

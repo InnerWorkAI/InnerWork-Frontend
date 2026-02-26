@@ -102,9 +102,9 @@ export class AddEditEmployeeModalComponent implements OnInit {
     this.lastManagerDate.set(emp.last_manager_date);
   }
 
-  onLocationSelected(location: { lat: number, lng: number, address: string }) {
+  onLocationSelected(address: string) {
     this.locationTouched.set(true);
-    this.homeAddress.set(location.address);
+    this.homeAddress.set(address);
   }
 
   save() {
