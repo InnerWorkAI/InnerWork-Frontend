@@ -98,12 +98,44 @@
       </div>
     </section>
     <section class="table-card">
-      <app-employee-chart 
-        class="full-width-chart" 
-        [rawData]="burnoutService.burnoutForms()" 
-        title="Organizational Climate Trends"
-        subtitle="Trends in overall satisfaction and stress levels over the last month.">
-      </app-employee-chart>
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800">Organization Climate Trends</h3>
+            <p class="text-sm text-gray-500">Trends in over satisfaction and stress levels</p>
+          </div>
+
+          <div class="flex gap-2 bg-gray-50 p-1 rounded-xl">
+            <button 
+              (click)="daysRange.set(7)"
+              [style.background-color]="daysRange() === 7 ? '#9333ea' : 'transparent'"
+              [style.color]="daysRange() === 7 ? 'white' : '#666'"
+              class="!px-4 !py-2 !text-xs !font-bold !rounded-lg !transition-all">
+              7 Days
+            </button>
+            <button 
+              (click)="daysRange.set(30)"
+              [style.background-color]="daysRange() === 30 ? '#9333ea' : 'transparent'"
+              [style.color]="daysRange() === 30 ? 'white' : '#666'"
+              class="!px-4 !py-2 !text-xs !font-bold !rounded-lg !transition-all">
+              30 Days
+            </button>
+          </div>
+        </div>
+
+        @if (chartSeries()[0]?.data?.length) {
+          <app-employee-chart 
+            [series]="chartSeries()" 
+            [categories]="chartCategories()"
+            [legend]="chartLegend">
+          </app-employee-chart>
+        } @else {
+          <div class="h-[350px] flex items-center justify-center text-gray-400">
+            <ion-spinner name="crescent"></ion-spinner>
+            <p class="ml-2">Cargando estadísticas...</p>
+          </div>
+        }
+      </div>
     </section>
 
   </div>
