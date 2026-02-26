@@ -1,0 +1,57 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="px-4 pt-4">
+    <ion-title class="text-xl font-black text-slate-800 uppercase tracking-tighter">
+      Update <span class="text-purple-600">Photo</span>
+    </ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="close()" [disabled]="isLoading()" color="medium" class="font-bold text-xs uppercase tracking-widest">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-white">
+  <div class="flex flex-col items-center gap-8 py-8">
+    
+    <div class="relative mx-auto"> 
+      <div class="w-44 h-44 aspect-square rounded-full border-[6px] border-purple-50 overflow-hidden shadow-2xl bg-slate-50 transition-transform hover:scale-105 duration-300 flex items-center justify-center">
+        <img [src]="previewUrl() || 'assets/images/default-avatar.jpg'" 
+             class="min-w-full min-h-full object-cover">
+      </div>
+      
+      <div class="absolute bottom-2 right-2 bg-purple-600 p-2.5 rounded-full shadow-lg text-white flex items-center justify-center border-2 border-white">
+        @if (isLoading()) {
+          <ion-spinner name="crescent" class="text-white w-5 h-5"></ion-spinner>
+        } @else {
+          <ion-icon name="camera" class="text-xl"></ion-icon>
+        }
+      </div>
+    </div>
+
+    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden">
+
+    <div class="w-full space-y-4 px-4">
+      <ion-button expand="block" fill="outline" shape="round" 
+                  (click)="fileInput.click()" 
+                  [disabled]="isLoading()"
+                  class="h-12 font-bold text-sm tracking-wide">
+        Select Photo
+      </ion-button>
+
+      <ion-button expand="block" shape="round" color="primary" 
+                  [disabled]="!selectedFile() || isLoading()" 
+                  (click)="upload()"
+                  class="h-14 font-black text-sm uppercase tracking-widest shadow-lg shadow-purple-200">
+        
+        @if (isLoading()) {
+          <ion-spinner name="crescent" slot="start" class="mr-3"></ion-spinner>
+          Uploading...
+        } @else {
+          Save Changes
+        }
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -65,6 +65,7 @@ export interface Employee {
     marital_status: MaritalStatus;
     home_address: string;
     phone: string;
+    profile_image_url?: string;
     department: Department;
     education: EducationLevel;
     education_field: EducationField;

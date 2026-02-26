@@ -17,7 +17,7 @@ export class EmployeeService {
       if (this.auth.isAuthenticated() && !this._currentEmployee()) {
         this.loadMyProfile();
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   // 1. Definimos la señal privada (la que cambia) 
@@ -72,6 +72,27 @@ export class EmployeeService {
     return this.api.delete(`${this.endpoint}${id}/`).pipe(
       tap(() => {
         this._employees.update(prev => prev.filter(e => e.id !== id));
+      })
+    );
+  }
+
+  updateProfileImage(employeeId: number, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.api.post<any>(`${this.endpoint}${employeeId}/profile-image`, formData).pipe(
+      tap((response) => {
+        const current = this._currentEmployee();
+        if (current && current.id === employeeId) {
+          this._currentEmployee.set({
+            ...current,
+            profile_image_url: response.profile_image_url
+          });
+        }
+        
+        this._employees.update(prev =>
+          prev.map(e => e.id === employeeId ? { ...e, profile_image_url: response.profile_image_url } : e)
+        );
       })
     );
   }
