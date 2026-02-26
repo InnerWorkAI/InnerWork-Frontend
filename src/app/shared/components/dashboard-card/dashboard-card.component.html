@@ -1,0 +1,33 @@
+<div class="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full min-h-[140px] flex flex-col">
+  
+  <div class="flex justify-between items-start">
+    <div>
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{{ title() }}</p>
+    </div>
+
+    @if (percentage()) {
+      <div class="flex items-center text-xs font-bold px-2 py-0.5 rounded-full"
+          [ngClass]="{
+            'bg-green-50 text-green-600': trend() === 'up',
+            'bg-red-50 text-red-600': trend() === 'down',
+            'bg-gray-50 text-gray-500': trend() === 'neutral'
+          }">
+        <ion-text [color]="trend() === 'up' ? 'success' : 'danger'" class="text-[10px] mr-0.5"></ion-text>
+        {{ percentage() }}
+      </div>
+    }
+  </div>
+    
+  <div class="flex-1 flex items-center">
+    <h1 class="text-4xl font-black text-gray-900 leading-none">
+      {{ value() }}
+    </h1>
+  </div>
+
+  <div class="mt-auto">
+    <p class="text-[11px] text-gray-400 font-medium">
+      {{ description() }}
+    </p>
+  </div>
+
+</div>
