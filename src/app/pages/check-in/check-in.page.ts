@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from '@ionic/angular/standalone';
@@ -7,6 +7,9 @@ import { EmployeeSurveyComponent } from "src/app/shared/components/employee-surv
 import { addIcons } from 'ionicons';
 import { checkmarkCircle } from 'ionicons/icons';
 import { JournalData } from 'src/app/shared/models/Journal';
+import { FormService } from 'src/app/core/services/form-service';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, firstValueFrom, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-check-in',
@@ -16,6 +19,9 @@ import { JournalData } from 'src/app/shared/models/Journal';
   imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, WebcamPersonDetectorComponent, EmployeeSurveyComponent]
 })
 export class CheckInPage implements OnInit {
+
+  formService = inject(FormService);
+  private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
 
   isLoading = true;
   hasPendingSurvey = false;
@@ -72,17 +78,25 @@ export class CheckInPage implements OnInit {
 
 
 
-
   async checkSurveyStatus() {
     this.isLoading = true;
 
+
     try {
 
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      this.hasPendingSurvey = true;
+      const status = await firstValueFrom(
+        this.hasCompletedToday$.pipe(
+          filter(val => val !== undefined), 
+          timeout(7000)
+        )
+      );
+
+      console.log('¡Status recibido!', status);
+      this.hasPendingSurvey = status;
 
     } catch (error) {
-      this.hasPendingSurvey = false;
+      console.error('Error o Timeout esperando al FormService:', error);
+      this.hasPendingSurvey = true;
     } finally {
       this.isLoading = false;
     }

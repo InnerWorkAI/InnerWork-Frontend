@@ -7,6 +7,9 @@ import { AiChatComponent } from "src/app/shared/components/ai-chat/ai-chat.compo
 import { addIcons } from 'ionicons';
 import { alertCircle, checkmarkCircle } from 'ionicons/icons';
 import { AuthService } from 'src/app/core/services/auth-service';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, firstValueFrom } from 'rxjs';
+import { FormService } from 'src/app/core/services/form-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,9 +19,12 @@ import { AuthService } from 'src/app/core/services/auth-service';
   imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, EmployeeChartComponent, AiChatComponent]
 })
 export class DashboardPage implements OnInit {
+  formService = inject(FormService);
 
-  hasPendingCheckIn: boolean = true; // Cambia a false cuando el usuario termine
-  
+  private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
+  hasDoneCheckin: boolean = true;
+  isLoading: boolean = true;
+
   constructor() {
     addIcons({
       checkmarkCircle,
@@ -28,12 +34,30 @@ export class DashboardPage implements OnInit {
 
   authService = inject(AuthService);
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.checkStatus();
+  }
+
+  async checkStatus() {
+    this.isLoading = true;
+    try {
+      const completed = await firstValueFrom(
+        this.hasCompletedToday$.pipe(
+          filter(val => val !== undefined)
+        )
+      );
+
+      this.hasDoneCheckin = completed;
+      
+    } catch (error) {
+      console.error('Error checkeando status en Dashboard', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   startCheckIn() {
     console.log('Check-in started');
-    this.hasPendingCheckIn = false;
   }
 
 }
