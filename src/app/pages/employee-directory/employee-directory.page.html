@@ -56,7 +56,7 @@
                   @let evaluationDate = lastEvaluationDates()[emp.id!];
                     @if (evaluationDate) {
                       <span class="!font-medium !text-gray-700">
-                        {{ evaluationDate | date: 'dd-MM-yyyy' }}
+                        {{ evaluationDate | date: 'yyyy-MM-dd' }}
                       </span>
                     } @else if (lastScores()[emp.id!] === -1) {
                       <span class="!text-gray-300">N/A</span>

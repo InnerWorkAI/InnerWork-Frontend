@@ -43,7 +43,13 @@ export class EmployeeDirectoryPage implements OnInit {
       const fullName = `${emp.first_name} ${emp.last_name}`.toLowerCase();
       const deptId = emp.department as unknown as number;
       const deptName = DepartmentNames[deptId]?.toLowerCase() || '';
-      return fullName.includes(text) || deptName.includes(text);
+      const evaluationDate = this.lastEvaluationDates()[emp.id!] || '';
+
+      return (
+        fullName.includes(text) || 
+        deptName.includes(text) || 
+        evaluationDate.includes(text)
+      );
     });
 
     // Llamamos a la función usando THIS
