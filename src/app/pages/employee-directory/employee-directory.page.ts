@@ -5,6 +5,7 @@ import { IonContent } from '@ionic/angular/standalone';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
+import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
 
 const DepartmentNames: Record<number, string> = {
     0: 'R&D',
@@ -17,7 +18,7 @@ const DepartmentNames: Record<number, string> = {
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, SearchBarComponent ]
+  imports: [IonContent, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
 })
 
 export class EmployeeDirectoryPage implements OnInit {
@@ -28,37 +29,45 @@ export class EmployeeDirectoryPage implements OnInit {
   public lastScores = signal<Record<number, number>>({});
   public lastEvaluationDates = signal<Record<number, string>>({});
   public searchText = signal<string>('');
+  public selectedDept = signal<number | null>(null);
+  public minBurnout = signal<number>(0);
+  public maxBurnout = signal<number>(100);
   
   public filteredEmployees = computed(() => {
     const text = this.searchText().toLowerCase().trim();
+    const deptFilter = this.selectedDept();
+    const min = this.minBurnout();
+    const max = this.maxBurnout();
+
     const all = this.employeeService.employees();
     
-    all.forEach(emp => {
-      if (emp.id) this.loadEmployeeScore(emp.id);
-    });
-
-    if (!text) return all;
-
     const filtered = all.filter(emp => {
       const fullName = `${emp.first_name} ${emp.last_name}`.toLowerCase();
       const deptId = emp.department as unknown as number;
       const deptName = DepartmentNames[deptId]?.toLowerCase() || '';
       const evaluationDate = this.lastEvaluationDates()[emp.id!] || '';
+      
+      const matchesText = !text || 
+                          fullName.includes(text) || 
+                          deptName.includes(text) || 
+                          evaluationDate.includes(text);
 
-      return (
-        fullName.includes(text) || 
-        deptName.includes(text) || 
-        evaluationDate.includes(text)
-      );
-    });
+      const matchesDept = deptFilter === null || deptId === deptFilter;
 
-    // Llamamos a la función usando THIS
-    filtered.forEach(emp => {
-      if (emp.id) this.loadEmployeeScore(emp.id);
-    });
+      const score = this.lastScores()[emp.id!];
+      
+      const isPending = score === undefined || score === -1;
+      const matchesBurnout = isPending || (score >= min && score <= max);
 
-    return filtered;
+      return matchesText && matchesDept && matchesBurnout;
   });
+
+  filtered.forEach(emp => {
+    if (emp.id) this.loadEmployeeScore(emp.id);
+  });
+
+  return filtered;
+});
 
   constructor(
 

@@ -7,10 +7,20 @@
       </div>
     </header>
 
-    <app-search-bar 
-      [placeholder]="'Find employee...'" 
-      (searchChange)="searchText.set($event)">
-    </app-search-bar>
+    <div class="!flex !flex-wrap !items-center !gap-6 !mb-8">
+      <div class="!flex-1 !min-w-[300px]">
+        <app-search-bar 
+          [placeholder]="'Find employee...'" 
+          (searchChange)="searchText.set($event)">
+        </app-search-bar>
+      </div>
+      <div>
+        <app-burnout-filter 
+          (rangeChange)="minBurnout.set($event.lower); maxBurnout.set($event.upper)">
+        </app-burnout-filter>
+      </div>
+    </div>
+    
 
     <section class="!block !w-full table-card">
       <div class="!overflow-hidden !bg-white !border !border-gray-200 !rounded-xl !shadow-sm">
