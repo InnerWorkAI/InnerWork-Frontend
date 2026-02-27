@@ -33,6 +33,10 @@ export class EmployeeDirectoryPage implements OnInit {
     const text = this.searchText().toLowerCase().trim();
     const all = this.employeeService.employees();
     
+    all.forEach(emp => {
+      if (emp.id) this.loadEmployeeScore(emp.id);
+    });
+
     if (!text) return all;
 
     const filtered = all.filter(emp => {
