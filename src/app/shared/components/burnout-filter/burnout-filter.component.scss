@@ -1,0 +1,27 @@
+.burnout-input {
+    width: 60px;
+    height: 44px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+    outline: none;
+    background-color: #ffffff;
+
+
+    &::placeholder {
+        color: #9ca3af;
+        opacity: 1; // Necesario en algunos navegadores
+        font-weight: 400;
+        }
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+.filter-container {
+    user-select: none;
+}
