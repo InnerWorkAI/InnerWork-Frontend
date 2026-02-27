@@ -167,17 +167,16 @@ export class AdminDashboardPage implements OnInit {
   }
 
   getScoreBg(score: number): string {
-    if (score >= 70) return '#fee2e2'; 
-    if (score < 50) return '#f0fdf4';  
-    if (score < 70) return '#fffbeb';  
+    if (score >= this.CRITICAL_LIMIT) return '#fee2e2'; 
+    if (score > this.WARNING_LIMIT) return '#fffbeb';  
+    if (score <= this.WARNING_LIMIT) return '#f3f4f6';  
     return '#f3f4f6';                  
   }
 
   getScoreColor(score: number): string {
     if (score >= this.CRITICAL_LIMIT) return '#ef4444'; 
     if (score > this.WARNING_LIMIT) return '#d97706'; 
-    else return '#16a34a'; 
-    
+    if (score <= this.WARNING_LIMIT) return '#16a34a';  
     return '#374151';
   }
 
