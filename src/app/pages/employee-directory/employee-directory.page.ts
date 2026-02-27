@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent } from '@ionic/angular/standalone';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
+import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 
 const DepartmentNames: Record<number, string> = {
     0: 'R&D',
@@ -16,7 +17,7 @@ const DepartmentNames: Record<number, string> = {
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule ]
+  imports: [IonContent, CommonModule, FormsModule, SearchBarComponent ]
 })
 
 export class EmployeeDirectoryPage implements OnInit {
@@ -26,17 +27,19 @@ export class EmployeeDirectoryPage implements OnInit {
   public burnoutService = inject(BurnoutFormService);
   public lastScores = signal<Record<number, number>>({});
   public lastEvaluationDates = signal<Record<number, string>>({});
-  public searchText = signal('');
+  public searchText = signal<string>('');
   
   public filteredEmployees = computed(() => {
-    const term = this.searchText().toLowerCase();
+    const text = this.searchText().toLowerCase().trim();
     const all = this.employeeService.employees();
     
+    if (!text) return all;
+
     const filtered = all.filter(emp => {
       const fullName = `${emp.first_name} ${emp.last_name}`.toLowerCase();
       const deptId = emp.department as unknown as number;
       const deptName = DepartmentNames[deptId]?.toLowerCase() || '';
-      return fullName.includes(term) || deptName.includes(term);
+      return fullName.includes(text) || deptName.includes(text);
     });
 
     // Llamamos a la función usando THIS

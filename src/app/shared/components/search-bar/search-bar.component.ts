@@ -12,11 +12,9 @@ export class SearchBarComponent  implements OnInit {
 
   placeholder = input<string>('Find Employee...'); 
   
-  // ✅ Signal Output: Emite el evento de búsqueda
   searchChange = output<string>(); 
 
   handleInput(event: any) {
-    // Obtenemos el valor y lo emitimos
     const value = event.target.value || '';
     this.searchChange.emit(value);
   }
