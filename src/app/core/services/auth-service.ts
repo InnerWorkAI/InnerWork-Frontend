@@ -60,7 +60,7 @@ export class AuthService {
           if (this.userRole() === 'admin') {
             this.router.navigate(['/admin/dashboard']);
           } else {
-            this.router.navigate(['/check-in']);
+            this.router.navigate(['/dashboard']);
           }
         })
       );

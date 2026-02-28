@@ -29,6 +29,7 @@ export class EmployeeService {
   public currentEmployee = this._currentEmployee.asReadonly();
 
   loadMyProfile(): void {
+    if (this.auth.currentUser()?.role === 'admin') return;
     this.api.get<Employee>(`${this.endpoint}me`).subscribe({
       next: (data) => {
         this._currentEmployee.set(data);

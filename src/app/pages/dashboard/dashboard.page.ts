@@ -9,7 +9,7 @@ import { alertCircle, checkmarkCircle } from 'ionicons/icons';
 import { AuthService } from 'src/app/core/services/auth-service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { filter, firstValueFrom } from 'rxjs';
-import { FormService } from 'src/app/core/services/form-service';
+import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,7 @@ import { FormService } from 'src/app/core/services/form-service';
   imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, EmployeeChartComponent, AiChatComponent]
 })
 export class DashboardPage implements OnInit {
-  formService = inject(FormService);
+  formService = inject(BurnoutFormService);
 
   private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
   hasDoneCheckin: boolean = true;

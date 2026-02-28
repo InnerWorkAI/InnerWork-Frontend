@@ -1,9 +1,9 @@
 <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-10 h-full flex flex-col font-sans">
   
   <h2 class="text-3xl font-bold text-gray-900 mb-8 tracking-tight">Check-in Questionnaire</h2>
+  
   @if (!isSurveySubmitted) {
 
-  
   <div class="mb-12">
     <div class="flex justify-between items-center mb-4">
       <span class="text-xs font-bold uppercase tracking-widest text-purple-600">Step {{currentStep}} of {{totalSteps}}</span>
@@ -20,21 +20,20 @@
     <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <div class="flex justify-between items-start gap-4">
         <h3 class="text-3xl font-bold text-gray-900 leading-tight text-balance">How satisfied are you with your work environment today?</h3>
-        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.environment }} / 5</span>
+        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.environment }} / 4</span>
       </div>
       <div class="py-12 px-2">
         <div class="relative flex items-center h-4">
           <div class="absolute w-full h-3 bg-gray-200 rounded-full"></div>
           <div class="absolute h-3 bg-purple-600 rounded-full z-10 pointer-events-none"
-               [style.width.%]="((formData.environment - 1) / 4) * 100"></div>
+               [style.width.%]="((formData.environment - 1) / 3) * 100"></div>
           <div class="absolute w-full flex justify-between px-[6px] z-20 pointer-events-none">
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
-            <div class="w-1 h-3 bg-black/10 rounded-full"></div>
           </div>
-          <input type="range" min="1" max="5" step="1" [(ngModel)]="formData.environment" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
+          <input type="range" min="1" max="4" step="1" [(ngModel)]="formData.environment" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
         </div>
         <div class="flex justify-between mt-6 text-sm font-black text-gray-400 uppercase tracking-widest px-1">
           <span>Not at all</span><span>Very Satisfied</span>
@@ -47,21 +46,20 @@
     <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <div class="flex justify-between items-start gap-4">
         <h3 class="text-3xl font-bold text-gray-900 leading-tight text-balance">Rate your level of job involvement and satisfaction.</h3>
-        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.involvement }} / 5</span>
+        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.involvement }} / 4</span>
       </div>
       <div class="py-12 px-2">
         <div class="relative flex items-center h-4">
           <div class="absolute w-full h-3 bg-gray-200 rounded-full"></div>
           <div class="absolute h-3 bg-purple-600 rounded-full z-10 pointer-events-none"
-               [style.width.%]="((formData.involvement - 1) / 4) * 100"></div>
+               [style.width.%]="((formData.involvement - 1) / 3) * 100"></div>
           <div class="absolute w-full flex justify-between px-[6px] z-20 pointer-events-none">
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
-            <div class="w-1 h-3 bg-black/10 rounded-full"></div>
           </div>
-          <input type="range" min="1" max="5" step="1" [(ngModel)]="formData.involvement" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
+          <input type="range" min="1" max="4" step="1" [(ngModel)]="formData.involvement" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
         </div>
         <div class="flex justify-between mt-6 text-sm font-black text-gray-400 uppercase tracking-widest px-1">
           <span>Low</span><span>Very High</span>
@@ -74,21 +72,20 @@
     <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <div class="flex justify-between items-start gap-4">
         <h3 class="text-3xl font-bold text-gray-900 leading-tight text-balance">How would you rate your performance today?</h3>
-        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.performance }} / 5</span>
+        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.performance }} / 4</span>
       </div>
       <div class="py-12 px-2">
         <div class="relative flex items-center h-4">
           <div class="absolute w-full h-3 bg-gray-200 rounded-full"></div>
           <div class="absolute h-3 bg-purple-600 rounded-full z-10 pointer-events-none"
-               [style.width.%]="((formData.performance - 1) / 4) * 100"></div>
+               [style.width.%]="((formData.performance - 1) / 3) * 100"></div>
           <div class="absolute w-full flex justify-between px-[6px] z-20 pointer-events-none">
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
-            <div class="w-1 h-3 bg-black/10 rounded-full"></div>
           </div>
-          <input type="range" min="1" max="5" step="1" [(ngModel)]="formData.performance" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
+          <input type="range" min="1" max="4" step="1" [(ngModel)]="formData.performance" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
         </div>
         <div class="flex justify-between mt-6 text-sm font-black text-gray-400 uppercase tracking-widest px-1">
           <span>Poor</span><span>Outstanding</span>
@@ -101,21 +98,20 @@
     <div class="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <div class="flex justify-between items-start gap-4">
         <h3 class="text-3xl font-bold text-gray-900 leading-tight text-balance">Did you maintain a healthy Work-Life balance?</h3>
-        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.balance }} / 5</span>
+        <span class="text-xl font-black text-purple-600 bg-purple-50 px-4 py-2 rounded-xl min-w-[5rem] text-center shadow-sm">{{ formData.balance }} / 4</span>
       </div>
       <div class="py-12 px-2">
         <div class="relative flex items-center h-4">
           <div class="absolute w-full h-3 bg-gray-200 rounded-full"></div>
           <div class="absolute h-3 bg-purple-600 rounded-full z-10 pointer-events-none"
-               [style.width.%]="((formData.balance - 1) / 4) * 100"></div>
+               [style.width.%]="((formData.balance - 1) / 3) * 100"></div>
           <div class="absolute w-full flex justify-between px-[6px] z-20 pointer-events-none">
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
             <div class="w-1 h-3 bg-black/10 rounded-full"></div>
-            <div class="w-1 h-3 bg-black/10 rounded-full"></div>
           </div>
-          <input type="range" min="1" max="5" step="1" [(ngModel)]="formData.balance" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
+          <input type="range" min="1" max="4" step="1" [(ngModel)]="formData.balance" class="absolute w-full h-full bg-transparent appearance-none cursor-pointer z-30 accent-purple-600">
         </div>
         <div class="flex justify-between mt-6 text-sm font-black text-gray-400 uppercase tracking-widest px-1">
           <span>Bad</span><span>Excellent</span>
@@ -171,26 +167,17 @@
 
   </div>
 
-<div class="flex justify-center items-center gap-6 mt-20 w-full px-6 max-w-5xl mx-auto">
-  
-  @if (currentStep > 1) {
-    <ion-button (click)="prevStep()" 
-                fill="outline" 
-                shape="round"
-                class="flex-1">
-      BACK
+  <div class="flex justify-center items-center gap-6 mt-20 w-full px-6 max-w-5xl mx-auto">
+    @if (currentStep > 1) {
+      <ion-button (click)="prevStep()" fill="outline" shape="round" class="flex-1">
+        BACK
+      </ion-button>
+    }
+    <ion-button (click)="currentStep === totalSteps ? submit() : nextStep()" fill="solid" shape="round" color="primary" class="flex-1">
+      {{ currentStep === totalSteps ? 'SUBMIT CHECK-IN' : 'CONTINUE' }}
     </ion-button>
-  }
-  
-  <ion-button (click)="currentStep === totalSteps ? submit() : nextStep()"
-              fill="solid" 
-              shape="round"
-              [color]="'primary'"
-              class="flex-1">
-    {{ currentStep === totalSteps ? 'SUBMIT CHECK-IN' : 'CONTINUE' }}
-  </ion-button>
-  
-</div>
+  </div>
+
   } @else {
     <div class="flex-grow flex flex-col items-center justify-center animate-in zoom-in-95 duration-500">
       <div class="bg-green-50 rounded-[3rem] p-12 w-full text-center border border-green-100 shadow-sm">
@@ -198,11 +185,10 @@
           <ion-icon name="checkmark-circle" style="font-size: 64px;"></ion-icon>
         </div>
         <h2 class="text-4xl font-black text-gray-900 mb-4 tracking-tight">Formulary Saved!</h2>
-        
-                <p class="text-gray-500 text-xl leading-relaxed max-w-md mx-auto">
-                  Your formulary has been saved successfully. Great job on maintaining a healthy work-life balance today!
-                </p>
-              </div>
-            </div>
-          }
-        
+        <p class="text-gray-500 text-xl leading-relaxed max-w-md mx-auto">
+          Your formulary has been saved successfully. Great job on maintaining a healthy work-life balance today!
+        </p>
+      </div>
+    </div>
+  }
+</div>
