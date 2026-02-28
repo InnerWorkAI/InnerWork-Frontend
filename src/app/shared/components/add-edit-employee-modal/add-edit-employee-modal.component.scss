@@ -87,3 +87,13 @@ ion-content::part(scroll) {
     background: var(--ion-color-primary-tint);
   }
 }
+
+
+.date-placeholder::-webkit-datetime-edit {
+  color: #9ca3af; /* Este es el gray-400 de Tailwind */
+}
+
+/* Cuando el usuario ya ha elegido una fecha, el color vuelve a ser negro */
+input[type="date"]:not(.date-placeholder)::-webkit-datetime-edit {
+  color: #111827; /* gray-900 */
+}
