@@ -6,7 +6,7 @@ import { IonicModule, ModalController } from "@ionic/angular";
 import { MenuController } from '@ionic/angular';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { addIcons } from 'ionicons';
-import { logOutOutline, personOutline } from 'ionicons/icons';
+import { business, logOutOutline, personOutline } from 'ionicons/icons';
 import { ChangePictureModalComponent } from '../change-picture-modal/change-picture-modal.component';
 
 @Component({
@@ -29,7 +29,8 @@ export class AuthenticatedLayoutComponent  implements OnInit {
 
     addIcons({
       personOutline,
-      logOutOutline
+      logOutOutline,
+      business
     });
   }
 
@@ -49,7 +50,7 @@ export class AuthenticatedLayoutComponent  implements OnInit {
   ngOnInit() {}
 
   closeMenu() {
-  this.menu.close();
+  this.menu.close("menu");
   }
 
   async changeProfilePicture() {

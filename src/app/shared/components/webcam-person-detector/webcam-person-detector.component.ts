@@ -20,6 +20,7 @@ export class WebcamPersonDetectorComponent {
   private mediaRecorder: MediaRecorder | null = null;
   private recordedChunks: Blob[] = [];
   private captureInterval: any;
+  audioUrl: string | null = null;
 
   // Estados de la UI
   isLoading = true;
@@ -78,7 +79,12 @@ export class WebcamPersonDetectorComponent {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: true
+        audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: true,
+        sampleRate: 44100
+      }
       });
       this.videoElement.nativeElement.srcObject = stream;
       this.cameraInitialized = true;
@@ -107,6 +113,7 @@ export class WebcamPersonDetectorComponent {
   startRecording() {
     if (!this.faceDetected) return;
 
+    
     this.isRecording = true;
     this.showReview = false;
     this.capturedImages = [];
@@ -117,7 +124,7 @@ export class WebcamPersonDetectorComponent {
     const stream = this.videoElement.nativeElement.srcObject as MediaStream;
 
     const audioStream = new MediaStream(stream.getAudioTracks());
-    this.mediaRecorder = new MediaRecorder(audioStream, { mimeType: 'audio/webm;codecs=opus' });
+    this.mediaRecorder = new MediaRecorder(audioStream, { mimeType: 'audio/webm;codecs=opus', bitsPerSecond: 128000 });
 
     this.mediaRecorder.ondataavailable = (e) => this.recordedChunks.push(e.data);
     this.mediaRecorder.onstop = () => {
