@@ -59,7 +59,7 @@ export class EmployeeService {
 
   // 4. PUT: Buscamos el empleado en la señal y lo actualizamos
   updateEmployee(id: number, employee: Employee): Observable<Employee> {
-    return this.api.put<Employee>(`${this.endpoint}${id}/`, employee).pipe(
+    return this.api.patch<Employee>(`${this.endpoint}${id}/`, employee).pipe(
       tap((updatedEmp) => {
         this._employees.update(prev =>
           prev.map(e => e.id === id ? updatedEmp : e)

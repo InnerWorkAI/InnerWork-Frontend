@@ -10,6 +10,9 @@ import { IonIcon, IonButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { trashOutline, createOutline } from 'ionicons/icons';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Employee } from 'src/app/shared/models/employee';
+import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
+import { ModalController } from '@ionic/angular';
 
 const DepartmentNames: Record<number, string> = {
     0: 'R&D',
@@ -30,12 +33,14 @@ export class EmployeeDirectoryPage implements OnInit {
   private readonly WARNING_LIMIT = 50;
   public employeeService = inject(EmployeeService);
   public burnoutService = inject(BurnoutFormService);
+  private modalCtrl = inject(ModalController);
   public lastScores = signal<Record<number, number>>({});
   public lastEvaluationDates = signal<Record<number, string>>({});
   public searchText = signal<string>('');
   public selectedDept = signal<number | null>(null);
   public minBurnout = signal<number>(0);
   public maxBurnout = signal<number>(100);
+  selectedEmployee = signal<Employee | null>(null);
   
   public filteredEmployees = computed(() => {
     const text = this.searchText().toLowerCase().trim();
@@ -126,39 +131,39 @@ export class EmployeeDirectoryPage implements OnInit {
 
   // Función para confirmar eliminación de un empleado
   async confirmDelete(employee: any) {
-  const alert = await this.alertCtrl.create({
-    header: 'Confirmar eliminación',
-    message: `¿Estás seguro de que quieres eliminar a ${employee.first_name} ${employee.last_name}?`,
-    buttons: [
-      {
-        text: 'Cancelar',
-        role: 'cancel',
-        cssClass: '!text-gray-500'
-      },
-      {
-        text: 'Eliminar',
-        role: 'destructive',
-        cssClass: '!text-[#aa0b0b]',
-        handler: () => {
-          this.deleteEmployee(employee.id);
+    const alert = await this.alertCtrl.create({
+      header: 'Confirm Deletion',
+      message: `Are you sure you want to delete ${employee.first_name} ${employee.last_name}?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: '!text-gray-500'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          cssClass: '!text-[#aa0b0b]',
+          handler: () => {
+            this.deleteEmployee(employee.id);
+          }
         }
-      }
-    ]
-  });
+      ]
+    });
 
-  await alert.present();
-}
+    await alert.present();
+  }
 
   // Función para eliminar empleados
   private deleteEmployee(id: number) {
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
-        console.log('Empleado eliminado correctamente');
-        this.showToast('Empleado eliminado con éxito', 'success');
+        console.log('Employee deleted successfully');
+        this.showToast('Employee deleted successfully', 'success');
       },
       error: (err) => {
-        console.error('Error al eliminar:', err);
-        this.showToast('Error al eliminar el empleado', 'danger');
+        console.error('Error deleting employee:', err);
+        this.showToast('Error deleting employee', 'danger');
       }
     });
   }
@@ -172,5 +177,25 @@ export class EmployeeDirectoryPage implements OnInit {
       position: 'bottom'
     });
     await toast.present();
+  }
+
+  // Función para abrir el modal de edición
+  async openEditModal(emp: Employee) {
+    const modal = await this.modalCtrl.create({
+      component: AddEditEmployeeModalComponent,
+      componentProps: {
+        employee: emp 
+      },
+      mode: 'ios',
+      cssClass: 'custom-modal-class'
+    });
+
+    await modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    
+    if (role === 'confirm') {
+      this.employeeService.loadEmployees(); 
+    }
   }
 }
