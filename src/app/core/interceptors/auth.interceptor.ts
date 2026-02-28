@@ -1,10 +1,14 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Cogemos el nombre exacto que usa tu compañero: 'auth_token'
+  // 1. PRIMERO comprobamos si la petición va a Groq
+  // Si la URL contiene 'groq.com', dejamos pasar la petición tal cual viene del servicio
+  if (req.url.includes('api.groq.com')) {
+    return next(req);
+  }
+
   const token = localStorage.getItem('auth_token'); 
 
-  // Si el token existe, lo pegamos en la cabecera "Authorization"
   if (token) {
     const cloned = req.clone({
       setHeaders: {
@@ -14,6 +18,5 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(cloned);
   }
 
-  // Si no hay token, la petición sigue normal (como en el login)
   return next(req);
 };

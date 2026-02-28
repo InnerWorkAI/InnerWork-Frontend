@@ -79,5 +79,9 @@ export class AuthService {
     'token': token, 
     'new_password': password 
   });
-}
+  }
+
+  forgotPassword(email: string) {
+    return this.apiService.post(`users/request-password-reset`, { email });
+  }
 }

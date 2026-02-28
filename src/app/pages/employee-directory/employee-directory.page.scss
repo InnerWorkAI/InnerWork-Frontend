@@ -1,0 +1,9 @@
+td {
+    background: transparent !important;
+}
+
+tr {
+    &:hover {
+        background-color: #f9fafb !important;
+    }
+}

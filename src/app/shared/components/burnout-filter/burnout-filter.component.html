@@ -1,0 +1,23 @@
+<div class="!flex !items-center !gap-3 !h-[56px]">
+  <span class="!text-[10px] !font-bold !uppercase !tracking-wider !text-gray-400 !whitespace-nowrap">
+    Burnout filter:
+  </span>
+
+  <div class="!flex !items-center !gap-2">
+    <input 
+      type="number" 
+      placeholder="0" 
+      class="burnout-input !transition-all !duration-200 !border !border-gray-200 !rounded-xl !shadow-sm
+            focus:!border-[#9333ea] focus:!ring-1 focus:!ring-[#9333ea]"
+      (input)="onMinChange($event)">
+
+    <span class="!text-gray-400 !font-medium">to</span>
+
+    <input 
+      type="number" 
+      placeholder="100" 
+      class="burnout-input !transition-all !duration-200 !border !border-gray-200 !rounded-xl !shadow-sm
+            focus:!border-[#9333ea] focus:!ring-1 focus:!ring-[#9333ea]"
+      (input)="onMaxChange($event)">
+  </div>
+</div>

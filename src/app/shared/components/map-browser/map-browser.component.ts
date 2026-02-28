@@ -5,7 +5,6 @@ import { locateOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { LocationIQProvider } from 'leaflet-geosearch';
 import { environment } from 'src/environments/environment';
-import { Address } from '../../models/User';
 
 @Component({
   selector: 'app-map-browser',
@@ -15,7 +14,7 @@ import { Address } from '../../models/User';
 })
 export class MapBrowserComponent implements AfterViewInit {
 
-  onLocationChanged = output<Address>();
+  onLocationChanged = output<string>();
 
   map!: L.Map;
   marker!: L.Marker;
@@ -106,17 +105,19 @@ onSearch(query: string) {
 
   async getAddressFromCoords(lat: number, lon: number) {
     try {
-        const results = await this.provider.search({ 
-                query: `${lat}, ${lon}` 
-              });
+      const results = await this.provider.search({ 
+        query: `${lat}, ${lon}` 
+      });
 
       if (results && results.length > 0) {
         this.formatAndSetAddress(results[0].raw);
-        this.onLocationChanged.emit({
-          lat: parseFloat(results[0].raw.lat),
-          lng: parseFloat(results[0].raw.lon),
-          address: this.addressText()
-        });
+
+        // Creamos el texto formateado: "Calle Falsa 123; 40.4167; -3.7032"
+        const fullLocationText = `${this.addressText()}; ${lat}; ${lon}`;
+
+        this.onLocationChanged.emit(fullLocationText);
+        
+        console.log("Ubicación formateada:", fullLocationText);
       }
     } catch (error) {
       console.error("Error en reverse geocoding:", error);

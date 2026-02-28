@@ -1,9 +1,13 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, effect, HostListener, inject, OnInit } from '@angular/core';
 import { IonContent, IonRouterOutlet, IonToolbar, IonHeader, IonButtons, IonButton } from "@ionic/angular/standalone";
 import { RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service';
-import { IonicModule } from "@ionic/angular";
+import { IonicModule, ModalController } from "@ionic/angular";
 import { MenuController } from '@ionic/angular';
+import { EmployeeService } from 'src/app/core/services/employee-service';
+import { addIcons } from 'ionicons';
+import { logOutOutline, personOutline } from 'ionicons/icons';
+import { ChangePictureModalComponent } from '../change-picture-modal/change-picture-modal.component';
 
 @Component({
   selector: 'app-authenticated-layout',
@@ -14,19 +18,50 @@ import { MenuController } from '@ionic/angular';
 })
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
-  constructor() { }
+  private modalCtrl = inject(ModalController);
+
+  constructor() { 
+      effect(() => {
+      const emp = this.employeeService.currentEmployee();
+      console.log('Datos del empleado actual:', emp);
+      console.log('URL de la imagen:', emp?.profile_image_url);
+    });
+
+    addIcons({
+      personOutline,
+      logOutOutline
+    });
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.isDesktop = event.target.innerWidth > 768;
+
+
   }
+
+  
   
   public authService = inject(AuthService);
+  public employeeService = inject(EmployeeService);
   private menu = inject(MenuController);
 
   ngOnInit() {}
 
   closeMenu() {
   this.menu.close();
-}
+  }
+
+  async changeProfilePicture() {
+  const modal = await this.modalCtrl.create({
+      component: ChangePictureModalComponent,
+      handle: true
+    });
+    
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.uploaded) {
+    }
+  }
 }
