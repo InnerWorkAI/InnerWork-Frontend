@@ -19,7 +19,7 @@ export class FormService {
       if (employee && this._hasCompletedToday() === undefined) {
         this.fetchStatus(employee.id!);
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
     private fetchStatus(employeeId: number) {
