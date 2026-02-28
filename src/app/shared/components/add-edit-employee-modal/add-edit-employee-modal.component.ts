@@ -28,7 +28,6 @@ export class AddEditEmployeeModalComponent implements OnInit {
   firstName = signal('');
   lastName = signal('');
   email = signal('');
-  password = signal('');
   birthDate = signal('');
   gender = signal<number | null>(null);
   maritalStatus = signal<number | null>(null);
@@ -57,7 +56,6 @@ export class AddEditEmployeeModalComponent implements OnInit {
       (this.numCompanies() ?? 0) <= 0 ||
       !this.homeAddress()?.trim() ||
       !this.email()?.includes('@') ||
-      (!this.isEditMode() && this.password()?.length < 6) ||
       !this.isValidDate(this.birthDate()) ||
       this.department() === null ||
       this.education() === null ||
@@ -124,7 +122,6 @@ export class AddEditEmployeeModalComponent implements OnInit {
       first_name: this.firstName(),
       last_name: this.lastName(),
       email: this.email(),
-      password: this.password(),
       birth_date: this.birthDate(),
       gender: Number(this.gender()),
       marital_status: Number(this.maritalStatus()),
