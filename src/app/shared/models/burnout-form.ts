@@ -1,3 +1,15 @@
+export interface BurnoutRequest {
+    environment_satisfaction: number;
+    overtime: number;
+    job_involvement: number;
+    performance_rating: number;
+    job_satisfaction: number;
+    work_life_balance: number; 
+    business_travel: number;
+    images?: string[];
+    audio?: string | null;
+}
+
 export class BurnoutForm {
     id?: number;
     employee_id: number;
@@ -23,6 +35,6 @@ export class BurnoutForm {
         this.work_life_balance = '';
         this.business_travel = '';
         this.burnout_score = 0;
-        this.created_at = ''; 
+        this.created_at = '';
     }
 }

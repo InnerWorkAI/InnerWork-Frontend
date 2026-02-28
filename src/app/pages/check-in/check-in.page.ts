@@ -7,9 +7,10 @@ import { EmployeeSurveyComponent } from "src/app/shared/components/employee-surv
 import { addIcons } from 'ionicons';
 import { checkmarkCircle } from 'ionicons/icons';
 import { JournalData } from 'src/app/shared/models/Journal';
-import { FormService } from 'src/app/core/services/form-service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { filter, firstValueFrom, timeout } from 'rxjs';
+import { BurnoutRequest } from 'src/app/shared/models/burnout-form';
+import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 
 @Component({
   selector: 'app-check-in',
@@ -20,7 +21,8 @@ import { filter, firstValueFrom, timeout } from 'rxjs';
 })
 export class CheckInPage implements OnInit {
 
-  formService = inject(FormService);
+  formService = inject(BurnoutFormService);
+
   private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
 
   isLoading = true;
@@ -38,11 +40,11 @@ export class CheckInPage implements OnInit {
     this.checkSurveyStatus();
   }
 
-  handleSurveyFinished(formData: any) {
-    console.log('Datos recibidos del cuestionario:', formData);
+  handleSurveyFinished(surveyForm: any) {
+    console.log('Datos recibidos del cuestionario:', surveyForm);
 
-    this.surveyData = formData;
-    
+    this.surveyData = surveyForm;
+
     this.checkBothSteps();
   }
 
@@ -52,30 +54,63 @@ export class CheckInPage implements OnInit {
     this.checkBothSteps();
   }
 
+
   private async checkBothSteps() {
     if (this.surveyData && this.journalFiles) {
 
-      try {
-        const audioForm = new FormData();
-        audioForm.append('audio', this.journalFiles.audio, 'journal.webm');
-        
-        // ENVIAR AUDIO + DATOS DEL CUESTIONARIO A API
+      this.isLoading = true;
 
-        const photosForm = new FormData();
+      try {
+
+        const formData = new FormData();
+
+        formData.append('environment_satisfaction', Number(this.surveyData.environment).toString());
+        formData.append('job_involvement', Number(this.surveyData.involvement).toString());
+        formData.append('job_satisfaction', Number(this.surveyData.involvement).toString());
+        formData.append('performance_rating', Number(this.surveyData.performance).toString());
+        formData.append('work_life_balance', Number(this.surveyData.balance).toString());
+        formData.append('overtime', (this.surveyData.overtime ? 1 : 0).toString());
+        formData.append('business_travel', this.mapTravelToApi(this.surveyData.travel).toString());
+
+        if (this.journalFiles.audio) {
+          formData.append('audio', this.journalFiles.audio, 'journal.webm');
+        }
         this.journalFiles.images.forEach((blob, i) => {
-          photosForm.append('frames', blob, `frame_${i}.jpg`);
+          formData.append('images', blob, `image_${i}.jpg`);
         });
 
-        // ENVIAR FOTOS A API
 
-        this.hasPendingSurvey = false;
+        console.log('CONTENIDO REAL DEL ENVÍO:');
+        formData.forEach((value, key) => console.log(`${key}:`, value));
+        console.log(formData)
+
+        this.formService.saveForm(formData).subscribe({
+          next: (res) => {
+            console.log('Formulario enviado con éxito', res);
+            this.hasPendingSurvey = false;
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('Error al enviar formulario:', err);
+            this.isLoading = false;
+            alert('Hubo un error al enviar los datos. Por favor, inténtalo de nuevo.');
+          }
+        });
 
       } catch (error) {
         console.error('Error enviando los datos:', error);
+        this.isLoading = false;
       }
     }
   }
 
+  private mapTravelToApi(travel: string): number {
+    switch (travel) {
+      case 'International': return 2;
+      case 'Local': return 1;
+      default: return 0;
+    }
+  }
 
 
   async checkSurveyStatus() {
@@ -86,7 +121,7 @@ export class CheckInPage implements OnInit {
 
       const status = await firstValueFrom(
         this.hasCompletedToday$.pipe(
-          filter(val => val !== undefined), 
+          filter(val => val !== undefined),
           timeout(7000)
         )
       );
