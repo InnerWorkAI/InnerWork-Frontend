@@ -59,7 +59,6 @@ export interface Employee {
     first_name: string;
     last_name: string;
     email: string;
-    password: string;
     birth_date: string;
     gender: Gender;
     marital_status: MaritalStatus;
