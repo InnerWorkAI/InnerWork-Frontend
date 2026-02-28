@@ -6,6 +6,10 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
+import { IonIcon, IonButton } from '@ionic/angular/standalone'; 
+import { addIcons } from 'ionicons';
+import { trashOutline, createOutline } from 'ionicons/icons';
+import { AlertController, ToastController } from '@ionic/angular';
 
 const DepartmentNames: Record<number, string> = {
     0: 'R&D',
@@ -18,7 +22,7 @@ const DepartmentNames: Record<number, string> = {
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
+  imports: [IonContent,IonIcon, IonButton, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
 })
 
 export class EmployeeDirectoryPage implements OnInit {
@@ -70,8 +74,11 @@ export class EmployeeDirectoryPage implements OnInit {
 });
 
   constructor(
-
-  ) { }
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController, // Añadido
+  ){
+    addIcons({ trashOutline, createOutline });
+  }
 
   ngOnInit() {
     this.employeeService.loadEmployees();
@@ -115,5 +122,55 @@ export class EmployeeDirectoryPage implements OnInit {
     if (score > this.WARNING_LIMIT) return '#d97706'; 
     if (score <= this.WARNING_LIMIT) return '#16a34a';  
     return '#374151';
+  }
+
+  // Función para confirmar eliminación de un empleado
+  async confirmDelete(employee: any) {
+  const alert = await this.alertCtrl.create({
+    header: 'Confirmar eliminación',
+    message: `¿Estás seguro de que quieres eliminar a ${employee.first_name} ${employee.last_name}?`,
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+        cssClass: '!text-gray-500'
+      },
+      {
+        text: 'Eliminar',
+        role: 'destructive',
+        cssClass: '!text-[#aa0b0b]',
+        handler: () => {
+          this.deleteEmployee(employee.id);
+        }
+      }
+    ]
+  });
+
+  await alert.present();
+}
+
+  // Función para eliminar empleados
+  private deleteEmployee(id: number) {
+    this.employeeService.deleteEmployee(id).subscribe({
+      next: () => {
+        console.log('Empleado eliminado correctamente');
+        this.showToast('Empleado eliminado con éxito', 'success');
+      },
+      error: (err) => {
+        console.error('Error al eliminar:', err);
+        this.showToast('Error al eliminar el empleado', 'danger');
+      }
+    });
+  }
+
+  // Función auxiliar para avisar al usuario
+  private async showToast(message: string, color: 'success' | 'danger') {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }

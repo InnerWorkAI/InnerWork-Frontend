@@ -101,6 +101,15 @@
                     </div>
                   }
                 </td>
+                <td class="!p-4 !text-right">
+
+                  <button 
+                    (click)="confirmDelete(emp)"
+                    class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#aa0b0b] hover:!bg-red-50 !transition-colors"
+                    title="Delete employee">
+                    <ion-icon name="trash-outline" class="!text-xl"></ion-icon>
+                  </button>
+                </td>
               </tr>
             } @empty {
               <tr>
