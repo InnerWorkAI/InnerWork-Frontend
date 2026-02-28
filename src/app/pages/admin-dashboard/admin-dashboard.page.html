@@ -67,7 +67,7 @@
                     {{ departmentNames[emp.department] }}
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-600">
-                    {{ burnoutScores[emp.id]?.created_at ? (burnoutScores[emp.id].created_at | date:'yyyy/MM/dd') : 'Sin evaluar' }}
+                    {{ burnoutScores[emp.id]?.created_at ? (burnoutScores[emp.id].created_at | date:'yyyy/MM/dd') : '	No evaluations' }}
                   </td>
                   <td class="px-6 py-4">
                     <span [style.color]="getScoreColor(burnoutScores[emp.id]?.burnout_score)">
