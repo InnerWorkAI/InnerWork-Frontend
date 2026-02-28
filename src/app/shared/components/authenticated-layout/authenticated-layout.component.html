@@ -1,47 +1,55 @@
-<ion-menu contentId="main-content" type="overlay" class="mobile-only-menu" [disabled]="isDesktop">
+<ion-menu menuId="menu" contentId="main-content" type="overlay" class="mobile-only-menu" [disabled]="isDesktop">
   <div class="p-6 pt-12 bg-[#a855f7] shadow-lg flex items-center gap-4">
+    @if (authService.userRole() !== 'admin') {
     <ion-avatar class="profile-avatar-mobile">
       <img #profilePicMenu
         [src]="employeeService.currentEmployee()?.profile_image_url || 'assets/images/default-avatar.jpg'"
-        class="object-cover" 
-        (error)="profilePicMenu.src = 'assets/images/default-avatar.jpg'">
+        class="object-cover" (error)="profilePicMenu.src = 'assets/images/default-avatar.jpg'">
     </ion-avatar>
-
-    <h2 class="text-white font-black text-lg uppercase tracking-tighter truncate">
-      {{ authService.userName() }}
+    } @else {
+    <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+      <ion-icon name="business" class="text-white text-2xl"></ion-icon>
+    </div>
+    }
+    <h2 class="text-white font-black text-lg tracking-tighter whitespace-normal leading-tight">
+      {{ employeeService.userName() }}
     </h2>
   </div>
 
   <ion-content class="bg-slate-50 relative">
-    <ion-list lines="none" class="p-4 bg-transparent">
-      @if (authService.userRole() === 'admin') {
-        <ion-item button routerLink="/admin/dashboard" class="menu-item" (click)="closeMenu()">
+    <ion-menu-toggle [autoHide]="false">
+      <ion-list lines="none" class="p-4 bg-transparent">
+        @if (authService.userRole() === 'admin') {
+        <ion-item button routerLink="/admin/dashboard" class="menu-item">
           <ion-label>Dashboard</ion-label>
         </ion-item>
-        <ion-item button routerLink="/admin/employees" class="menu-item" (click)="closeMenu()">
+        <ion-item button routerLink="/admin/employees" class="menu-item">
           <ion-label>Employees</ion-label>
         </ion-item>
-      } @else {
-        <ion-item button routerLink="/dashboard" class="menu-item" (click)="closeMenu()">
+        } @else {
+        <ion-item button routerLink="/dashboard" class="menu-item">
           <ion-label>My Dashboard</ion-label>
         </ion-item>
-        <ion-item button routerLink="/check-in" class="menu-item" (click)="closeMenu()">
+        <ion-item button routerLink="/check-in" class="menu-item">
           <ion-label>Check-In</ion-label>
         </ion-item>
-      }
-    </ion-list>
+        }
+      </ion-list>
+    </ion-menu-toggle>
 
     <div class="absolute bottom-0 left-0 w-full p-4 bg-white border-t border-slate-100">
       <ion-list lines="none" class="bg-transparent p-0">
-        
-        <ion-button (click)="changeProfilePicture()" expand="block" fill="clear" color="primary" class="font-bold">
-          Change Picture
-        </ion-button>
+        <ion-menu-toggle [autoHide]="false">
+          @if (authService.userRole() !== 'admin') {
+          <ion-button (click)="changeProfilePicture()" expand="block" fill="clear" color="primary" class="font-bold">
+            Change Picture
+          </ion-button>
+          }
 
-        <ion-button (click)="authService.logout()" expand="block" fill="clear" color="danger" class="font-bold">
-          Logout
-        </ion-button>
-        
+          <ion-button (click)="authService.logout()" expand="block" fill="clear" color="danger" class="font-bold">
+            Logout
+          </ion-button>
+        </ion-menu-toggle>
       </ion-list>
     </div>
   </ion-content>
@@ -76,13 +84,21 @@
         </nav>
 
         <div class="hidden md:flex items-center gap-4">
-          <div id="profile-menu-trigger" class="flex items-center gap-3 px-3 py-1 bg-white/10 rounded-full border border-white/20">
-            <span class="text-white text-xs font-bold">{{ authService.userName() }}</span>
+          <div id="profile-menu-trigger"
+            class="flex items-center gap-3 px-3 py-1 bg-white/10 rounded-full border border-white/20 cursor-pointer hover:bg-white/20 transition-all">
+            <span class="text-white text-xs font-bold">{{ employeeService.userName() }}</span>
+
+            @if (authService.userRole() !== 'admin') {
             <ion-avatar class="profile-avatar-mini">
               <img #profilePic
                 [src]="employeeService.currentEmployee()?.profile_image_url || 'assets/images/default-avatar.jpg'"
                 (error)="profilePic.src = 'assets/images/default-avatar.jpg'">
             </ion-avatar>
+            } @else {
+            <div class="flex items-center justify-center bg-white/20 rounded-full p-1">
+              <ion-icon name="business" class="text-white text-sm"></ion-icon>
+            </div>
+            }
           </div>
         </div>
 
@@ -90,17 +106,20 @@
           <ng-template>
             <ion-content class="ion-padding-vertical">
               <ion-list lines="none">
+
+                @if (authService.userRole() !== 'admin') {
                 <ion-item button (click)="changeProfilePicture()" class="text-sm">
                   <ion-icon slot="start" name="person-outline" class="text-purple-600"></ion-icon>
                   <ion-label class="ml-4">Change Your Picture</ion-label>
                 </ion-item>
-
                 <hr class="my-2 border-slate-100">
+                }
 
                 <ion-item button (click)="authService.logout()" class="text-sm text-red-600">
                   <ion-icon slot="start" name="log-out-outline" color="danger"></ion-icon>
                   <ion-label color="danger" class="ml-4">Logout</ion-label>
                 </ion-item>
+
               </ion-list>
             </ion-content>
           </ng-template>

@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/core/services/auth-service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { filter, firstValueFrom } from 'rxjs';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
+import { EmployeeService } from 'src/app/core/services/employee-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +33,7 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  authService = inject(AuthService);
+  employeeService = inject(EmployeeService);
 
   async ngOnInit() {
     await this.checkStatus();

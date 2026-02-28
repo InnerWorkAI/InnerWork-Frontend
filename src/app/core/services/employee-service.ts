@@ -1,4 +1,4 @@
-import { Injectable, effect, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { ApiService } from './api-service'
 import { Employee } from '../../shared/models/employee';
 import { Observable, tap } from 'rxjs';
@@ -14,11 +14,40 @@ export class EmployeeService {
 
   constructor() {
     effect(() => {
-      if (this.auth.isAuthenticated() && !this._currentEmployee()) {
-        this.loadMyProfile();
+      // 1. Verificamos que esté autenticado
+      if (this.auth.isAuthenticated()) {
+        const role = this.auth.userRole();
+
+        // 2. Si es Empleado y no tenemos sus datos, cargamos perfil
+        if (role === 'user' && !this._currentEmployee()) {
+          this.loadMyProfile();
+        }
+
+        // 3. Si es Admin y no tenemos los datos de empresa, cargamos empresa
+        else if (role === 'admin' && !this._currentCompany()) {
+          this.loadMyCompany();
+        }
       }
     });
   }
+
+  public userName = computed(() => {
+    const user = this.auth.currentUser();
+    const role = this.auth.userRole();
+
+    if (!user) return 'Usuario';
+
+    if (role === 'admin') {
+      return this.currentCompany()?.name || 'Admin';
+    }
+
+    const employee = this.currentEmployee();
+    if (employee) {
+      return `${employee.first_name} ${employee.last_name}`;
+    }
+
+    return user.name || 'Cargando...';
+  });
 
   // 1. Definimos la señal privada (la que cambia) 
   // y la pública (la que el Dashboard lee)
@@ -28,6 +57,9 @@ export class EmployeeService {
   private _currentEmployee = signal<Employee | null>(null);
   public currentEmployee = this._currentEmployee.asReadonly();
 
+  private _currentCompany = signal<any | null>(null);
+  public currentCompany = this._currentCompany.asReadonly();
+
   loadMyProfile(): void {
     if (this.auth.currentUser()?.role === 'admin') return;
     this.api.get<Employee>(`${this.endpoint}me`).subscribe({
@@ -36,6 +68,16 @@ export class EmployeeService {
         console.log('Perfil cargado:', data);
       },
       error: (err) => console.error('Error al cargar perfil "me":', err)
+    });
+  }
+
+  loadMyCompany(): void {
+    this.api.get<any>(`companies`).subscribe({
+      next: (data) => {
+        this._currentCompany.set(data);
+        console.log('Empresa cargada:', data);
+      },
+      error: (err) => console.error('Error al cargar empresa:', err)
     });
   }
 
@@ -90,7 +132,7 @@ export class EmployeeService {
             profile_image_url: response.profile_image_url
           });
         }
-        
+
         this._employees.update(prev =>
           prev.map(e => e.id === employeeId ? { ...e, profile_image_url: response.profile_image_url } : e)
         );
