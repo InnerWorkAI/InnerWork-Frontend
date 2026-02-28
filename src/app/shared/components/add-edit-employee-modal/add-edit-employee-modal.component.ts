@@ -47,15 +47,16 @@ export class AddEditEmployeeModalComponent implements OnInit {
   lastManagerDate = signal('');
 
   isFormInvalid = computed(() => {
+    const isEmailValid = this.isEditMode() ? true : (this.email()?.includes('@'));
     return (
       !this.firstName()?.trim() ||
       !this.lastName()?.trim() ||
       (this.monthlySalary() ?? 0) <= 0 ||
       (this.salaryHike() ?? 0) < 0 ||
       (this.salaryHike() ?? 0) > 100 ||
-      (this.numCompanies() ?? 0) <= 0 ||
+      (this.numCompanies() ?? 0) < 0 ||
       !this.homeAddress()?.trim() ||
-      !this.email()?.includes('@') ||
+      !isEmailValid ||
       !this.isValidDate(this.birthDate()) ||
       this.department() === null ||
       this.education() === null ||
@@ -78,6 +79,7 @@ export class AddEditEmployeeModalComponent implements OnInit {
   }
 
   private fillFormWithEmployee(emp: Employee) {
+    console.log('Datos del empleado al cargar:', emp);
     this.firstName.set(emp.first_name);
     this.lastName.set(emp.last_name);
     this.email.set(emp.email);
