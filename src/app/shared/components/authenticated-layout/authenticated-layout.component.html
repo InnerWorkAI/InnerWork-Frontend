@@ -18,39 +18,53 @@
 
   <ion-content class="bg-slate-50 relative">
     <ion-menu-toggle [autoHide]="false">
-      <ion-list lines="none" class="p-4 bg-transparent">
+      <ion-list lines="none" class="p-4 bg-transparent flex flex-col gap-2">
         @if (authService.userRole() === 'admin') {
-        <ion-item button routerLink="/admin/dashboard" class="menu-item">
+        <ion-item button routerLink="/admin/dashboard" detail="false" routerLinkActive="active-menu-item"
+          [routerLinkActiveOptions]="{exact: true}" class="custom-menu-item">
+          <ion-icon name="grid-outline" slot="start"></ion-icon>
           <ion-label>Dashboard</ion-label>
         </ion-item>
-        <ion-item button routerLink="/admin/employees" class="menu-item">
+
+        <ion-item button routerLink="/admin/employees" detail="false" routerLinkActive="active-menu-item"
+          class="custom-menu-item">
+          <ion-icon name="people-outline" slot="start"></ion-icon>
           <ion-label>Employees</ion-label>
         </ion-item>
         } @else {
-        <ion-item button routerLink="/dashboard" class="menu-item">
+        <ion-item button routerLink="/dashboard" detail="false" routerLinkActive="active-menu-item"
+          class="custom-menu-item">
+          <ion-icon name="apps-outline" slot="start"></ion-icon>
           <ion-label>My Dashboard</ion-label>
         </ion-item>
-        <ion-item button routerLink="/check-in" class="menu-item">
+
+        <ion-item button routerLink="/check-in" detail="false" routerLinkActive="active-menu-item"
+          class="custom-menu-item">
+          <ion-icon name="time-outline" slot="start"></ion-icon>
           <ion-label>Check-In</ion-label>
         </ion-item>
         }
       </ion-list>
     </ion-menu-toggle>
 
-    <div class="absolute bottom-0 left-0 w-full p-4 bg-white border-t border-slate-100">
-      <ion-list lines="none" class="bg-transparent p-0">
-        <ion-menu-toggle [autoHide]="false">
+    <div class="absolute bottom-0 left-0 w-full p-4">
+      <ion-menu-toggle [autoHide]="false">
+        <div class="flex flex-col gap-3">
+
           @if (authService.userRole() !== 'admin') {
-          <ion-button (click)="changeProfilePicture()" expand="block" fill="clear" color="primary" class="font-bold">
+          <ion-button (click)="changeProfilePicture()" expand="block" fill="outline" color="primary" mode="ios"
+            class="font-bold m-0 border-purple-500 rounded-lg">
             Change Picture
           </ion-button>
           }
 
-          <ion-button (click)="authService.logout()" expand="block" fill="clear" color="danger" class="font-bold">
+          <ion-button (click)="authService.logout()" expand="block" fill="outline" color="danger" mode="ios"
+            class="font-bold m-0 rounded-lg">
             Logout
           </ion-button>
-        </ion-menu-toggle>
-      </ion-list>
+
+        </div>
+      </ion-menu-toggle>
     </div>
   </ion-content>
 </ion-menu>
@@ -73,13 +87,27 @@
           </div>
         </div>
 
-        <nav class="hidden md:flex items-center ml-10 space-x-1 flex-1">
+<nav class="hidden md:flex items-center ml-10 space-x-2 flex-1">
           @if (authService.userRole() === 'admin') {
-          <ion-button fill="clear" routerLink="/admin/dashboard" class="nav-link">Dashboard</ion-button>
-          <ion-button fill="clear" routerLink="/admin/employees" class="nav-link">Employees</ion-button>
+          <ion-button fill="clear" routerLink="/admin/dashboard" class="nav-link"
+                      routerLinkActive="active-nav-link" [routerLinkActiveOptions]="{exact: true}">
+            Dashboard
+          </ion-button>
+          
+          <ion-button fill="clear" routerLink="/admin/employees" class="nav-link"
+                      routerLinkActive="active-nav-link">
+            Employees
+          </ion-button>
           } @else {
-          <ion-button fill="clear" routerLink="/dashboard" class="nav-link">My Dashboard</ion-button>
-          <ion-button fill="clear" routerLink="/check-in" class="nav-link">Check-In</ion-button>
+          <ion-button fill="clear" routerLink="/dashboard" class="nav-link"
+                      routerLinkActive="active-nav-link" [routerLinkActiveOptions]="{exact: true}">
+            My Dashboard
+          </ion-button>
+          
+          <ion-button fill="clear" routerLink="/check-in" class="nav-link"
+                      routerLinkActive="active-nav-link">
+            Check-In
+          </ion-button>
           }
         </nav>
 
