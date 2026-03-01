@@ -21,19 +21,14 @@ export class LoginPage  {
   private authService = inject(AuthService);
 
   handleSubmit(credentials: LoginCredentials): void {
+    console.log(credentials)
     this.errorMessage.set('');
     
     this.authService.login(credentials.email, credentials.password).subscribe({
       next: (res) => console.log('Éxito:', res),
       error: (err) => {
-        const message = err.error?.detail || 'Correo o contraseña incorrectos';
-        if (environment.API_URL) {
-          console.log("HAY URL DE API")
-        } else {
-          console.log("NO HAY URL DE API")
-        }
+        const message = err.error?.detail || 'Invalid credentials';
         this.errorMessage.set(message);
-        console.log(message)
       }
     });
   }
