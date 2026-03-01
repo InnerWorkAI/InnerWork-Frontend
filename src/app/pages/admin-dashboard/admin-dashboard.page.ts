@@ -45,7 +45,7 @@ export class AdminDashboardPage implements OnInit {
     this.employeeService.loadEmployees();
   }
 
-  // Extrae el último formulario de cada empleado una sola vez.
+  // Extrae el último formulario de cada empleado una sola vez
   public latestEmployeeForms = computed(() => {
     const allForms = this.burnoutService.burnoutForms();
     if (!allForms || allForms.length === 0) return [];
@@ -106,7 +106,6 @@ export class AdminDashboardPage implements OnInit {
   });
 
   public chartSeries = computed<ApexAxisChartSeries>(() => {
-    // Aseguramos orden cronológico para que el Map guarde el ÚLTIMO del periodo
     const allForms = [...this.burnoutService.burnoutForms()]
       .filter(f => f?.created_at)
       .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
@@ -115,7 +114,9 @@ export class AdminDashboardPage implements OnInit {
 
     const range = this.daysRange();
     const numBuckets = Math.ceil(range / 7);
-    const seriesData: number[] = [];
+
+    const satisfactionData: number[] = [];
+    const aiStressData: number[] = [];
 
     for (let i = numBuckets - 1; i >= 0; i--) {
       const end = new Date();
@@ -123,29 +124,38 @@ export class AdminDashboardPage implements OnInit {
       const start = new Date();
       start.setDate(start.getDate() - ((i + 1) * 7));
 
-      const latestPerEmployee = new Map<number, number>();
+      const latestPerEmployee = new Map<number, { sat: number, ai: number }>();
       
       allForms.forEach(f => {
         const d = new Date(f.created_at);
         if (d >= start && d < end) {
-          const score = f.final_burnout_score ?? f.burnout_score ?? 0;
-          latestPerEmployee.set(f.employee_id, 100 - score);
+          const burnout = f.final_burnout_score ?? f.burnout_score ?? 0;
+          const aiAverage = ((f.image_score ?? 0) + (f.text_score ?? 0)) / 2;
+          
+          latestPerEmployee.set(f.employee_id, { 
+            sat: 100 - burnout, 
+            ai: aiAverage 
+          });
         }
       });
 
       const values = Array.from(latestPerEmployee.values());
-      const avg = values.length 
-        ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) 
-        : 0;
       
-      seriesData.push(avg);
+      if (values.length > 0) {
+        const avgSat = Math.round(values.reduce((a, b) => a + b.sat, 0) / values.length);
+        const avgAi = Math.round(values.reduce((a, b) => a + b.ai, 0) / values.length);
+        satisfactionData.push(avgSat);
+        aiStressData.push(avgAi);
+      } else {
+        satisfactionData.push(0);
+        aiStressData.push(0);
+      }
     }
 
-    return [{ 
-      name: 'Satisfaction', 
-      data: seriesData,
-      color: '#a855f7'
-    }]; 
+    return [
+      { name: 'Employee Satisfaction', data: satisfactionData },
+      { name: 'AI Detected Stress', data: aiStressData }
+    ];
   });
 
   public chartCategories = computed<string[]>(() => {
