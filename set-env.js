@@ -1,17 +1,22 @@
 const fs = require('fs');
 
-const targetPath = './src/environments/environment.prod.ts';
-
+const paths = [
+  './src/environments/environment.ts',
+  './src/environments/environment.prod.ts'
+];
 
 const envConfigFile = `
 export const environment = {
   production: true,
   locationIqToken: '${process.env.LOCATION_IQ_TOKEN || ""}',
-  API_URL: '${process.env.API_URL || ""}',
+  apiUrl: '${process.env.API_URL || ""}',
   groqKey: '${process.env.GROQ_KEY || ""}'
 };
 `;
 
-fs.writeFileSync(targetPath, envConfigFile);
+paths.forEach(path => {
+  fs.writeFileSync(path, envConfigFile);
+  console.log(`✅ Generado: ${path}`);
+});
 
-console.log('✅ Archivo environment.prod.ts generado con éxito');
+console.log('✅ Archivo environment.ts generado con éxito');
