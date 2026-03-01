@@ -6,7 +6,7 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
-import { IonIcon, IonButton } from '@ionic/angular/standalone'; 
+import { IonIcon } from '@ionic/angular/standalone'; 
 import { addIcons } from 'ionicons';
 import { trashOutline, createOutline } from 'ionicons/icons';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -25,7 +25,7 @@ const DepartmentNames: Record<number, string> = {
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent,IonIcon, IonButton, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
+  imports: [IonContent,IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
 })
 
 export class EmployeeDirectoryPage implements OnInit {
