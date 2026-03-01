@@ -120,20 +120,19 @@ export class EmployeeDirectoryPage implements OnInit {
     return DepartmentNames[id] || 'Unknown';
   }
 
-  getScoreBg(score: number): string {
-  if (score === -1) return '#f3f4f6'; 
+getScoreBg(score: number | null | undefined): string {
+  if (score === -1 || score == null) return '#f3f4f6'; 
   if (score >= this.CRITICAL_LIMIT) return '#fee2e2'; 
-  if (score > this.WARNING_LIMIT) return '#fffbeb';   // Ámbar claro (Amber-50)
+  if (score > this.WARNING_LIMIT) return '#fffbeb';   
   return '#dcfce7'; 
 }
 
-getScoreColor(score: number): string {
-  if (score === -1) return '#9ca3af'; 
+getScoreColor(score: number | null | undefined): string {
+  if (score === -1 || score == null) return '#9ca3af'; 
   if (score >= this.CRITICAL_LIMIT) return '#ef4444';
   if (score > this.WARNING_LIMIT) return '#d97706'; 
   return '#16a34a'; 
 }
-
   // Función para confirmar eliminación de un empleado
   async confirmDelete(employee: any) {
     const alert = await this.alertCtrl.create({
