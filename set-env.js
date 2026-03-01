@@ -9,7 +9,7 @@ const envConfigFile = `
 export const environment = {
   production: true,
   locationIqToken: '${process.env.LOCATION_IQ_TOKEN || ""}',
-  apiUrl: '${process.env.API_URL || ""}',
+  API_URL: '${process.env.API_URL || ""}',
   groqKey: '${process.env.GROQ_KEY || ""}'
 };
 `;
