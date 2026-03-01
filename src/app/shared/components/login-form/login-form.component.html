@@ -23,9 +23,14 @@
     </ion-input>
   </div>
 
-  <ion-button type="submit" expand="block" mode="ios"
+  <ion-button type="submit" expand="block" mode="ios" [disabled]="!email() || !password()"
     class="login-button h-12 font-bold normal-case mt-6">
     Log In
   </ion-button>
+  <ion-button type="button" fill="clear" expand="block" mode="ios"
+      (click)="onCancel()"
+      class="h-12 font-semibold text-gray-500 normal-case ion-no-margin">
+      Cancel
+    </ion-button>
 
 </form>
