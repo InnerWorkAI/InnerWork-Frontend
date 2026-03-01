@@ -32,7 +32,7 @@ export class AdminDashboardPage implements OnInit {
     [Department.HUMAN_RESOURCES]: 'Human Resources'
   };
 
-  public daysRange = signal<7 | 30>(7);
+  public daysRange = signal<number>(28);
   private primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary').trim() || '#9333ea';
   
   public chartLegend = [{ label: 'Satisfaction', color: this.primaryColor }];
@@ -94,48 +94,78 @@ export class AdminDashboardPage implements OnInit {
     
     if (allEmployees.length === 0) return '0%';
 
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
 
     const activeThisWeek = latestForms.filter(form => {
-      const evaluationDate = new Date(form.created_at);
-      return evaluationDate >= sevenDaysAgo;
+      const formTime = new Date(form.created_at).getTime();
+      return !isNaN(formTime) && formTime >= sevenDaysAgo;
     });
 
     const rate = (activeThisWeek.length / allEmployees.length) * 100;
-    
     return Math.round(rate) + '%';
   });
 
   public chartSeries = computed<ApexAxisChartSeries>(() => {
-    const forms = this.burnoutService.burnoutForms()
-      .filter(f => f?.created_at && (f.final_burnout_score !== undefined || f.burnout_score !== undefined));
-    
-    if (forms.length === 0) return [];
+    // Aseguramos orden cronológico para que el Map guarde el ÚLTIMO del periodo
+    const allForms = [...this.burnoutService.burnoutForms()]
+      .filter(f => f?.created_at)
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
-    const dailyData: { [key: string]: { total: number, count: number } } = {};
-    forms.forEach(f => {
-      const dateKey = new Date(f.created_at).toISOString().split('T')[0];
-      if (!dailyData[dateKey]) dailyData[dateKey] = { total: 0, count: 0 };
+    if (!allForms.length) return [];
+
+    const range = this.daysRange();
+    const numBuckets = Math.ceil(range / 7);
+    const seriesData: number[] = [];
+
+    for (let i = numBuckets - 1; i >= 0; i--) {
+      const end = new Date();
+      end.setDate(end.getDate() - (i * 7));
+      const start = new Date();
+      start.setDate(start.getDate() - ((i + 1) * 7));
+
+      const latestPerEmployee = new Map<number, number>();
       
-      const score = f.final_burnout_score ?? f.burnout_score;
-      dailyData[dateKey].total += (100 - score);
-      dailyData[dateKey].count++;
-    });
+      allForms.forEach(f => {
+        const d = new Date(f.created_at);
+        if (d >= start && d < end) {
+          const score = f.final_burnout_score ?? f.burnout_score ?? 0;
+          latestPerEmployee.set(f.employee_id, 100 - score);
+        }
+      });
 
-    const sortedDates = Object.keys(dailyData).sort();
-    const averages = sortedDates.map(date => Math.round(dailyData[date].total / dailyData[date].count));
+      const values = Array.from(latestPerEmployee.values());
+      const avg = values.length 
+        ? Math.round(values.reduce((a, b) => a + b, 0) / values.length) 
+        : 0;
+      
+      seriesData.push(avg);
+    }
 
-    return [{ name: 'Company Average', data: averages.slice(-this.daysRange()) }];
+    return [{ 
+      name: 'Satisfaction', 
+      data: seriesData,
+      color: '#a855f7'
+    }]; 
   });
 
   public chartCategories = computed<string[]>(() => {
-    const forms = this.burnoutService.burnoutForms().filter(f => f?.created_at);
-    const dates = [...new Set(forms.map(f => new Date(f.created_at).toISOString().split('T')[0]))].sort();
-    return dates.slice(-this.daysRange()).map(d => {
-      const dateObj = new Date(d);
-      return `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
-    });
+    const range = this.daysRange();
+    const numBuckets = Math.ceil(range / 7);
+    const categories: string[] = [];
+
+    for (let i = numBuckets - 1; i >= 0; i--) {
+      const start = new Date();
+      start.setDate(start.getDate() - ((i + 1) * 7));
+      const end = new Date();
+      end.setDate(end.getDate() - (i * 7));
+
+      // Formato: "Día/Mes"
+      const startLabel = `${start.getDate()}/${start.getMonth() + 1}`;
+      const endLabel = `${end.getDate()}/${end.getMonth() + 1}`;
+      
+      categories.push(`${startLabel} - ${endLabel}`);
+    }
+    return categories;
   });
 
   async editEmployee() {
