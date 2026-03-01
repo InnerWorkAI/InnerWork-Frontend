@@ -23,7 +23,6 @@
               "browser": ""
             },
             "index": "src/index.html",
-            "externalDependencies": ["buffer"],
             "polyfills": [
               "src/polyfills.ts"
             ],

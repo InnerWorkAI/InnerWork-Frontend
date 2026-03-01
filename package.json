@@ -12,9 +12,6 @@
     "lint": "ng lint"
   },
   "private": true,
-  "browser": {
-    "buffer": false
-  },
   "dependencies": {
     "@angular/animations": "^20.0.0",
     "@angular/common": "^20.0.0",
@@ -36,6 +33,7 @@
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "apexcharts": "^5.5.1",
+    "buffer": "^6.0.3",
     "ionicons": "^7.0.0",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
