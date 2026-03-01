@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ApiService {
   private http = inject(HttpClient);
-  private readonly baseUrl = environment.apiUrl;
+  private readonly baseUrl = environment.API_URL;
 
   get<T>(endpoint: string): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}/${endpoint}`);

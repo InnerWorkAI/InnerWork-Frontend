@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   locationIqToken: '',
-  apiUrl: '',
+  API_URL: '',
   groqKey: ''
 };

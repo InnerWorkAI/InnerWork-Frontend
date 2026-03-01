@@ -27,7 +27,7 @@ export class LoginPage  {
       next: (res) => console.log('Éxito:', res),
       error: (err) => {
         const message = err.error?.detail || 'Correo o contraseña incorrectos';
-        if (environment.apiUrl) {
+        if (environment.API_URL) {
           console.log("HAY URL DE API")
         } else {
           console.log("NO HAY URL DE API")
