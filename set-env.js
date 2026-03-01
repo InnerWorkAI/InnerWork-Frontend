@@ -16,7 +16,7 @@ const paths = [
 const envConfigFile = `export const environment = {
   production: true,
   locationIqToken: '${(process.env.LOCATION_IQ_TOKEN || "").trim()}',
-  apiUrl: '${(process.env.API_URL || "").trim()}',
+  API_URL: '${(process.env.API_URL || "").trim()}',
   groqKey: '${(process.env.GROQ_KEY || "").trim()}'
 };`;
 
