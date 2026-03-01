@@ -111,22 +111,25 @@
           }
         </nav>
 
-        <div class="hidden md:flex items-center gap-4">
+<div class="hidden md:flex items-center gap-4">
           <div id="profile-menu-trigger"
-            class="flex items-center gap-3 px-3 py-1 bg-white/10 rounded-full border border-white/20 cursor-pointer hover:bg-white/20 transition-all">
-            <span class="text-white text-xs font-bold">{{ employeeService.userName() }}</span>
+               class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-white/10 transition-all">
+            
+            <span class="text-white text-sm font-bold">{{ employeeService.userName() }}</span>
 
             @if (authService.userRole() !== 'admin') {
-            <ion-avatar class="profile-avatar-mini">
-              <img #profilePic
+            <ion-avatar class="profile-avatar-mini border-2 border-white/30"> <img #profilePic
                 [src]="employeeService.currentEmployee()?.profile_image_url || 'assets/images/default-avatar.jpg'"
-                (error)="profilePic.src = 'assets/images/default-avatar.jpg'">
+                (error)="profilePic.src = 'assets/images/default-avatar.jpg'"
+                class="object-cover">
             </ion-avatar>
             } @else {
-            <div class="flex items-center justify-center bg-white/20 rounded-full p-1">
-              <ion-icon name="business" class="text-white text-sm"></ion-icon>
+            <div class="flex items-center justify-center bg-white/20 rounded-full p-1.5">
+              <ion-icon name="business" class="text-white text-base"></ion-icon>
             </div>
             }
+
+            <ion-icon name="chevron-down-outline" class="text-white/70 text-sm"></ion-icon>
           </div>
         </div>
 

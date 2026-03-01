@@ -6,7 +6,7 @@ import { IonicModule, ModalController } from "@ionic/angular";
 import { MenuController } from '@ionic/angular';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { addIcons } from 'ionicons';
-import { appsOutline, business, gridOutline, logOutOutline, peopleOutline, personOutline, timeOutline } from 'ionicons/icons';
+import { appsOutline, business, chevronDownOutline, gridOutline, logOutOutline, peopleOutline, personOutline, timeOutline } from 'ionicons/icons';
 import { ChangePictureModalComponent } from '../change-picture-modal/change-picture-modal.component';
 
 @Component({
@@ -34,7 +34,8 @@ export class AuthenticatedLayoutComponent  implements OnInit {
       gridOutline,
       peopleOutline,
       appsOutline,
-      timeOutline
+      timeOutline,
+      chevronDownOutline
     });
   }
 
