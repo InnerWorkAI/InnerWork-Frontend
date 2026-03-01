@@ -18,5 +18,3 @@ paths.forEach(path => {
   fs.writeFileSync(path, envConfigFile);
   console.log(`✅ Generado: ${path}`);
 });
-
-console.log('✅ Archivo environment.ts generado con éxito');
