@@ -31,6 +31,7 @@
               <th class="!px-6 !py-4 !text-left !text-xs !font-semibold !text-gray-500 !tracking-wider">Department</th>
               <th class="!px-6 !py-4 !text-left !text-xs !font-semibold !text-gray-500 !tracking-wider">Last Evaluation Date</th>
               <th class="!px-6 !py-4 !text-left !text-xs !font-semibold !text-gray-500 !tracking-wider">Burnout Risk</th>
+              <th class="!px-6 !py-4 !text-left !text-xs !font-semibold !text-gray-500 !tracking-wider">Actions</th>
             </tr>
           </thead>
           
@@ -64,12 +65,12 @@
 
                 <td class="!px-6 !py-4 !whitespace-nowrap !text-sm !text-gray-500">
                   @let evaluationDate = lastEvaluationDates()[emp.id!];
-                    @if (evaluationDate) {
+                    @if (evaluationDate && evaluationDate !== 'none') {
                       <span class="!font-medium !text-gray-700">
                         {{ evaluationDate | date: 'yyyy-MM-dd' }}
                       </span>
-                    } @else if (lastScores()[emp.id!] === -1) {
-                      <span class="!text-gray-300">N/A</span>
+                    } @else if (evaluationDate == 'none' && lastScores()[emp.id!] === -1) {
+                      <span class="!text-gray-300">No evaluations</span>
                     } @else {
                       <div class="!animate-pulse !bg-gray-100 !h-4 !w-20 !rounded"></div>
                     }
@@ -81,13 +82,13 @@
                   @if (score === undefined) {
                     <div class="!flex !items-center !gap-2 !text-gray-400">
                       <div class="!w-2 !h-2 !rounded-full !bg-gray-200 !animate-pulse"></div>
-                      <span class="!text-xs !italic">Cargando...</span>
+                      <span class="!text-xs !italic">Loading...</span>
                     </div>
                   } @else if (score === -1) {
                     <div class="!inline-flex !px-3 !py-1 !rounded-full !text-xs !font-bold"
                       [style.background-color]="getScoreBg(score)"
                       [style.color]="getScoreColor(score)">
-                      <span class="!text-xs !text-gray-400">Sin registros</span>
+                      <span class="!text-xs !text-gray-400">No forms submitted yet</span>
                     </div>
                   } @else {
                     <div class="!inline-flex !px-3 !py-1 !rounded-full !text-xs !font-bold"
@@ -100,15 +101,25 @@
                       </span>
                     </div>
                   }
-                </td>
-                <td class="!p-4 !text-right">
+                </td>          
 
-                  <button 
-                    (click)="confirmDelete(emp)"
-                    class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#aa0b0b] hover:!bg-red-50 !transition-colors"
-                    title="Delete employee">
-                    <ion-icon name="trash-outline" class="!text-xl"></ion-icon>
-                  </button>
+                <td class="!px-6 !py-4 !whitespace-nowrap">
+                  <div class="!flex !items-center !justify-between !w-full">
+
+                    <button 
+                      (click)="openEditModal(emp)"
+                      class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#9334EA] hover:!bg-purple-50 !transition-colors !mr-1"
+                      title="Edit employee">
+                      <ion-icon name="create-outline" class="!text-xl"></ion-icon>
+                    </button>
+
+                    <button 
+                      (click)="confirmDelete(emp)"
+                      class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#aa0b0b] hover:!bg-red-50 !transition-colors"
+                      title="Delete employee">
+                      <ion-icon name="trash-outline" class="!text-xl"></ion-icon>
+                    </button>
+                  </div>
                 </td>
               </tr>
             } @empty {
