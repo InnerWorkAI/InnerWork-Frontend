@@ -1,12 +1,12 @@
 import { Component, effect, HostListener, inject, OnInit } from '@angular/core';
 import { IonContent, IonRouterOutlet, IonToolbar, IonHeader, IonButtons, IonButton } from "@ionic/angular/standalone";
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service';
 import { IonicModule, ModalController } from "@ionic/angular";
 import { MenuController } from '@ionic/angular';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { addIcons } from 'ionicons';
-import { business, logOutOutline, personOutline } from 'ionicons/icons';
+import { appsOutline, business, chevronDownOutline, gridOutline, logOutOutline, peopleOutline, personOutline, timeOutline } from 'ionicons/icons';
 import { ChangePictureModalComponent } from '../change-picture-modal/change-picture-modal.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { ChangePictureModalComponent } from '../change-picture-modal/change-pict
   templateUrl: './authenticated-layout.component.html',
   standalone: true,
   styleUrls: ['./authenticated-layout.component.scss'],
-  imports: [RouterLink, IonicModule]
+  imports: [RouterLink, IonicModule, RouterModule]
 })
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
@@ -30,7 +30,12 @@ export class AuthenticatedLayoutComponent  implements OnInit {
     addIcons({
       personOutline,
       logOutOutline,
-      business
+      business,
+      gridOutline,
+      peopleOutline,
+      appsOutline,
+      timeOutline,
+      chevronDownOutline
     });
   }
 

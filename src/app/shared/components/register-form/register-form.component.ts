@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, computed, OnInit, output, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginCredentials, RegisterCompanyCredentials } from '../../models/User';
 import { IonicModule } from '@ionic/angular';
 import { MapBrowserComponent } from "../map-browser/map-browser.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -12,6 +13,8 @@ import { MapBrowserComponent } from "../map-browser/map-browser.component";
   imports: [CommonModule, FormsModule, IonicModule, MapBrowserComponent]
 })
 export class RegisterFormComponent {
+
+  router = inject(Router);
 
   email = signal('');
   password = signal('');
@@ -65,5 +68,7 @@ export class RegisterFormComponent {
     this.locationTouched.set(true);
   }
 
-
+    onCancel() {
+    this.router.navigate(['/home']);
+  }
 }
