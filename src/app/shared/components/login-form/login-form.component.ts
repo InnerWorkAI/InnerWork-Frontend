@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { LoginCredentials } from '../../models/User';
 import { ModalController } from '@ionic/angular';
 import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -17,6 +18,7 @@ export class LoginFormComponent  implements OnInit {
 
   constructor() { }
   private modalCtrl = inject(ModalController);
+  private router = inject(Router);
 
   email = signal('');
   password = signal('');
@@ -43,6 +45,10 @@ export class LoginFormComponent  implements OnInit {
     });
     
     await modal.present();
+  }
+
+  onCancel() {
+    this.router.navigate(['/home']);
   }
 
 }
