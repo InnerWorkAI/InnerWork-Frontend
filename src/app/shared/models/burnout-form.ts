@@ -21,8 +21,12 @@ export class BurnoutForm {
     job_satisfaction: string;
     work_life_balance: string;
     business_travel: string;
-    burnout_score: number;
     created_at: string;
+    burnout_score: number;        
+    final_burnout_score?: number;  
+    image_score?: number;         
+    text_score?: number;          
+    form_score?: number;
 
     constructor(employeeId: number = 0) {
         this.employee_id = employeeId;

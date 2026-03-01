@@ -52,7 +52,6 @@
               <th>Department</th>
               <th>Last Evaluation Date</th>
               <th>Burnout Score</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-50">
@@ -67,22 +66,23 @@
                     {{ departmentNames[emp.department] }}
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-600">
-                    {{ burnoutScores[emp.id]?.created_at ? (burnoutScores[emp.id].created_at | date:'yyyy/MM/dd') : '	No evaluations' }}
+                    @let scoreData = burnoutScoresMap()[emp.id];
+                    
+                    @let evaluation = burnoutScoresMap()[emp.id];
+
+                    @if (evaluation?.created_at) {
+                      {{ evaluation.created_at | date:'yyyy/MM/dd' }}
+                    } @else {
+                      <span class="italic text-gray-400">No evaluations</span>
+                    }
                   </td>
+
                   <td class="px-6 py-4">
-                    <span [style.color]="getScoreColor(burnoutScores[emp.id]?.burnout_score)">
-                      {{ burnoutScores[emp.id]?.burnout_score ? burnoutScores[emp.id].burnout_score + '%' : '--' }}
+                    @let finalScore = scoreData?.final_burnout_score ?? scoreData?.burnout_score ?? -1;
+                    
+                    <span [style.color]="getScoreColor(finalScore)">
+                      {{ (finalScore !== -1) ? (finalScore | number:'1.0-0') + '%' : '--' }}
                     </span>
-                  </td>
-                  <td class="px-6 py-4 text-right">
-                    <ion-button 
-                      fill="clear" 
-                      size="small" 
-                      class="text-[11px] font-bold uppercase tracking-wider text-purple-600"
-                      [routerLink]="['/employee-profile', emp.id]">
-                      View Profile
-                      <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-                    </ion-button>
                   </td>
                 </tr>
               }
