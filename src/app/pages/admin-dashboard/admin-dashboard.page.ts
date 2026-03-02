@@ -9,6 +9,7 @@ import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { RouterModule } from '@angular/router';
 import { DashboardCardComponent } from 'src/app/shared/components/dashboard-card/dashboard-card.component';
 import { ApexAxisChartSeries } from 'ng-apexcharts';
+import { UserStatsService } from 'src/app/core/services/user-stats-service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -18,6 +19,9 @@ import { ApexAxisChartSeries } from 'ng-apexcharts';
   imports: [CommonModule, IonicModule, EmployeeChartComponent, RouterModule, DashboardCardComponent]
 })
 export class AdminDashboardPage implements OnInit {
+
+  private userStatsService = inject(UserStatsService);
+  
   private readonly CRITICAL_LIMIT = 70; 
   private readonly WARNING_LIMIT = 50;
   private modalCtrl = inject(ModalController);
@@ -32,10 +36,12 @@ export class AdminDashboardPage implements OnInit {
     [Department.HUMAN_RESOURCES]: 'Human Resources'
   };
 
-  public daysRange = signal<number>(28);
+  public daysRange = this.userStatsService.daysRange;
   private primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary').trim() || '#9333ea';
   
   public chartLegend = [{ label: 'Satisfaction', color: this.primaryColor }];
+  public chartSeries = this.userStatsService.adminChartSeries;
+  public chartCategories = this.userStatsService.chartCategories;
 
   constructor() {
   }
@@ -105,78 +111,6 @@ export class AdminDashboardPage implements OnInit {
     return Math.round(rate) + '%';
   });
 
-  public chartSeries = computed<ApexAxisChartSeries>(() => {
-    const allForms = [...this.burnoutService.burnoutForms()]
-      .filter(f => f?.created_at)
-      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-
-    if (!allForms.length) return [];
-
-    const range = this.daysRange();
-    const numBuckets = Math.ceil(range / 7);
-
-    const satisfactionData: number[] = [];
-    const aiStressData: number[] = [];
-
-    for (let i = numBuckets - 1; i >= 0; i--) {
-      const end = new Date();
-      end.setDate(end.getDate() - (i * 7));
-      const start = new Date();
-      start.setDate(start.getDate() - ((i + 1) * 7));
-
-      const latestPerEmployee = new Map<number, { sat: number, ai: number }>();
-      
-      allForms.forEach(f => {
-        const d = new Date(f.created_at);
-        if (d >= start && d < end) {
-          const burnout = f.final_burnout_score ?? f.burnout_score ?? 0;
-          const aiAverage = ((f.image_score ?? 0) + (f.text_score ?? 0)) / 2;
-          
-          latestPerEmployee.set(f.employee_id, { 
-            sat: 100 - burnout, 
-            ai: aiAverage 
-          });
-        }
-      });
-
-      const values = Array.from(latestPerEmployee.values());
-      
-      if (values.length > 0) {
-        const avgSat = Math.round(values.reduce((a, b) => a + b.sat, 0) / values.length);
-        const avgAi = Math.round(values.reduce((a, b) => a + b.ai, 0) / values.length);
-        satisfactionData.push(avgSat);
-        aiStressData.push(avgAi);
-      } else {
-        satisfactionData.push(0);
-        aiStressData.push(0);
-      }
-    }
-
-    return [
-      { name: 'Employee Satisfaction', data: satisfactionData },
-      { name: 'AI Detected Stress', data: aiStressData }
-    ];
-  });
-
-  public chartCategories = computed<string[]>(() => {
-    const range = this.daysRange();
-    const numBuckets = Math.ceil(range / 7);
-    const categories: string[] = [];
-
-    for (let i = numBuckets - 1; i >= 0; i--) {
-      const start = new Date();
-      start.setDate(start.getDate() - ((i + 1) * 7));
-      const end = new Date();
-      end.setDate(end.getDate() - (i * 7));
-
-      // Formato: "Día/Mes"
-      const startLabel = `${start.getDate()}/${start.getMonth() + 1}`;
-      const endLabel = `${end.getDate()}/${end.getMonth() + 1}`;
-      
-      categories.push(`${startLabel} - ${endLabel}`);
-    }
-    return categories;
-  });
 
   async editEmployee() {
     const modal = await this.modalCtrl.create({

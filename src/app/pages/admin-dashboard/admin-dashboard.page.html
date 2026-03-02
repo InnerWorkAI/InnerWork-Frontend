@@ -1,6 +1,6 @@
 <ion-content>
   <div class="dashboard-container">
-    
+
     <header class="main-header">
       <div class="header-text">
         <h1>Welcome, {{ user }}</h1>
@@ -11,26 +11,17 @@
       </button>
     </header>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <app-dashboard-card 
-        title="Company Well-being" 
-        [value]="avgWellBeing()" 
-        description="Average health score"
+      <app-dashboard-card title="Company Well-being" [value]="avgWellBeing()" description="Average health score"
         [trend]="'up'">
       </app-dashboard-card>
 
-      <app-dashboard-card 
-        title="Critical Alerts" 
-        [value]="criticalAlerts()" 
+      <app-dashboard-card title="Critical Alerts" [value]="criticalAlerts()"
         [percentage]="criticalAlerts() > 0 ? 'Action required' : 'All clear'"
-        [trend]="criticalAlerts() > 0 ? 'down' : 'neutral'"
-        description="Employees at high risk">
+        [trend]="criticalAlerts() > 0 ? 'down' : 'neutral'" description="Employees at high risk">
       </app-dashboard-card>
 
-      <app-dashboard-card 
-        title="Last 7 Days Participation"
-        [value]="participationRate()" 
-        description="Survey completion rate"
-        [trend]="'neutral'">
+      <app-dashboard-card title="Last 7 Days Participation" [value]="participationRate()"
+        description="Survey completion rate" [trend]="'neutral'">
       </app-dashboard-card>
     </div>
     <section class="table-card">
@@ -55,43 +46,44 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-50">
-            @for (emp of (showAllEmployees ? employeeService.employees() : employeeService.employees().slice(0, 6)); track emp.id) {
-              @if (emp.id) {
-                <tr class="hover:bg-gray-50/50 transition-colors">
-                  <td class="px-6 py-4">
-                    <div class="font-bold text-gray-900">{{ emp.first_name }} {{ emp.last_name }}</div>
-                    <div class="text-xs text-gray-400">{{ emp.email }}</div>
-                  </td>
-                  <td class="px-6 py-4 text-sm text-gray-600">
-                    {{ departmentNames[emp.department] }}
-                  </td>
-                  <td class="px-6 py-4 text-sm text-gray-600">
-                    @let scoreData = burnoutScoresMap()[emp.id];
-                    
-                    @let evaluation = burnoutScoresMap()[emp.id];
+            @for (emp of (showAllEmployees ? employeeService.employees() : employeeService.employees().slice(0, 6));
+            track emp.id) {
+            @if (emp.id) {
+            <tr class="hover:bg-gray-50/50 transition-colors">
+              <td class="px-6 py-4">
+                <div class="font-bold text-gray-900">{{ emp.first_name }} {{ emp.last_name }}</div>
+                <div class="text-xs text-gray-400">{{ emp.email }}</div>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-600">
+                {{ departmentNames[emp.department] }}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-600">
+                @let scoreData = burnoutScoresMap()[emp.id];
 
-                    @if (evaluation?.created_at) {
-                      {{ evaluation.created_at | date:'yyyy/MM/dd' }}
-                    } @else {
-                      <span class="italic text-gray-400">No evaluations</span>
-                    }
-                  </td>
+                @let evaluation = burnoutScoresMap()[emp.id];
 
-                  <td class="px-6 py-4">
-                    @let finalScore = scoreData?.final_burnout_score ?? scoreData?.burnout_score ?? -1;
-                    
-                    <span [style.color]="getScoreColor(finalScore)">
-                      {{ (finalScore !== -1) ? (finalScore | number:'1.0-0') + '%' : '--' }}
-                    </span>
-                  </td>
-                </tr>
-              }
+                @if (evaluation?.created_at) {
+                {{ evaluation.created_at | date:'yyyy/MM/dd' }}
+                } @else {
+                <span class="italic text-gray-400">No evaluations</span>
+                }
+              </td>
+
+              <td class="px-6 py-4">
+                @let finalScore = scoreData?.final_burnout_score ?? scoreData?.burnout_score ?? -1;
+
+                <span [style.color]="getScoreColor(finalScore)">
+                  {{ (finalScore !== -1) ? (finalScore | number:'1.0-0') + '%' : '--' }}
+                </span>
+              </td>
+            </tr>
+            }
             } @empty {
-              <tr>
-                <td colspan="3" class="px-6 py-10 text-center text-gray-400 italic">
-                  No employees found.
-                </td>
-              </tr>
+            <tr>
+              <td colspan="3" class="px-6 py-10 text-center text-gray-400 italic">
+                No employees found.
+              </td>
+            </tr>
             }
           </tbody>
         </table>
@@ -106,31 +98,33 @@
           </div>
 
           <div class="flex gap-2 mb-4">
-            <button 
-              (click)="daysRange.set(28)"
-              [class]="daysRange() === 28 ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'"
-              class="!px-4 !py-2 !rounded-xl !text-sm !font-bold !transition-all">
-              Last Month
-            </button>
-            <button 
-              (click)="daysRange.set(84)"
-              [class]="daysRange() === 84 ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'"
-              class="!px-4 !py-2 !rounded-xl !text-sm !font-bold !transition-all">
-              Last 3 Months
-            </button>
+
+            <ion-button (click)="daysRange.set(28)" fill="none"
+              [style.--background]="daysRange() === 28 ? '#a855f7' : 'transparent'"
+              [style.--color]="daysRange() === 28 ? 'white' : '#64748b'"
+              class="!min-h-0 h-9 !m-0 !p-0 rounded-xl text-xs font-bold transition-all duration-200 overflow-hidden --padding-start-0 --padding-end-0 shadow-none"
+              style="--padding-start: 12px; --padding-end: 12px; --border-radius: 12px;">
+              1 Month
+            </ion-button>
+
+            <ion-button (click)="daysRange.set(84)" fill="none"
+              [style.--background]="daysRange() === 84 ? '#a855f7' : 'transparent'"
+              [style.--color]="daysRange() === 84 ? 'white' : '#64748b'"
+              class="!min-h-0 h-9 !m-0 !p-0 rounded-xl text-xs font-bold transition-all duration-200 overflow-hidden shadow-none"
+              style="--padding-start: 12px; --padding-end: 12px; --border-radius: 12px;">
+              3 Months
+            </ion-button>
           </div>
         </div>
 
         @if (chartSeries()[0]?.data?.length) {
-          <app-employee-chart 
-            [series]="chartSeries()" 
-            [categories]="chartCategories()"
-            [chartColors]="['#a855f7', '#111827']">
-          </app-employee-chart>
+        <app-employee-chart [series]="chartSeries()" [categories]="chartCategories()"
+          [chartColors]="['#a855f7', '#111827']">
+        </app-employee-chart>
         } @else {
-          <div class="h-[350px] flex items-center justify-center text-gray-400">
-            <p class="ml-2">No statistics available</p>
-          </div>
+        <div class="h-[350px] flex items-center justify-center text-gray-400">
+          <p class="ml-2">No statistics available</p>
+        </div>
         }
       </div>
     </section>

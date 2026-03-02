@@ -22,7 +22,7 @@ export class BurnoutForm {
     work_life_balance: string;
     business_travel: string;
     created_at: string;
-    burnout_score: number;        
+    burnout_score: string;        
     final_burnout_score?: number;  
     image_score?: number;         
     text_score?: number;          
@@ -38,7 +38,7 @@ export class BurnoutForm {
         this.job_satisfaction = '';
         this.work_life_balance = '';
         this.business_travel = '';
-        this.burnout_score = 0;
+        this.burnout_score = '';
         this.created_at = '';
     }
 }

@@ -1,7 +1,7 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { ApiService } from './api-service';
 import { BurnoutForm, BurnoutRequest } from 'src/app/shared/models/burnout-form';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { EmployeeService } from './employee-service';
 
 
@@ -20,24 +20,57 @@ export class BurnoutFormService {
   constructor() {
     effect(() => {
       const employee = this.employeeService.currentEmployee();
-
-      if (employee && this._hasCompletedToday() === undefined) {
-        this.fetchStatus(employee.id!);
+      if (employee) {
+        if (this._hasCompletedToday() === undefined) {
+          this.fetchStatus(employee.id!);
+        }
+        this.loadMyForms(employee.id!);
       }
+
+
     });
   }
 
-  // Señal que almacena todos los formularios cargados
-  public burnoutForms = signal<BurnoutForm[]>([]);
+  private mapScores(forms: BurnoutForm[]): BurnoutForm[] {
+    return forms.map(form => {
+      if (typeof form.burnout_score === 'string') {
+        const scores = form.burnout_score.split(',').map(s => parseInt(s.trim(), 10));
 
-  getLastFormByEmployee(employeeId: number): Observable<BurnoutForm> {
-    return this.api.get<BurnoutForm>(`${this.endpoint}/employee/${employeeId}/last`);
+        form.image_score = scores[0] ?? 0;
+        form.text_score = scores[1] ?? 0;
+        form.form_score = scores[2] ?? 0;
+      }
+      return form;
+    });
   }
+
+  public burnoutForms = signal<BurnoutForm[]>([]);
+  public myForms = signal<BurnoutForm[]>([]);
 
   loadAll() {
     this.api.get<BurnoutForm[]>(this.endpoint).subscribe(data => {
-      this.burnoutForms.set(data);
+      const processedData = this.mapScores(data);
+      this.burnoutForms.set(processedData);
     });
+  }
+
+  loadMyForms(employeeId: number) {
+    this.getFormsByEmployee(employeeId).subscribe(data => {
+      const processedData = this.mapScores(data);
+      this.myForms.set(processedData);
+    });
+  }
+
+  getLastFormByEmployee(employeeId: number): Observable<BurnoutForm> {
+    return this.api.get<BurnoutForm>(`${this.endpoint}/employee/${employeeId}/last`).pipe(
+      tap(form => this.mapScores([form]))
+    );
+  }
+
+  getFormsByEmployee(employeeId: number): Observable<BurnoutForm[]> {
+    return this.api.get<BurnoutForm[]>(`${this.endpoint}/employee/${employeeId}`).pipe(
+      map(data => this.mapScores(data))
+    );
   }
 
   saveForm(data: FormData) {

@@ -11,6 +11,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { filter, firstValueFrom } from 'rxjs';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { EmployeeService } from 'src/app/core/services/employee-service';
+import { UserStatsService } from 'src/app/core/services/user-stats-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,11 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 })
 export class DashboardPage implements OnInit {
   formService = inject(BurnoutFormService);
+  userStatsService = inject(UserStatsService);
+
+  public chartSeries = this.userStatsService.myPersonalSeries;
+  public chartCategories = this.userStatsService.chartCategories;
+  public daysRange = this.userStatsService.daysRange;
 
   private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
   hasDoneCheckin: boolean = true;
@@ -59,6 +65,10 @@ export class DashboardPage implements OnInit {
 
   startCheckIn() {
     console.log('Check-in started');
+  }
+
+  setRange(days: number) {
+    this.userStatsService.daysRange.set(days);
   }
 
 }

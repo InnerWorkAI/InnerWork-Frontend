@@ -1,4 +1,4 @@
-import { Component, computed, input} from '@angular/core';
+import { Component, computed, effect, input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { 
   NgApexchartsModule,
@@ -32,6 +32,12 @@ export class EmployeeChartComponent{
   public chartColors = input<string[]>(['#a855f7']);  
   public series = input<ApexAxisChartSeries>([]); 
   public categories = input<string[]>([]);
+
+  constructor() {
+  effect(() => {
+    console.log('Contenido de series:', this.series());
+  });
+}
 
   public chart: ApexChart = {
     type: 'line', 

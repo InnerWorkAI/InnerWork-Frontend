@@ -97,7 +97,7 @@ export class EmployeeDirectoryPage implements OnInit {
         if (form) {
           this.lastScores.update(scores => ({
             ...scores,
-            [empId]: form.burnout_score
+            [empId]: form.final_burnout_score!
           }));
           this.lastEvaluationDates.update(dates => ({
           ...dates,
