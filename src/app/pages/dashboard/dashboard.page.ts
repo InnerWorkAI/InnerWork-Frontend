@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from '@ionic/angular/standalone';
@@ -12,6 +12,7 @@ import { filter, firstValueFrom } from 'rxjs';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { UserStatsService } from 'src/app/core/services/user-stats-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,17 +21,17 @@ import { UserStatsService } from 'src/app/core/services/user-stats-service';
   standalone: true,
   imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, EmployeeChartComponent, AiChatComponent]
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage {
   formService = inject(BurnoutFormService);
   userStatsService = inject(UserStatsService);
+  router = inject(Router);
 
   public chartSeries = this.userStatsService.myPersonalSeries;
   public chartCategories = this.userStatsService.chartCategories;
   public daysRange = this.userStatsService.daysRange;
 
-  private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
-  hasDoneCheckin: boolean = true;
-  isLoading: boolean = true;
+  isLoading = computed(() => this.formService.hasCompletedToday() === undefined);
+  hasDoneCheckin = computed(() => this.formService.hasCompletedToday() === true);
 
   constructor() {
     addIcons({
@@ -41,30 +42,8 @@ export class DashboardPage implements OnInit {
 
   employeeService = inject(EmployeeService);
 
-  async ngOnInit() {
-    await this.checkStatus();
-  }
-
-  async checkStatus() {
-    this.isLoading = true;
-    try {
-      const completed = await firstValueFrom(
-        this.hasCompletedToday$.pipe(
-          filter(val => val !== undefined)
-        )
-      );
-
-      this.hasDoneCheckin = completed;
-      
-    } catch (error) {
-      console.error('Error checkeando status en Dashboard', error);
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
   startCheckIn() {
-    console.log('Check-in started');
+    this.router.navigate(['/check-in'])
   }
 
   setRange(days: number) {

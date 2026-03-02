@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true" class="bg-slate-50">
 
-  @if (isLoading) {
+  @if (isLoading()) {
   <div class="max-w-[1600px] mx-auto p-6 lg:p-12 w-full min-h-full flex flex-col justify-center">
     <div class="flex flex-col items-center justify-center animate-in fade-in duration-500">
       <div class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
@@ -71,25 +71,25 @@
       </div>
 
       <div class="h-fit p-4 rounded-2xl flex items-center justify-between transition-all border shrink-0"
-        [ngClass]="hasDoneCheckin ? 'bg-amber-50 border-amber-200 shadow-sm' : 'bg-emerald-50 border-emerald-200'">
+        [ngClass]="!hasDoneCheckin() ? 'bg-amber-50 border-amber-200 shadow-sm' : 'bg-emerald-50 border-emerald-200'">
 
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
-            [ngClass]="hasDoneCheckin ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'">
-            <ion-icon [name]="hasDoneCheckin ? 'alert-circle' : 'checkmark-circle'" class="text-2xl"></ion-icon>
+            [ngClass]="!hasDoneCheckin() ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'">
+            <ion-icon [name]="!hasDoneCheckin() ? 'alert-circle' : 'checkmark-circle'" class="text-2xl"></ion-icon>
           </div>
 
           <div>
             <h4 class="text-sm font-bold text-slate-800">
-              {{ hasDoneCheckin ? 'Daily Check-in Pending' : 'Check-in Completed' }}
+              {{ !hasDoneCheckin ? 'Daily Check-in Pending' : 'Check-in Completed' }}
             </h4>
             <p class="text-[11px] text-slate-500">
-              {{ hasDoneCheckin ? 'Tell us how you feel today.' : 'Your data is up to date.' }}
+              {{ !hasDoneCheckin ? 'Tell us how you feel today.' : 'Your data is up to date.' }}
             </p>
           </div>
         </div>
 
-        @if (hasDoneCheckin) {
+        @if (!hasDoneCheckin()) {
         <ion-button (click)="startCheckIn()" fill="solid" color="warning"
           class="text-[10px] font-black uppercase tracking-widest h-9 m-0"
           style="--border-radius: 12px; --box-shadow: none;">

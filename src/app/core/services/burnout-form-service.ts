@@ -1,8 +1,9 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { ApiService } from './api-service';
 import { BurnoutForm, BurnoutRequest } from 'src/app/shared/models/burnout-form';
-import { map, Observable, tap } from 'rxjs';
+import { filter, firstValueFrom, map, Observable, tap, timeout } from 'rxjs';
 import { EmployeeService } from './employee-service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 
 @Injectable({
@@ -21,11 +22,10 @@ export class BurnoutFormService {
     effect(() => {
       const employee = this.employeeService.currentEmployee();
       if (employee) {
-        if (this._hasCompletedToday() === undefined) {
-          this.fetchStatus(employee.id!);
-        }
+        this.fetchStatus(employee.id!);
         this.loadMyForms(employee.id!);
       }
+      
 
 
     });
@@ -74,14 +74,27 @@ export class BurnoutFormService {
   }
 
   saveForm(data: FormData) {
-    return this.api.post<FormData>(this.endpoint, data);
+    return this.api.post<any>(this.endpoint, data).pipe(
+      tap(() => {
+        this._hasCompletedToday.set(true); 
+        console.log('Signal actualizada a true tras el envío');
+      })
+    );
   }
 
   private fetchStatus(employeeId: number) {
-    this.api.get<boolean>(`burnout-forms/employee/${employeeId}/has-this-week`)
+    this.api.get<any>(`burnout-forms/employee/${employeeId}/has-this-week`)
       .subscribe({
-        next: (status) => this._hasCompletedToday.set(status),
-        error: () => this._hasCompletedToday.set(true)
+        next: (res) => {
+          const status = (typeof res === 'object' && res !== null) 
+                        ? res.has_form_this_week 
+                        : res;
+          
+          this._hasCompletedToday.set(!!status);
+        },
+        error: () => this._hasCompletedToday.set(false)
       });
   }
+
+
 }

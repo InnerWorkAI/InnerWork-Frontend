@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from '@ionic/angular/standalone';
@@ -8,7 +8,7 @@ import { addIcons } from 'ionicons';
 import { checkmarkCircle } from 'ionicons/icons';
 import { JournalData } from 'src/app/shared/models/Journal';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { filter, firstValueFrom, timeout } from 'rxjs';
+import { filter, firstValueFrom, map, timeout } from 'rxjs';
 import { BurnoutRequest } from 'src/app/shared/models/burnout-form';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 
@@ -19,14 +19,13 @@ import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
   standalone: true,
   imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, WebcamPersonDetectorComponent, EmployeeSurveyComponent]
 })
-export class CheckInPage implements OnInit {
+export class CheckInPage  {
 
   formService = inject(BurnoutFormService);
 
-  private hasCompletedToday$ = toObservable(this.formService.hasCompletedToday);
-
-  isLoading = true;
-  hasPendingSurvey = false;
+  isLoading = computed(() => this.formService.hasCompletedToday() === undefined);
+  hasDoneCheckin = computed(() => this.formService.hasCompletedToday() === true);
+  isSaving = false;
   surveyData: any;
   journalFiles: JournalData | null = null;
 
@@ -36,9 +35,6 @@ export class CheckInPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.checkSurveyStatus();
-  }
 
   handleSurveyFinished(surveyForm: any) {
     console.log('Datos recibidos del cuestionario:', surveyForm);
@@ -58,7 +54,7 @@ export class CheckInPage implements OnInit {
   private async checkBothSteps() {
     if (this.surveyData && this.journalFiles) {
 
-      this.isLoading = true;
+      this.isSaving = true;
 
       try {
 
@@ -87,19 +83,18 @@ export class CheckInPage implements OnInit {
         this.formService.saveForm(formData).subscribe({
           next: (res) => {
             console.log('Formulario enviado con éxito', res);
-            this.hasPendingSurvey = false;
-            this.isLoading = false;
+            this.isSaving = false;
           },
           error: (err) => {
             console.error('Error al enviar formulario:', err);
-            this.isLoading = false;
+            this.isSaving = false;
             alert('Hubo un error al enviar los datos. Por favor, inténtalo de nuevo.');
           }
         });
 
       } catch (error) {
         console.error('Error enviando los datos:', error);
-        this.isLoading = false;
+        this.isSaving = false;
       }
     }
   }
@@ -109,31 +104,6 @@ export class CheckInPage implements OnInit {
       case 'International': return 2;
       case 'Local': return 1;
       default: return 0;
-    }
-  }
-
-
-  async checkSurveyStatus() {
-    this.isLoading = true;
-
-
-    try {
-
-      const status = await firstValueFrom(
-        this.hasCompletedToday$.pipe(
-          filter(val => val !== undefined),
-          timeout(7000)
-        )
-      );
-
-      console.log('¡Status recibido!', status);
-      this.hasPendingSurvey = status;
-
-    } catch (error) {
-      console.error('Error o Timeout esperando al FormService:', error);
-      this.hasPendingSurvey = true;
-    } finally {
-      this.isLoading = false;
     }
   }
 
