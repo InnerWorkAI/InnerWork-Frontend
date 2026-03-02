@@ -38,9 +38,8 @@ export class LoginFormComponent  implements OnInit {
   async onForgot() {
     const modal = await this.modalCtrl.create({
       component: ForgotPasswordModalComponent,
-      breakpoints: [0, 0.4],
-      initialBreakpoint: 0.4,
       handle: true,
+      cssClass: 'custom-reset-modal',
       mode: 'ios'
     });
     

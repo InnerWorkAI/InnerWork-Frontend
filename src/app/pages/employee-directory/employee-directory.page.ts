@@ -1,138 +1,147 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
-import { IonIcon } from '@ionic/angular/standalone'; 
+import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { trashOutline, createOutline } from 'ionicons/icons';
+import { trashOutline, createOutline, checkmarkOutline, checkmark, closeCircle, calendarOutline } from 'ionicons/icons';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Employee } from 'src/app/shared/models/employee';
 import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
 import { ModalController } from '@ionic/angular';
 
 const DepartmentNames: Record<number, string> = {
-    0: 'R&D',
-    1: 'Sales',
-    2: 'Human Resources'
-  };
+  0: 'R&D',
+  1: 'Sales',
+  2: 'Human Resources'
+};
 
 @Component({
   selector: 'app-employee-directory',
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent,IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
+  imports: [IonContent, IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent, IonSelect, IonSelectOption]
 })
 
 export class EmployeeDirectoryPage implements OnInit {
-  private readonly CRITICAL_LIMIT = 70; 
+  private readonly CRITICAL_LIMIT = 70;
   private readonly WARNING_LIMIT = 50;
   public employeeService = inject(EmployeeService);
   public burnoutService = inject(BurnoutFormService);
   private modalCtrl = inject(ModalController);
   public lastScores = signal<Record<number, number>>({});
   public lastEvaluationDates = signal<Record<number, string>>({});
+
   public searchText = signal<string>('');
   public selectedDept = signal<number | null>(null);
   public minBurnout = signal<number>(0);
   public maxBurnout = signal<number>(100);
+  public startDate = signal<string | null>(null);
+  public endDate = signal<string | null>(null);
+
   selectedEmployee = signal<Employee | null>(null);
-  
+  public selectedDepts = signal<number[]>([]);
+
+  public allForms = this.burnoutService.burnoutForms;
+
+  public burnoutMap = computed(() => {
+    const forms = this.allForms();
+    const map: Record<number, { score: number, date: string }> = {};
+
+    forms.forEach(f => {
+      const currentScore = f.final_burnout_score!;
+
+      if (!map[f.employee_id] || new Date(f.created_at) > new Date(map[f.employee_id].date)) {
+        map[f.employee_id] = { score: currentScore, date: f.created_at };
+      }
+    });
+    return map;
+  });
+
   public filteredEmployees = computed(() => {
+    
     const text = this.searchText().toLowerCase().trim();
-    const deptFilter = this.selectedDept();
+    const depts = this.selectedDepts();
     const min = this.minBurnout();
     const max = this.maxBurnout();
+    const start = this.startDate();
+    const end = this.endDate();
+    const scores = this.burnoutMap();
 
-    const all = this.employeeService.employees();
-    
-    const filtered = all.filter(emp => {
-      const fullName = `${emp.first_name} ${emp.last_name}`.toLowerCase();
-      const deptId = emp.department as unknown as number;
-      const deptName = DepartmentNames[deptId]?.toLowerCase() || '';
-      const evaluationDate = this.lastEvaluationDates()[emp.id!] || '';
-      
-      const matchesText = !text || 
-                          fullName.includes(text) || 
-                          deptName.includes(text) || 
-                          evaluationDate.includes(text);
+    return this.employeeService.employees().filter(emp => {
+      const firstName = emp.first_name || '';
+      const lastName = emp.last_name || '';
 
-      const matchesDept = deptFilter === null || deptId === deptFilter;
+      const fullName = `${firstName} ${lastName}`.toLowerCase();
+      const empData = scores[emp.id!];
 
-      const score = this.lastScores()[emp.id!];
-      
-      const isPending = score === undefined || score === -1;
-      const matchesBurnout = isPending || (score >= min && score <= max);
+      const matchesText = !text || fullName.includes(text);
 
-      return matchesText && matchesDept && matchesBurnout;
+      const matchesDept = depts.length === 0 || depts.includes(Number(emp.department));
+
+      const score = empData?.score ?? -1;
+      const matchesBurnout = score === -1 || (score >= min && score <= max);
+
+      let matchesDate = true;
+      if (empData?.date) {
+        const evalDate = new Date(empData.date).getTime();
+        const startLimit = start ? new Date(start).getTime() : null;
+        const endLimit = end ? new Date(end).getTime() : null;
+
+        if (startLimit && evalDate < startLimit) matchesDate = false;
+        if (endLimit && evalDate > endLimit) matchesDate = false;
+      } else if (start || end) {
+        matchesDate = false;
+      }
+
+      return matchesText && matchesDept && matchesBurnout && matchesDate;
+    });
   });
-
-  filtered.forEach(emp => {
-    if (emp.id) this.loadEmployeeScore(emp.id);
-  });
-
-  return filtered;
-});
 
   constructor(
     private alertCtrl: AlertController,
     private toastCtrl: ToastController, // Añadido
-  ){
-    addIcons({ trashOutline, createOutline });
+  ) {
+    addIcons({ trashOutline, createOutline, checkmark, closeCircle, calendarOutline });
   }
 
   ngOnInit() {
     this.employeeService.loadEmployees();
+    this.burnoutService.loadAll();
   }
 
-  private loadEmployeeScore(empId: number) {
-    if (this.lastScores()[empId] !== undefined) return;
-
-    this.burnoutService.getLastFormByEmployee(empId).subscribe({
-      next: (form) => {
-        if (form) {
-          this.lastScores.update(scores => ({
-            ...scores,
-            [empId]: form.final_burnout_score!
-          }));
-          this.lastEvaluationDates.update(dates => ({
-          ...dates,
-            [empId]: form.created_at
-          }));
-      } else {
-        this.lastScores.update(scores => ({ ...scores, [empId]: -1 }));
-        this.lastEvaluationDates.update(dates => ({ ...dates, [empId]: 'none' }));
-      }
-    },
-    error: () => {
-      this.lastScores.update(scores => ({ ...scores, [empId]: -1 }));
-      this.lastEvaluationDates.update(dates => ({ ...dates, [empId]: '' }));
-    }
-  });
+  toggleDept(deptId: number) {
+    this.selectedDepts.update(depts =>
+      depts.includes(deptId)
+        ? depts.filter(id => id !== deptId) // Si está, lo quito
+        : [...depts, deptId]                // Si no está, lo añado
+    );
   }
+
 
   public getDepartmentName(dept: any): string {
     const id = dept as number;
     return DepartmentNames[id] || 'Unknown';
   }
 
-getScoreBg(score: number | null | undefined): string {
-  if (score === -1 || score == null) return '#f3f4f6'; 
-  if (score >= this.CRITICAL_LIMIT) return '#fee2e2'; 
-  if (score > this.WARNING_LIMIT) return '#fffbeb';   
-  return '#dcfce7'; 
-}
+  getScoreBg(score: number | null | undefined): string {
+    if (score === -1 || score == null) return '#f3f4f6';
+    if (score >= this.CRITICAL_LIMIT) return '#fee2e2';
+    if (score > this.WARNING_LIMIT) return '#fffbeb';
+    return '#dcfce7';
+  }
 
-getScoreColor(score: number | null | undefined): string {
-  if (score === -1 || score == null) return '#9ca3af'; 
-  if (score >= this.CRITICAL_LIMIT) return '#ef4444';
-  if (score > this.WARNING_LIMIT) return '#d97706'; 
-  return '#16a34a'; 
-}
+  getScoreColor(score: number | null | undefined): string {
+    if (score === -1 || score == null) return '#9ca3af';
+    if (score >= this.CRITICAL_LIMIT) return '#ef4444';
+    if (score > this.WARNING_LIMIT) return '#d97706';
+    return '#16a34a';
+  }
   // Función para confirmar eliminación de un empleado
   async confirmDelete(employee: any) {
     const alert = await this.alertCtrl.create({
@@ -188,7 +197,7 @@ getScoreColor(score: number | null | undefined): string {
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
       componentProps: {
-        employee: emp 
+        employee: emp
       },
       mode: 'ios',
       cssClass: 'custom-modal-class'
@@ -197,9 +206,9 @@ getScoreColor(score: number | null | undefined): string {
     await modal.present();
 
     const { data, role } = await modal.onWillDismiss();
-    
+
     if (role === 'confirm') {
-      this.employeeService.loadEmployees(); 
+      this.employeeService.loadEmployees();
     }
   }
 }

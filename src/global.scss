@@ -38,3 +38,23 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+.custom-reset-modal {
+  // 1. Centramos el modal en pantalla
+  --vertical-align: middle;
+  --horizontal-align: center;
+
+  // 2. Forzamos el tamaño de la tarjeta (ajusta el height si te sobra aire)
+  --width: 90%;
+  --max-width: 400px;
+  --height: 420px; 
+
+  // 3. Estética de la tarjeta
+  --border-radius: 24px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+
+  &::part(content) {
+    // Aseguramos que el contenido interno no se desborde ni se corte
+    overflow: hidden;
+  }
+}

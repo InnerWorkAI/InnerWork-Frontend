@@ -1,19 +1,9 @@
-<div class="!px-0 !py-4">
+<div class="search-wrapper">
   <ion-searchbar 
     [placeholder]="placeholder()" 
     (ionInput)="handleInput($event)"
     mode="md" 
     debounce="300"
-    class="!p-0 !h-auto !shadow-sm !transition-all !duration-200 
-          !rounded-xl !border !border-gray-200
-          focus-within:!border-[#9333ea] focus-within:!ring-1 focus-within:!ring-[#9333ea]"
-    style="
-      --background: #ffffff;
-      --border-radius: 12px; 
-      --icon-color: var(--ion-color-primary);
-      --clear-button-color: var(--ion-color-primary);
-      --placeholder-color: #9ca3af;
-      --box-shadow: none;
-    ">
+    class="custom-searchbar">
   </ion-searchbar>
 </div>
