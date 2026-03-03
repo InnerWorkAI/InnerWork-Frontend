@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { IonHeader, IonContent, IonIcon, IonButton, IonButtons, IonToolbar, IonTitle, IonInput, IonSpinner } from "@ionic/angular/standalone";
-import { ModalController, ToastController } from '@ionic/angular';
+import { IonHeader, IonContent, IonIcon, IonButton, IonButtons, IonToolbar, IonTitle, IonInput, IonSpinner, ModalController, ToastController} from "@ionic/angular/standalone";
 import { AuthService } from 'src/app/core/services/auth-service';
 import { addIcons } from 'ionicons';
 import { closeOutline, keyOutline } from 'ionicons/icons';

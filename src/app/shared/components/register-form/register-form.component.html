@@ -65,7 +65,7 @@
   </div>
 
   <ion-button type="submit" expand="block" class="h-14 font-black mt-8" color="primary"
-    style="--border-radius: 1rem;" [disabled]="isFormInvalid()">
+    style="--border-radius: 1rem;" [disabled]="isFormInvalid() || isLoading()">
     Register your Company
   </ion-button>
 

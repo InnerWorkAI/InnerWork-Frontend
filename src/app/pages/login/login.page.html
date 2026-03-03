@@ -2,7 +2,12 @@
   <div class="flex items-center justify-center min-h-full bg-gray-50">
     
     <div class="bg-white p-8 rounded-[32px] shadow-lg border border-gray-100 w-full max-w-[400px]">
-      
+      @if (isLoading()) {
+        <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center">
+          <ion-spinner name="crescent" color="primary"></ion-spinner>
+          <p class="text-[#B794F4] font-medium mt-2">Authenticating...</p>
+        </div>
+      }
       <div class="flex flex-col items-center mb-6">
         <div class="flex items-center gap-2 mb-4">
           <!--<ion-icon name="heart" class="text-3xl text-[#B794F4]"></ion-icon>  Icono de la aplicación -->
@@ -17,7 +22,7 @@
           {{ errorMessage() }}
         </div>
       }
-      <app-login-form (submitForm)="handleSubmit($event)"></app-login-form>
+      <app-login-form (submitForm)="handleSubmit($event)" [isLoading]="isLoading()"></app-login-form>
 
     </div>
   </div>

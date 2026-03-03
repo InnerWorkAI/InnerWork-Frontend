@@ -1,18 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, output, OnInit, signal, inject } from '@angular/core';
+import { Component, output, OnInit, signal, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginCredentials } from '../../models/User';
-import { ModalController } from '@ionic/angular';
 import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
 import { Router } from '@angular/router';
-import { IonButton, IonInput } from "@ionic/angular/standalone";
+import { IonButton, IonInput, IonSpinner, ModalController } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
-  imports: [IonInput, IonButton, CommonModule, FormsModule]
+  imports: [IonSpinner, IonInput, IonButton, CommonModule, FormsModule]
 })
 export class LoginFormComponent  implements OnInit {
 
@@ -22,13 +21,15 @@ export class LoginFormComponent  implements OnInit {
 
   email = signal('');
   password = signal('');
+  public isLoading = input<boolean>(false);
 
   submitForm = output<LoginCredentials>();
 
 
   ngOnInit() {}
 
-  onSubmit() {
+  async onSubmit() {
+    if (this.isLoading()) return;
     this.submitForm.emit({ 
       email: this.email(), 
       password: this.password() 

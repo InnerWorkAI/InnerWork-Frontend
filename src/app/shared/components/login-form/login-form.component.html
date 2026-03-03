@@ -23,7 +23,7 @@
     </ion-input>
   </div>
 
-  <ion-button type="submit" expand="block" mode="ios" [disabled]="!email() || !password()"
+  <ion-button type="submit" expand="block" mode="ios" [disabled]="!email() || !password() || isLoading()"
     class="login-button h-12 font-bold normal-case mt-6">
     Log In
   </ion-button>

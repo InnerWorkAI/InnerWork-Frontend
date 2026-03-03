@@ -1,8 +1,13 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="flex items-center justify-center min-h-full bg-gray-50">
-    
+
     <div class="bg-white p-8 rounded-[32px] shadow-lg border border-gray-100 w-full max-w-[600px]">
-      
+      @if (isLoading()) {
+      <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p class="text-[#B794F4] font-medium mt-2">Authenticating...</p>
+      </div>
+      }
       <div class="flex flex-col items-center mb-6">
         <div class="flex items-center gap-2 mb-4">
           <img src="assets/images/innerwork-logo.png" class="h-9 w-9 object-contain" alt="Logo">
@@ -13,11 +18,12 @@
       </div>
 
       @if (errorMessage()) {
-        <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm text-center animate-fade-in">
-          {{ errorMessage() }}
-        </div>
+      <div
+        class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm text-center animate-fade-in">
+        {{ errorMessage() }}
+      </div>
       }
-      <app-register-form (submitForm)="handleSubmit($event)"></app-register-form>
+      <app-register-form (submitForm)="handleSubmit($event)" [isLoading]="isLoading()"></app-register-form>
 
     </div>
   </div>

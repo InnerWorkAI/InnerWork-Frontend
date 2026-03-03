@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ModalController, ToastController } from '@ionic/angular';
 import { Employee } from '../../models/employee';
 import { AuthService } from '../../../core/services/auth-service';
 import { MapBrowserComponent } from '../map-browser/map-browser.component';
 import { EmployeeService } from '../../../core/services/employee-service';
-import { IonButton, IonContent } from "@ionic/angular/standalone";
+import { IonButton, IonContent, ModalController, ToastController} from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-add-edit-employee-modal',

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, output, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RegisterCompanyCredentials } from '../../models/User';
 import { MapBrowserComponent } from "../map-browser/map-browser.component";
@@ -30,6 +30,7 @@ export class RegisterFormComponent {
   locationTouched = signal(false);
 
   submitForm = output<RegisterCompanyCredentials>();
+  public isLoading = input<boolean>(false);
 
   isValidEmail = computed(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,7 +53,7 @@ export class RegisterFormComponent {
     this.nameTouched.set(true);
     this.locationTouched.set(true);
 
-    if (this.isFormInvalid()) return;
+    if (this.isFormInvalid() || this.isLoading()) return;
 
     this.submitForm.emit({
       email: this.email(),
