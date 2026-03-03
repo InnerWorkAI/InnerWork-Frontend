@@ -22,7 +22,8 @@ import { ChangePictureModalComponent } from '../change-picture-modal/change-pict
     RouterModule,
     IonContent, IonHeader, IonToolbar, IonButtons, IonMenuButton, 
     IonButton, IonIcon, IonAvatar, IonPopover, IonList, IonItem, 
-    IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet]
+    IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet],
+    providers: [ModalController]
 })
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
@@ -31,7 +32,7 @@ export class AuthenticatedLayoutComponent  implements OnInit {
   constructor() { 
       effect(() => {
       const emp = this.employeeService.currentEmployee();
-      console.log('Datos del empleado actual:', emp);
+      console.log('Datos:', emp);
       console.log('URL de la imagen:', emp?.profile_image_url);
     });
 
