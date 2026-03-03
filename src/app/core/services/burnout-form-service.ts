@@ -40,6 +40,7 @@ export class BurnoutFormService {
         form.text_score = scores[1] ?? 0;
         form.form_score = scores[2] ?? 0;
       }
+      console.log(form+" formulario del empleado")
       return form;
     });
   }
