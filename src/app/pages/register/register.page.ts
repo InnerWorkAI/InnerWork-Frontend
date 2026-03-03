@@ -25,13 +25,9 @@ export class RegisterPage implements OnInit {
     this.errorMessage.set('');
 
     this.authService.registerCompany(credentials).subscribe({
-      next: (user) => {
-        console.log('Registro exitoso:', user);
-      },
       error: (err) => {
-        const message = err.error?.detail || 'Correo o contraseña incorrectos';
+        const message = err.error?.detail || 'Already existing account';
         this.errorMessage.set(message);
-        console.log(message)
       }
     });
   }

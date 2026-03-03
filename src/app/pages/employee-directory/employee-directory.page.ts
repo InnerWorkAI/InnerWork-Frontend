@@ -169,7 +169,6 @@ export class EmployeeDirectoryPage implements OnInit {
   private deleteEmployee(id: number) {
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
-        console.log('Employee deleted successfully');
         this.showToast('Employee deleted successfully', 'success');
       },
       error: (err) => {
@@ -192,7 +191,6 @@ export class EmployeeDirectoryPage implements OnInit {
 
   // Función para abrir el modal de edición
   async openEditModal(emp: Employee) {
-    console.log("Click")
     const modal = await this.modalCtrl.create({
     
       component: AddEditEmployeeModalComponent,
@@ -202,9 +200,7 @@ export class EmployeeDirectoryPage implements OnInit {
       mode: 'ios',
       cssClass: 'custom-modal-class'
     });
-    console.log("Crea el modal")
     await modal.present();
-    console.log("Presenta el modal")
 
     const { data, role } = await modal.onWillDismiss();
 

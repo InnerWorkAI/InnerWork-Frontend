@@ -69,7 +69,6 @@ export class WebcamPersonDetectorComponent {
       });
 
       this.isLoading = false;
-      console.log("Sistema recuperado");
     } catch (error) {
       console.error("El navegador sigue bloqueado, reinicia Chrome.");
     }
@@ -204,8 +203,6 @@ export class WebcamPersonDetectorComponent {
       this.capturedImages.forEach((img, i) => {
         formData.append('frames', this.base64ToBlob(img), `frame_${i}.jpg`);
       });
-
-      console.log("Enviando datos a la API...");
 
       this.onJournalFinished.emit({
           audio: this.finalAudioBlob,

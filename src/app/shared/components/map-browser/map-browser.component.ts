@@ -93,7 +93,6 @@ onSearch(query: string) {
     this.searchTimeout = setTimeout(async () => {
       try {
         const results = await this.provider.search({ query });
-        console.log(results)
 
         this.suggestions.set(results.map(r => r.raw));
       } catch (error) {
@@ -117,7 +116,6 @@ onSearch(query: string) {
 
         this.onLocationChanged.emit(fullLocationText);
         
-        console.log("Ubicación formateada:", fullLocationText);
       }
     } catch (error) {
       console.error("Error en reverse geocoding:", error);

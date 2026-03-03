@@ -64,7 +64,6 @@ export class RegisterFormComponent {
 
   onLocationSelected(address: string) {
     this.companyLocation.set(address);
-    console.log('Signal actualizado:', this.companyLocation());
     this.locationTouched.set(true);
   }
 

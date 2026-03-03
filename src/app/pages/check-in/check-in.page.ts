@@ -37,8 +37,6 @@ export class CheckInPage  {
 
 
   handleSurveyFinished(surveyForm: any) {
-    console.log('Datos recibidos del cuestionario:', surveyForm);
-
     this.surveyData = surveyForm;
 
     this.checkBothSteps();
@@ -46,7 +44,6 @@ export class CheckInPage  {
 
   handleJournalFinished(files: JournalData) {
     this.journalFiles = files;
-    console.log('Archivos multimedia recibidos en el padre');
     this.checkBothSteps();
   }
 
@@ -76,17 +73,11 @@ export class CheckInPage  {
         });
 
 
-        console.log('CONTENIDO REAL DEL ENVÍO:');
-        formData.forEach((value, key) => console.log(`${key}:`, value));
-        console.log(formData)
-
         this.formService.saveForm(formData).subscribe({
           next: (res) => {
-            console.log('Formulario enviado con éxito', res);
             this.isSaving = false;
           },
           error: (err) => {
-            console.error('Error al enviar formulario:', err);
             this.isSaving = false;
             alert('Hubo un error al enviar los datos. Por favor, inténtalo de nuevo.');
           }

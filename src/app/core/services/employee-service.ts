@@ -65,7 +65,6 @@ export class EmployeeService {
     this.api.get<Employee>(`${this.endpoint}me`).subscribe({
       next: (data) => {
         this._currentEmployee.set(data);
-        console.log('Perfil cargado:', data);
       },
       error: (err) => console.error('Error al cargar perfil "me":', err)
     });
@@ -75,7 +74,6 @@ export class EmployeeService {
     this.api.get<any>(`companies`).subscribe({
       next: (data) => {
         this._currentCompany.set(data);
-        console.log('Empresa cargada:', data);
       },
       error: (err) => console.error('Error al cargar empresa:', err)
     });

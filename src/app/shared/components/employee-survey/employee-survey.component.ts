@@ -36,7 +36,6 @@ export class EmployeeSurveyComponent {
   }
 
   submit() {
-    console.log('Datos finales del cuestionario:', this.formData);
     
     this.isSurveySubmitted = true;
 

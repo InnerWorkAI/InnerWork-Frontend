@@ -25,9 +25,6 @@ export class BurnoutFormService {
         this.fetchStatus(employee.id!);
         this.loadMyForms(employee.id!);
       }
-      
-
-
     });
   }
 
@@ -40,7 +37,6 @@ export class BurnoutFormService {
         form.text_score = scores[1] ?? 0;
         form.form_score = scores[2] ?? 0;
       }
-      console.log(form+" formulario del empleado")
       return form;
     });
   }
@@ -80,7 +76,7 @@ export class BurnoutFormService {
     return this.api.post<any>(this.endpoint, data).pipe(
       tap(() => {
         this._hasCompletedToday.set(true); 
-        console.log('Signal actualizada a true tras el envío');
+        this.loadMyForms(this.employeeService.currentEmployee()?.id!);
       })
     );
   }

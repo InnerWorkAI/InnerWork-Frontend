@@ -30,11 +30,6 @@ export class AuthenticatedLayoutComponent  implements OnInit {
   
 
   constructor() { 
-      effect(() => {
-      const emp = this.employeeService.currentEmployee();
-      console.log('Datos:', emp);
-      console.log('URL de la imagen:', this.imageUrl());
-    });
     addIcons({
       personOutline,
       logOutOutline,

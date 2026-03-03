@@ -80,7 +80,6 @@ export class AddEditEmployeeModalComponent implements OnInit {
   }
 
   private fillFormWithEmployee(emp: Employee) {
-    console.log('Datos del empleado al cargar:', emp);
     this.firstName.set(emp.first_name);
     this.lastName.set(emp.last_name);
     this.email.set(emp.email);

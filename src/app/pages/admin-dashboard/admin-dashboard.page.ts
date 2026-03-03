@@ -112,15 +112,12 @@ export class AdminDashboardPage implements OnInit {
 
 
   async editEmployee() {
-    console.log("Click")
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
       mode: 'ios',
       backdropDismiss: false,
     });
-    console.log("Crea el modal")
     await modal.present();
-    console.log("Presenta el modal")
   }
 
   getScoreColor(score: number | null | undefined): string {

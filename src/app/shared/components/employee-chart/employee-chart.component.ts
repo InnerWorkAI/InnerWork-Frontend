@@ -33,11 +33,7 @@ export class EmployeeChartComponent{
   public series = input<ApexAxisChartSeries>([]); 
   public categories = input<string[]>([]);
 
-  constructor() {
-  effect(() => {
-    console.log('Contenido de series:', this.series());
-  });
-}
+  constructor() {}
 
   public chart: ApexChart = {
     type: 'line', 
