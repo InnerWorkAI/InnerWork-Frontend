@@ -63,7 +63,9 @@ export class BurnoutFormService {
 
   getLastFormByEmployee(employeeId: number): Observable<BurnoutForm> {
     return this.api.get<BurnoutForm>(`${this.endpoint}/employee/${employeeId}/last`).pipe(
-      tap(form => this.mapScores([form]))
+      tap(form => {if (form) {
+        this.mapScores([form]);
+      }})
     );
   }
 

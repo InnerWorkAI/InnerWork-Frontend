@@ -2,11 +2,10 @@ import { Component, effect, HostListener, inject, OnInit } from '@angular/core';
 import { 
   IonContent, IonHeader, IonToolbar, IonButtons, IonMenuButton, 
   IonButton, IonIcon, IonAvatar, IonPopover, IonList, IonItem, 
-  IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet 
+  IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet, ModalController
 } from "@ionic/angular/standalone";
 import { RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service';
-import { ModalController } from "@ionic/angular";
 import { MenuController } from '@ionic/angular';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { addIcons } from 'ionicons';
@@ -23,7 +22,6 @@ import { ChangePictureModalComponent } from '../change-picture-modal/change-pict
     IonContent, IonHeader, IonToolbar, IonButtons, IonMenuButton, 
     IonButton, IonIcon, IonAvatar, IonPopover, IonList, IonItem, 
     IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet],
-    providers: [ModalController]
 })
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
