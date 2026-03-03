@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, ModalController } from '@ionic/angular';
 import { EmployeeChartComponent } from 'src/app/shared/components/employee-chart/employee-chart.component';
 import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
 import { Department } from 'src/app/shared/models/employee';
@@ -8,15 +7,15 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { RouterModule } from '@angular/router';
 import { DashboardCardComponent } from 'src/app/shared/components/dashboard-card/dashboard-card.component';
-import { ApexAxisChartSeries } from 'ng-apexcharts';
 import { UserStatsService } from 'src/app/core/services/user-stats-service';
+import { IonContent, ModalController, IonButton } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, EmployeeChartComponent, RouterModule, DashboardCardComponent]
+  imports: [IonButton, IonContent, CommonModule, EmployeeChartComponent, RouterModule, DashboardCardComponent]
 })
 export class AdminDashboardPage implements OnInit {
 
@@ -113,12 +112,15 @@ export class AdminDashboardPage implements OnInit {
 
 
   async editEmployee() {
+    console.log("Click")
     const modal = await this.modalCtrl.create({
       component: AddEditEmployeeModalComponent,
       mode: 'ios',
       backdropDismiss: false,
     });
+    console.log("Crea el modal")
     await modal.present();
+    console.log("Presenta el modal")
   }
 
   getScoreColor(score: number | null | undefined): string {
