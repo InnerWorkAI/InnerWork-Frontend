@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, OnInit, output } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { Component, input, output } from '@angular/core';
 import { addIcons } from 'ionicons';
 import { arrowForwardOutline } from 'ionicons/icons';
+import { IonCard, IonButton, IonCardContent, IonAvatar, IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-employee-alert-card',
   standalone: true, 
-  imports: [CommonModule, IonicModule],
+  imports: [IonIcon, IonAvatar, IonCardContent, IonButton, IonCard, CommonModule],
   templateUrl: './employee-alert-card.component.html',
   styleUrls: ['./employee-alert-card.component.scss'],
 })

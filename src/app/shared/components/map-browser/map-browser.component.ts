@@ -1,16 +1,16 @@
 import { AfterViewInit, Component, output, signal } from '@angular/core';
 import L from 'leaflet';
-import { IonicModule } from "@ionic/angular";
 import { locateOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { LocationIQProvider } from 'leaflet-geosearch';
 import { environment } from 'src/environments/environment';
+import { IonButton, IonInput, IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-map-browser',
   templateUrl: './map-browser.component.html',
   styleUrls: ['./map-browser.component.scss'],
-  imports: [IonicModule],
+  imports: [IonIcon, IonInput, IonButton, ],
 })
 export class MapBrowserComponent implements AfterViewInit {
 

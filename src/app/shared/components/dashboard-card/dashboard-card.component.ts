@@ -1,13 +1,13 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { IonText } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-dashboard-card',
   templateUrl: './dashboard-card.component.html',
   styleUrls: ['./dashboard-card.component.scss'],
   standalone: true,
-  imports: [ CommonModule, IonicModule ],
+  imports: [IonText,  CommonModule ],
 })
 export class DashboardCardComponent{
 

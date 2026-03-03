@@ -2,7 +2,6 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { IonIcon, IonSpinner } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { send, sparkles } from 'ionicons/icons';
-import { IonicModule } from "@ionic/angular";
 import { CommonModule } from '@angular/common';
 import { Message } from '../../models/Message';
 import { FormsModule } from '@angular/forms';

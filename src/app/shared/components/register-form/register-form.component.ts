@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, computed, inject, OnInit, output, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LoginCredentials, RegisterCompanyCredentials } from '../../models/User';
-import { IonicModule } from '@ionic/angular';
+import { RegisterCompanyCredentials } from '../../models/User';
 import { MapBrowserComponent } from "../map-browser/map-browser.component";
 import { Router } from '@angular/router';
+import { IonInput, IonButton } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss'],
-  imports: [CommonModule, FormsModule, IonicModule, MapBrowserComponent]
+  imports: [IonButton, IonInput, CommonModule, FormsModule, MapBrowserComponent]
 })
 export class RegisterFormComponent {
 

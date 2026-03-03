@@ -1,18 +1,19 @@
 import { Component, Input, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController, ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { Employee } from '../../models/employee';
 import { AuthService } from '../../../core/services/auth-service';
 import { MapBrowserComponent } from '../map-browser/map-browser.component';
 import { EmployeeService } from '../../../core/services/employee-service';
+import { IonButton, IonContent } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-add-edit-employee-modal',
   templateUrl: './add-edit-employee-modal.component.html',
   styleUrls: ['./add-edit-employee-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, MapBrowserComponent]
+  imports: [IonContent, IonButton, CommonModule, FormsModule, MapBrowserComponent]
 })
 export class AddEditEmployeeModalComponent implements OnInit {
   @Input() employee?: Employee;
