@@ -215,7 +215,7 @@ export class EmployeeDirectoryPage implements OnInit {
 
   getProfileImageUrl(profilePath: string | undefined): string {
     if (!profilePath) return 'assets/images/default-avatar.jpg';
-    
+    console.log(`${environment.API_URL}/${profilePath}`)
     return `${environment.API_URL}/${profilePath}`;
   }
 }
