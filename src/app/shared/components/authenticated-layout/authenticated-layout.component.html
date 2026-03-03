@@ -3,7 +3,7 @@
     @if (authService.userRole() !== 'admin') {
     <ion-avatar class="profile-avatar-mobile">
       <img #profilePicMenu
-        [src]="employeeService.currentEmployee()?.profile_image_url || 'assets/images/default-avatar.jpg'"
+        [src]="imageUrl() || 'assets/images/default-avatar.jpg'"
         class="object-cover" (error)="profilePicMenu.src = 'assets/images/default-avatar.jpg'">
     </ion-avatar>
     } @else {
@@ -119,7 +119,7 @@
 
             @if (authService.userRole() !== 'admin') {
             <ion-avatar class="profile-avatar-mini border-2 border-white/30"> <img #profilePic
-                [src]="API_KEY+'/'+employeeService.currentEmployee()?.profile_image_url || 'assets/images/default-avatar.jpg'"
+                [src]="imageUrl() || 'assets/images/default-avatar.jpg'"
                 (error)="profilePic.src = 'assets/images/default-avatar.jpg'"
                 class="object-cover">
             </ion-avatar>

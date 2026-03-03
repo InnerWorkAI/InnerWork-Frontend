@@ -1,4 +1,4 @@
-import { Component, effect, HostListener, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, HostListener, inject, OnInit } from '@angular/core';
 import { 
   IonContent, IonHeader, IonToolbar, IonButtons, IonMenuButton, 
   IonButton, IonIcon, IonAvatar, IonPopover, IonList, IonItem, 
@@ -27,7 +27,7 @@ import { environment } from 'src/environments/environment';
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
   private modalCtrl = inject(ModalController);
-  public API_KEY = environment.API_URL
+  
 
   constructor() { 
       effect(() => {
@@ -35,7 +35,6 @@ export class AuthenticatedLayoutComponent  implements OnInit {
       console.log('Datos:', emp);
       console.log('URL de la imagen:', emp?.profile_image_url);
     });
-    console.log(this.API_KEY+this.employeeService.currentEmployee()?.profile_image_url+" IMAGEN DEL USUARIO")
     addIcons({
       personOutline,
       logOutOutline,
@@ -53,11 +52,15 @@ export class AuthenticatedLayoutComponent  implements OnInit {
     this.isDesktop = window.innerWidth > 768;
   }
 
-  
-  
   public authService = inject(AuthService);
   public employeeService = inject(EmployeeService);
   private menu = inject(MenuController);
+  public imageUrl = computed(() => {
+    const profilePath = this.employeeService.currentEmployee()?.profile_image_url;
+    return profilePath 
+      ? `${environment.API_URL}/${profilePath}` 
+      : 'assets/images/default-avatar.jpg';
+  });
 
   ngOnInit() {}
 
