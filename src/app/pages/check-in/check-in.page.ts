@@ -1,23 +1,21 @@
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { WebcamPersonDetectorComponent } from "src/app/shared/components/webcam-person-detector/webcam-person-detector.component";
 import { EmployeeSurveyComponent } from "src/app/shared/components/employee-survey/employee-survey.component";
 import { addIcons } from 'ionicons';
 import { checkmarkCircle } from 'ionicons/icons';
 import { JournalData } from 'src/app/shared/models/Journal';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { filter, firstValueFrom, map, timeout } from 'rxjs';
-import { BurnoutRequest } from 'src/app/shared/models/burnout-form';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-check-in',
   templateUrl: './check-in.page.html',
   styleUrls: ['./check-in.page.scss'],
   standalone: true,
-  imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, WebcamPersonDetectorComponent, EmployeeSurveyComponent]
+  imports: [IonButton, IonIcon, IonContent, CommonModule, FormsModule, WebcamPersonDetectorComponent, EmployeeSurveyComponent, RouterLink]
 })
 export class CheckInPage  {
 
