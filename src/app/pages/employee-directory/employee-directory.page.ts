@@ -6,13 +6,11 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
-import { IonIcon } from '@ionic/angular/standalone';
+import { IonIcon, ModalController, ToastController, AlertController} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { trashOutline, createOutline, checkmarkOutline, checkmark, closeCircle, calendarOutline } from 'ionicons/icons';
-import { AlertController, ToastController } from '@ionic/angular';
 import { Employee } from 'src/app/shared/models/employee';
 import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
-import { ModalController } from '@ionic/angular';
 
 const DepartmentNames: Record<number, string> = {
   0: 'R&D',
@@ -25,8 +23,7 @@ const DepartmentNames: Record<number, string> = {
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent, IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent, IonSelect, IonSelectOption],
-  providers: [ModalController]
+  imports: [IonContent, IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent]
 })
 
 export class EmployeeDirectoryPage implements OnInit {
@@ -195,7 +192,9 @@ export class EmployeeDirectoryPage implements OnInit {
 
   // Función para abrir el modal de edición
   async openEditModal(emp: Employee) {
+    console.log("Click")
     const modal = await this.modalCtrl.create({
+    
       component: AddEditEmployeeModalComponent,
       componentProps: {
         employee: emp
@@ -203,8 +202,9 @@ export class EmployeeDirectoryPage implements OnInit {
       mode: 'ios',
       cssClass: 'custom-modal-class'
     });
-
+    console.log("Crea el modal")
     await modal.present();
+    console.log("Presenta el modal")
 
     const { data, role } = await modal.onWillDismiss();
 
