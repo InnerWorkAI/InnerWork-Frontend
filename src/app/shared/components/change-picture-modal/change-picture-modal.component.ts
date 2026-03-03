@@ -6,6 +6,7 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 
 @Component({
   selector: 'app-change-picture-modal',
+  standalone: true,
   templateUrl: './change-picture-modal.component.html',
   styleUrls: ['./change-picture-modal.component.scss'],
   imports: [IonicModule],
