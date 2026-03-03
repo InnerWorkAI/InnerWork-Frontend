@@ -1,8 +1,12 @@
 import { Component, effect, HostListener, inject, OnInit } from '@angular/core';
-import { IonContent, IonRouterOutlet, IonToolbar, IonHeader, IonButtons, IonButton } from "@ionic/angular/standalone";
+import { 
+  IonContent, IonHeader, IonToolbar, IonButtons, IonMenuButton, 
+  IonButton, IonIcon, IonAvatar, IonPopover, IonList, IonItem, 
+  IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet 
+} from "@ionic/angular/standalone";
 import { RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth-service';
-import { IonicModule, ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import { MenuController } from '@ionic/angular';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { addIcons } from 'ionicons';
@@ -14,7 +18,11 @@ import { ChangePictureModalComponent } from '../change-picture-modal/change-pict
   templateUrl: './authenticated-layout.component.html',
   standalone: true,
   styleUrls: ['./authenticated-layout.component.scss'],
-  imports: [RouterLink, IonicModule, RouterModule]
+  imports: [RouterLink, 
+    RouterModule,
+    IonContent, IonHeader, IonToolbar, IonButtons, IonMenuButton, 
+    IonButton, IonIcon, IonAvatar, IonPopover, IonList, IonItem, 
+    IonLabel, IonMenu, IonMenuToggle, IonRouterOutlet]
 })
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
