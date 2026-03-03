@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { camera, cloudUploadOutline, imageOutline } from 'ionicons/icons';
 import { EmployeeService } from 'src/app/core/services/employee-service';
