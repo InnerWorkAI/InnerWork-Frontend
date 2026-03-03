@@ -11,6 +11,7 @@ import { EmployeeService } from 'src/app/core/services/employee-service';
 import { addIcons } from 'ionicons';
 import { appsOutline, business, chevronDownOutline, gridOutline, logOutOutline, peopleOutline, personOutline, timeOutline } from 'ionicons/icons';
 import { ChangePictureModalComponent } from '../change-picture-modal/change-picture-modal.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-authenticated-layout',
@@ -26,6 +27,7 @@ import { ChangePictureModalComponent } from '../change-picture-modal/change-pict
 export class AuthenticatedLayoutComponent  implements OnInit {
   public isDesktop: boolean = window.innerWidth > 768;
   private modalCtrl = inject(ModalController);
+  public API_KEY = environment.API_URL
 
   constructor() { 
       effect(() => {
@@ -33,7 +35,7 @@ export class AuthenticatedLayoutComponent  implements OnInit {
       console.log('Datos:', emp);
       console.log('URL de la imagen:', emp?.profile_image_url);
     });
-
+    console.log(this.API_KEY+this.employeeService.currentEmployee()?.profile_image_url+" IMAGEN DEL USUARIO")
     addIcons({
       personOutline,
       logOutOutline,
