@@ -50,9 +50,7 @@ export class AuthenticatedLayoutComponent  implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.isDesktop = event.target.innerWidth > 768;
-
-
+    this.isDesktop = window.innerWidth > 768;
   }
 
   
