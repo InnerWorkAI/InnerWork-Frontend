@@ -1,9 +1,13 @@
-<div class="search-wrapper">
+<div class="w-full mb-4 h-[56px] bg-white border-2 border-[#d1d5db] rounded-[20px] 
+            transition-all duration-200 flex items-center overflow-hidden
+            focus-within:border-[#9333ea] focus-within:ring-4 focus-within:ring-[#9333ea]/10 
+            focus-within:-translate-y-[1px]">
+  
   <ion-searchbar 
     [placeholder]="placeholder()" 
     (ionInput)="handleInput($event)"
     mode="md" 
     debounce="300"
-    class="custom-searchbar">
+    class="custom-searchbar-clean">
   </ion-searchbar>
 </div>
