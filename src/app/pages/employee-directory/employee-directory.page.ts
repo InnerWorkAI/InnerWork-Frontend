@@ -1,16 +1,16 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { EmployeeService } from 'src/app/core/services/employee-service';
 import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
-import { IonIcon, ModalController, ToastController, AlertController} from '@ionic/angular/standalone';
+import { IonIcon, ModalController, ToastController, AlertController, IonContent} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { trashOutline, createOutline, checkmarkOutline, checkmark, closeCircle, calendarOutline } from 'ionicons/icons';
 import { Employee } from 'src/app/shared/models/employee';
 import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
+import { environment } from 'src/environments/environment';
 
 const DepartmentNames: Record<number, string> = {
   0: 'R&D',
@@ -211,5 +211,11 @@ export class EmployeeDirectoryPage implements OnInit {
     if (role === 'confirm') {
       this.employeeService.loadEmployees();
     }
+  }
+
+  getProfileImageUrl(profilePath: string | undefined): string {
+    if (!profilePath) return 'assets/images/default-avatar.jpg';
+    
+    return `${environment.API_URL}/${profilePath}`;
   }
 }

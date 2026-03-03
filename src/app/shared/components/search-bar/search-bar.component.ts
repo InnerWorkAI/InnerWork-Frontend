@@ -1,14 +1,14 @@
 import { Component, OnInit, input, output } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonSearchbar } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-search-bar',
-  imports: [IonicModule],
+  imports: [IonSearchbar, ],
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
   standalone: true,
 })
-export class SearchBarComponent  implements OnInit {
+export class SearchBarComponent {
 
   placeholder = input<string>('Find Employee...'); 
   
@@ -18,6 +18,5 @@ export class SearchBarComponent  implements OnInit {
     const value = event.target.value || '';
     this.searchChange.emit(value);
   }
-  ngOnInit() {}
 
 }
