@@ -25,7 +25,8 @@ const DepartmentNames: Record<number, string> = {
   templateUrl: './employee-directory.page.html',
   styleUrls: ['./employee-directory.page.scss'],
   standalone: true,
-  imports: [IonContent, IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent, IonSelect, IonSelectOption]
+  imports: [IonContent, IonIcon, CommonModule, FormsModule, SearchBarComponent, BurnoutFilterComponent, IonSelect, IonSelectOption],
+  providers: [ModalController]
 })
 
 export class EmployeeDirectoryPage implements OnInit {

@@ -1,15 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
-import { IonicModule, ModalController } from "@ionic/angular";
+import { ModalController } from "@ionic/angular";
 import { addIcons } from 'ionicons';
 import { camera, cloudUploadOutline, imageOutline } from 'ionicons/icons';
 import { EmployeeService } from 'src/app/core/services/employee-service';
+import { IonContent, IonButtons, IonHeader, IonToolbar, IonTitle, IonSpinner, IonIcon, IonButton } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-change-picture-modal',
   standalone: true,
   templateUrl: './change-picture-modal.component.html',
   styleUrls: ['./change-picture-modal.component.scss'],
-  imports: [IonicModule],
+  imports: [IonButton, IonIcon, IonSpinner, IonTitle, IonToolbar, IonHeader, IonButtons, IonContent, ],
 })
 export class ChangePictureModalComponent {
 
