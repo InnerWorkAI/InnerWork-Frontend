@@ -20,6 +20,7 @@ export class WebcamPersonDetectorComponent {
   private mediaRecorder: MediaRecorder | null = null;
   private recordedChunks: Blob[] = [];
   private captureInterval: any;
+  private lastFaceBox: any = null;
   audioUrl: string | null = null;
 
   // Estados de la UI
@@ -40,10 +41,10 @@ export class WebcamPersonDetectorComponent {
   finalAudioBlob: Blob | null = null;
   onJournalFinished = output<JournalData>();
   capturedImagesBlobs: Blob[] = [];
-  
+
   refreshTime = 250;
 
-  
+
 
   constructor() {
     addIcons({
@@ -79,11 +80,11 @@ export class WebcamPersonDetectorComponent {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: {
-        echoCancellation: false,
-        noiseSuppression: false,
-        autoGainControl: true,
-        sampleRate: 44100
-      }
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: true,
+          sampleRate: 44100
+        }
       });
       this.videoElement.nativeElement.srcObject = stream;
       this.cameraInitialized = true;
@@ -96,12 +97,14 @@ export class WebcamPersonDetectorComponent {
   async predictFrame() {
     if (!this.detector || this.showReview) return;
 
-    // Validación de seguridad para evitar el error de ROI (0x0)
     const video = this.videoElement.nativeElement;
     if (video.readyState === 4 && video.videoWidth > 0) {
       try {
         const faces = await this.detector.estimateFaces(video);
         this.faceDetected = faces.length > 0;
+        if (this.faceDetected) {
+          this.lastFaceBox = faces[0].box;
+        }
       } catch (e) {
         console.warn("Detección omitida");
       }
@@ -112,7 +115,7 @@ export class WebcamPersonDetectorComponent {
   startRecording() {
     if (!this.faceDetected) return;
 
-    
+
     this.isRecording = true;
     this.showReview = false;
     this.capturedImages = [];
@@ -158,9 +161,7 @@ export class WebcamPersonDetectorComponent {
     const capture = () => {
       if (!this.isRecording) return;
       this.takeSnapshot();
-      // Programar siguiente captura entre 3 y 5 segundos
-      const nextIn = Math.random() * 2000 + 3000;
-      this.captureInterval = setTimeout(capture, nextIn);
+      this.captureInterval = setTimeout(capture, 3000);
     };
     capture();
   }
@@ -168,22 +169,30 @@ export class WebcamPersonDetectorComponent {
 
   private takeSnapshot() {
     const video = this.videoElement.nativeElement;
-    if (video.videoWidth === 0) return;
+    console.log("Entra1")
+    if (video.videoWidth === 0 || !this.lastFaceBox) return;
+    console.log("Entra2")
+    const { xMin, yMin, width, height } = this.lastFaceBox;
 
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
-    ctx?.drawImage(video, 0, 0);
+    if (ctx) {
+      ctx.drawImage(
+        video,
+        xMin, yMin, width, height,
+        0, 0, width, height
+      );
+      const base64 = canvas.toDataURL('image/jpeg', 0.8);
+      this.capturedImages.push(base64);
 
-    const base64 = canvas.toDataURL('image/jpeg', 0.7);
-    this.capturedImages.push(base64);
-
-    canvas.toBlob((blob) => {
-      if (blob) {
-        this.capturedImagesBlobs.push(blob);
-      }
-    }, 'image/jpeg', 0.7);
+      canvas.toBlob((blob) => {
+        if (blob) {
+          this.capturedImagesBlobs.push(blob);
+        }
+      }, 'image/jpeg', 0.8);
+    }
   }
 
   repeat() {
@@ -205,9 +214,9 @@ export class WebcamPersonDetectorComponent {
       });
 
       this.onJournalFinished.emit({
-          audio: this.finalAudioBlob,
-          images: this.capturedImagesBlobs
-        });
+        audio: this.finalAudioBlob,
+        images: this.capturedImagesBlobs
+      });
 
       this.isSubmitted = true;
       this.showReview = false;
