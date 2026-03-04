@@ -8,14 +8,14 @@ import { BurnoutFormService } from 'src/app/core/services/burnout-form-service';
 import { RouterModule } from '@angular/router';
 import { DashboardCardComponent } from 'src/app/shared/components/dashboard-card/dashboard-card.component';
 import { UserStatsService } from 'src/app/core/services/user-stats-service';
-import { IonContent, ModalController, IonButton } from "@ionic/angular/standalone";
+import { IonContent, ModalController, IonButton, IonSpinner } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.page.html',
   styleUrls: ['./admin-dashboard.page.scss'],
   standalone: true,
-  imports: [IonButton, IonContent, CommonModule, EmployeeChartComponent, RouterModule, DashboardCardComponent]
+  imports: [IonSpinner, IonButton, IonContent, CommonModule, EmployeeChartComponent, RouterModule, DashboardCardComponent]
 })
 export class AdminDashboardPage implements OnInit {
 
@@ -49,6 +49,16 @@ export class AdminDashboardPage implements OnInit {
     this.burnoutService.loadAll();
     this.employeeService.loadEmployees();
   }
+
+  ionViewDidEnter() {
+  this.burnoutService.loadAll();
+  setTimeout(() => {
+    const current = this.daysRange();
+    this.daysRange.set(current);
+  }, 300);
+  }
+
+  
 
   // Extrae el último formulario de cada empleado una sola vez
   public latestEmployeeForms = computed(() => {
