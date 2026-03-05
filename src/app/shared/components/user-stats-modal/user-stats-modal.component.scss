@@ -1,0 +1,12 @@
+ion-content {
+  --overflow: hidden; 
+  
+  &::part(scroll) {
+    padding-bottom: 0 !important;
+  }
+}
+
+app-employee-chart {
+  display: block;
+  margin-bottom: -10px;
+}

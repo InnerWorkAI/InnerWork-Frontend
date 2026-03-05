@@ -7,10 +7,11 @@ import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-
 import { BurnoutFilterComponent } from 'src/app/shared/components/burnout-filter/burnout-filter.component';
 import { IonIcon, ModalController, ToastController, AlertController, IonContent} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { trashOutline, createOutline, checkmarkOutline, checkmark, closeCircle, calendarOutline } from 'ionicons/icons';
+import { trashOutline, createOutline, checkmarkOutline, checkmark, closeCircle, calendarOutline, eyeOutline } from 'ionicons/icons';
 import { Employee } from 'src/app/shared/models/employee';
 import { AddEditEmployeeModalComponent } from 'src/app/shared/components/add-edit-employee-modal/add-edit-employee-modal.component';
 import { environment } from 'src/environments/environment';
+import { UserStatsModalComponent } from 'src/app/shared/components/user-stats-modal/user-stats-modal.component';
 
 const DepartmentNames: Record<number, string> = {
   0: 'R&D',
@@ -105,7 +106,7 @@ export class EmployeeDirectoryPage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController, // Añadido
   ) {
-    addIcons({ trashOutline, createOutline, checkmark, closeCircle, calendarOutline });
+    addIcons({ trashOutline, createOutline, checkmark, closeCircle, calendarOutline, eyeOutline });
   }
 
   ngOnInit() {
@@ -213,4 +214,17 @@ export class EmployeeDirectoryPage implements OnInit {
     if (!profilePath) return 'assets/images/default-avatar.jpg';
     return `${environment.API_URL}/${profilePath}`;
   }
+
+  async openStatsModal(emp: Employee) {
+  const modal = await this.modalCtrl.create({
+    component: UserStatsModalComponent,
+    componentProps: {
+      employee: emp
+    },
+    mode: 'ios',
+    cssClass: 'custom-stats-modal'
+  });
+  
+  await modal.present();
+}
 }

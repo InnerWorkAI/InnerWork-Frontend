@@ -1,17 +1,17 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ApexAxisChartSeries } from 'ng-apexcharts';
 import { BurnoutFormService } from './burnout-form-service';
-import { EmployeeService } from './employee-service';
-import { text } from 'ionicons/icons';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserStatsService {
-private burnoutService = inject(BurnoutFormService);
-  private employeeService = inject(EmployeeService);
-
+  private burnoutService = inject(BurnoutFormService);
+  
   public daysRange = signal<number>(28);
+
+  public employeeIdFilter = signal<number | null>(null);
 
   public chartCategories = computed<string[]>(() => {
     const range = this.daysRange();
@@ -93,6 +93,45 @@ private burnoutService = inject(BurnoutFormService);
     return [
       { name: 'My Satisfaction', data: satisfactionData },
       { name: 'My AI Stress', data: aiStressData }
+    ];
+  });
+
+public employeeChartSeries = computed<ApexAxisChartSeries>(() => {
+    const allForms = this.burnoutService.burnoutForms();
+    const targetId = this.employeeIdFilter();
+
+    if (!allForms.length || targetId === null) return [];
+
+    const range = this.daysRange();
+    const numBuckets = Math.ceil(range / 7);
+    const satisfactionData: number[] = [];
+    const aiStressData: number[] = [];
+
+    const empForms = allForms.filter(f => f.employee_id === targetId);
+
+    for (let i = numBuckets - 1; i >= 0; i--) {
+      const end = new Date(); end.setDate(end.getDate() - (i * 7));
+      const start = new Date(); start.setDate(start.getDate() - ((i + 1) * 7));
+
+      const formInWeek = empForms
+        .filter(f => {
+          const d = new Date(f.created_at);
+          return d >= start && d < end;
+        })
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+
+      if (formInWeek) {
+        satisfactionData.push(Math.round(100 - formInWeek.form_score!));
+        aiStressData.push(Math.round(((formInWeek.image_score ?? 0) + (formInWeek.text_score ?? 0)) / 2));
+      } else {
+        satisfactionData.push(0);
+        aiStressData.push(0);
+      }
+    }
+
+    return [
+      { name: 'Satisfaction', data: satisfactionData },
+      { name: 'AI Stress', data: aiStressData }
     ];
   });
 }
