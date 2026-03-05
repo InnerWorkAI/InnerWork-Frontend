@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthenticatedLayoutComponent } from './shared/components/authenticated-layout/authenticated-layout.component';
 import { userGuard } from './core/guards/user-guard';
 import { adminGuard } from './core/guards/admin-guard';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
 
@@ -12,21 +13,25 @@ export const routes: Routes = [
   },
   {
     path: 'home',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/home/home.page').then(m => m.HomePage),
   },
   {
     path: 'login',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/login/login.page').then(m => m.LoginPage),
   },
   {
     path: 'register',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/register/register.page').then(m => m.RegisterPage),
   },
     {
     path: 'reset-password',
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/reset-password/reset-password.page').then( m => m.ResetPasswordPage)
   },
 
