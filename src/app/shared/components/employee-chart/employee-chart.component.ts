@@ -37,10 +37,27 @@ export class EmployeeChartComponent{
 
   public chart: ApexChart = {
     type: 'line', 
-    height: 350, 
+    height: 350,
+    redrawOnParentResize: true,
     toolbar: { show: false }, 
-    animations: { enabled: true/* , easing: 'easeinout', speed: 800 */ } 
+    animations: { enabled: true/* , easing: 'easeinout', speed: 800 */ }
+    
   };
+
+  public responsive: any[] = [{
+    breakpoint: 576,
+    options: {
+      chart: {
+        height: 280
+      },
+      xaxis: {
+        labels: {
+          style: { fontSize: '9px' }
+        }
+      }
+    }
+  }];
+  
   public colors = computed(() => this.chartColors());
   public stroke: ApexStroke = { curve: 'smooth', width: 2.5 };
   

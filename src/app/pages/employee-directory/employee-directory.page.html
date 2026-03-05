@@ -18,55 +18,58 @@
       </div>
     </div>
 
-    <div class="!flex !flex-wrap !items-center !justify-between !gap-6 !mb-10">
-      
-      <div class="!flex !flex-wrap !items-center !gap-3 !min-w-[480px]">
+    <div class="!flex !flex-col lg:!flex-row !items-start lg:!items-center !justify-between !gap-6 !mb-10">
+
+      <div class="!flex !flex-col !gap-3 !w-full lg:!w-auto">
         <span class="!text-[10px] !font-bold !text-gray-400 !uppercase !tracking-widest">Departments</span>
 
-        @for (deptId of [0, 1, 2]; track deptId) {
+        <div class="!flex !flex-wrap !gap-2">
+          @for (deptId of [0, 1, 2]; track deptId) {
           @let isActive = selectedDepts().includes(deptId);
-          <button (click)="toggleDept(deptId)" 
-            [class]="isActive 
-              ? 'bg-purple-100 text-purple-700 border-purple-300 ring-2 ring-purple-500/20' 
-              : 'bg-white text-gray-500 border-gray-200 hover:border-purple-200'"
-            [style.border]="'1px solid ' + (isActive ? '#9333ea' : '#d1d5db')"
-            class="!flex !items-center !gap-2 !px-3 !py-1.5 !rounded-xl !text-xs !font-semibold !transition-all !duration-200">
+          <button (click)="toggleDept(deptId)" [class]="isActive 
+            ? 'bg-purple-100 text-purple-700 border-purple-300 ring-2 ring-purple-500/20' 
+            : 'bg-white text-gray-500 border-gray-200 hover:border-purple-200'"
+            class="!flex !items-center !gap-2 !px-3 !py-1.5 !rounded-xl !text-xs !font-semibold !transition-all !duration-200 !border">
 
             <div [class]="isActive ? 'bg-purple-600' : 'bg-white'"
-              [style.border]="'1px solid ' + (isActive ? '#9333ea' : '#d1d5db')"
               class="!w-4 !h-4 !rounded !border !flex !items-center !justify-center !transition-colors">
               @if (isActive) {
-                <ion-icon name="checkmark" class="!text-white !text-[11px]" style="--ionicon-stroke-width: 96px;"></ion-icon>
+              <ion-icon name="checkmark" class="!text-white !text-[11px]"></ion-icon>
               }
             </div>
-            {{ getDepartmentName(deptId) }}
+            <span class="whitespace-nowrap">{{ getDepartmentName(deptId) }}</span>
           </button>
-        }
+          }
 
-        @if (selectedDepts().length > 0) {
-          <button (click)="selectedDepts.set([])" class="!text-[10px] !text-purple-600 !font-bold hover:!underline !ml-1">
+          @if (selectedDepts().length > 0) {
+          <button (click)="selectedDepts.set([])"
+            class="!text-[10px] !text-purple-600 !font-bold hover:!underline !ml-1">
             Clear
           </button>
-        }
+          }
+        </div>
       </div>
 
-      <div class="!flex !items-center !gap-4 !bg-white !border !border-gray-200 !px-4 !py-1.5 !rounded-xl !shadow-sm">
+      <div
+        class="!flex !items-center !gap-4 !bg-white !border !border-gray-200 !px-4 !py-2 !rounded-xl !shadow-sm !w-full lg:!w-auto !justify-between lg:!justify-start">
         <div class="!flex !items-center !gap-2">
-          <label class="!text-[9px] !font-black !text-gray-400 !uppercase !tracking-tighter">From</label>
+          <label class="!text-[9px] !font-black !text-gray-400 !uppercase">From</label>
           <input type="date" [value]="startDate()" (change)="startDate.set($any($event.target).value)"
-            class="!text-xs !font-medium !text-gray-600 !outline-none !border-none !bg-transparent !cursor-pointer">
+            class="!text-xs !font-medium !text-gray-600 !outline-none !bg-transparent !cursor-pointer">
         </div>
-        <span class="!text-gray-200 !font-light">|</span>
+
+        <span class="!text-gray-200">|</span>
+
         <div class="!flex !items-center !gap-2">
-          <label class="!text-[9px] !font-black !text-gray-400 !uppercase !tracking-tighter">To</label>
+          <label class="!text-[9px] !font-black !text-gray-400 !uppercase">To</label>
           <input type="date" [value]="endDate()" (change)="endDate.set($any($event.target).value)"
-            class="!text-xs !font-medium !text-gray-600 !outline-none !border-none !bg-transparent !cursor-pointer">
+            class="!text-xs !font-medium !text-gray-600 !outline-none !bg-transparent !cursor-pointer">
         </div>
+
         @if (startDate() || endDate()) {
-          <button (click)="startDate.set(null); endDate.set(null)" 
-                  class="!flex !items-center !text-gray-300 hover:!text-red-500 !transition-colors !ml-1">
-            <ion-icon name="close-circle" class="!text-lg"></ion-icon>
-          </button>
+        <button (click)="startDate.set(null); endDate.set(null)" class="!text-gray-300 hover:!text-red-500">
+          <ion-icon name="close-circle" class="!text-lg"></ion-icon>
+        </button>
         }
       </div>
     </div>
@@ -76,99 +79,108 @@
         <table class="!min-w-full !divide-y !divide-gray-200">
           <thead class="!bg-gray-50">
             <tr>
-              <th class="!px-6 !py-4 !text-left !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Employee</th>
-              <th class="!px-6 !py-4 !text-center !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Department</th>
-              <th class="!px-6 !py-4 !text-center !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Last Evaluation</th>
-              <th class="!px-6 !py-4 !text-center !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Burnout Risk</th>
-              <th class="!px-6 !py-4 !text-right !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Actions</th>
+              <th class="!px-6 !py-4 !text-left !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Employee
+              </th>
+              <th class="!px-6 !py-4 !text-center !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">
+                Department</th>
+              <th class="!px-6 !py-4 !text-center !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Last
+                Evaluation</th>
+              <th class="!px-6 !py-4 !text-center !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Burnout
+                Risk</th>
+              <th class="!px-6 !py-4 !text-right !text-xs !font-bold !text-gray-500 !uppercase !tracking-wider">Actions
+              </th>
             </tr>
           </thead>
 
           <tbody class="!bg-white !divide-y !divide-gray-200">
             @for (emp of filteredEmployees(); track emp.id) {
-              @let empData = burnoutMap()[emp.id!];
-              @let score = empData?.score ?? -1;
+            @let empData = burnoutMap()[emp.id!];
+            @let score = empData?.score ?? -1;
 
-              <tr class="!hover:bg-gray-50/50 !transition-colors">
-                <td class="!px-6 !py-4 !whitespace-nowrap">
-                  <div class="!flex !items-center !gap-3">
-                    <div class="!w-10 !h-10 !rounded-full !bg-purple-100 !flex !items-center !justify-center !text-[#9334EA] !font-bold !overflow-hidden">
-                      @if (emp.profile_image_url) {
-                        <img [src]="getProfileImageUrl(emp.profile_image_url)" [alt]="emp.first_name" class="!w-full !h-full !object-cover">
-                      } @else {
-                        {{ emp.first_name.charAt(0) }}
-                      }
-                    </div>
-                    <div class="!flex !flex-col">
-                      <span class="!text-sm !font-semibold !text-gray-900 leading-tight">{{ emp.first_name }} {{ emp.last_name }}</span>
-                      <span class="!text-xs !text-gray-400">{{ emp.email }}</span>
-                    </div>
+            <tr class="!hover:bg-gray-50/50 !transition-colors">
+              <td class="!px-6 !py-4 !whitespace-nowrap">
+                <div class="!flex !items-center !gap-3">
+                  <div
+                    class="!w-10 !h-10 !rounded-full !bg-purple-100 !flex !items-center !justify-center !text-[#9334EA] !font-bold !overflow-hidden">
+                    @if (emp.profile_image_url) {
+                    <img [src]="getProfileImageUrl(emp.profile_image_url)" [alt]="emp.first_name"
+                      class="!w-full !h-full !object-cover">
+                    } @else {
+                    {{ emp.first_name.charAt(0) }}
+                    }
                   </div>
-                </td>
+                  <div class="!flex !flex-col">
+                    <span class="!text-sm !font-semibold !text-gray-900 leading-tight">{{ emp.first_name }} {{
+                      emp.last_name }}</span>
+                    <span class="!text-xs !text-gray-400">{{ emp.email }}</span>
+                  </div>
+                </div>
+              </td>
 
-                <td class="!px-6 !py-4 !whitespace-nowrap !text-center">
-                  <span class="!text-sm !font-medium !text-gray-600">
-                    {{ getDepartmentName(emp.department) }}
+              <td class="!px-6 !py-4 !whitespace-nowrap !text-center">
+                <span class="!text-sm !font-medium !text-gray-600">
+                  {{ getDepartmentName(emp.department) }}
+                </span>
+              </td>
+
+              <td class="!px-6 !py-4 !whitespace-nowrap !text-center !text-sm !text-gray-500">
+                @if (empData?.date) {
+                <span class="!font-medium !text-gray-700">
+                  {{ empData.date | date: 'yyyy-MM-dd' }}
+                </span>
+                } @else {
+                <span class="!text-gray-300 !italic !text-xs">No evaluations</span>
+                }
+              </td>
+
+              <td class="!px-6 !py-4 !whitespace-nowrap !text-center">
+                @if (score === -1) {
+                <div
+                  class="!inline-flex !px-3 !py-1 !rounded-full !text-[10px] !font-bold !bg-gray-100 !text-gray-400 !uppercase">
+                  Pending
+                </div>
+                } @else {
+                <div class="!inline-flex !px-3 !py-1 !rounded-full !text-xs !font-bold"
+                  [style.background-color]="getScoreBg(score)" [style.color]="getScoreColor(score)">
+                  <span>
+                    @if (score >= 70) { High Risk }
+                    @else if (score > 50) { Monitor }
+                    @else { Healthy }
+                    ({{ score }}%)
                   </span>
-                </td>
+                </div>
+                }
+              </td>
 
-                <td class="!px-6 !py-4 !whitespace-nowrap !text-center !text-sm !text-gray-500">
-                  @if (empData?.date) {
-                    <span class="!font-medium !text-gray-700">
-                      {{ empData.date | date: 'yyyy-MM-dd' }}
-                    </span>
-                  } @else {
-                    <span class="!text-gray-300 !italic !text-xs">No evaluations</span>
-                  }
-                </td>
-
-                <td class="!px-6 !py-4 !whitespace-nowrap !text-center">
-                  @if (score === -1) {
-                    <div class="!inline-flex !px-3 !py-1 !rounded-full !text-[10px] !font-bold !bg-gray-100 !text-gray-400 !uppercase">
-                      Pending
-                    </div>
-                  } @else {
-                    <div class="!inline-flex !px-3 !py-1 !rounded-full !text-xs !font-bold"
-                      [style.background-color]="getScoreBg(score)" [style.color]="getScoreColor(score)">
-                      <span>
-                        @if (score >= 70) { High Risk }
-                        @else if (score > 50) { Monitor }
-                        @else { Healthy }
-                        ({{ score }}%)
-                      </span>
-                    </div>
-                  }
-                </td>
-
-                <td class="!px-6 !py-4 !whitespace-nowrap !text-right">
-                  <div class="!flex !items-center !justify-end !gap-2">
-                    <button (click)="$event.stopPropagation(); openStatsModal(emp)"
-                      class="!p-2 !rounded-lg !text-gray-400 hover:!text-blue-500 hover:!bg-blue-50 !transition-all"
-                      title="View statistics">
-                      <ion-icon name="eye-outline" class="!text-xl"></ion-icon>
-                    </button>
-                    <button (click)="openEditModal(emp)"
-                      class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#9334EA] hover:!bg-purple-50 !transition-all"
-                      title="Edit employee">
-                      <ion-icon name="create-outline" class="!text-xl"></ion-icon>
-                    </button>
-                    <button (click)="confirmDelete(emp)"
-                      class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#aa0b0b] hover:!bg-red-50 !transition-all"
-                      title="Delete employee">
-                      <ion-icon name="trash-outline" class="!text-xl"></ion-icon>
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <td class="!px-6 !py-4 !whitespace-nowrap !text-right">
+                <div class="!flex !items-center !justify-end !gap-2">
+                  <button (click)="$event.stopPropagation(); openStatsModal(emp)"
+                    class="!p-2 !rounded-lg !text-gray-400 hover:!text-blue-500 hover:!bg-blue-50 !transition-all"
+                    title="View statistics">
+                    <ion-icon name="eye-outline" class="!text-xl"></ion-icon>
+                  </button>
+                  <button (click)="openEditModal(emp)"
+                    class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#9334EA] hover:!bg-purple-50 !transition-all"
+                    title="Edit employee">
+                    <ion-icon name="create-outline" class="!text-xl"></ion-icon>
+                  </button>
+                  <button (click)="confirmDelete(emp)"
+                    class="!p-2 !rounded-lg !text-gray-400 hover:!text-[#aa0b0b] hover:!bg-red-50 !transition-all"
+                    title="Delete employee">
+                    <ion-icon name="trash-outline" class="!text-xl"></ion-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
             } @empty {
-              <tr>
-                <td colspan="5" class="!px-6 !py-20 !text-center">
-                  <div class="!flex !flex-col !items-center !gap-2 !text-gray-400">
-                    <ion-icon name="people-outline" class="!text-4xl !opacity-20"></ion-icon>
-                    <span class="!text-sm">No employees match your criteria</span>
-                  </div>
-                </td>
-              </tr>
+            <tr>
+              <td colspan="5" class="!px-6 !py-20 !text-center">
+                <div class="!flex !flex-col !items-center !gap-2 !text-gray-400">
+                  <ion-icon name="people-outline" class="!text-4xl !opacity-20"></ion-icon>
+                  <span class="!text-sm">No employees match your criteria</span>
+                </div>
+              </td>
+            </tr>
             }
           </tbody>
         </table>
