@@ -81,10 +81,10 @@
 
           <div>
             <h4 class="text-sm font-bold text-slate-800">
-              {{ !hasDoneCheckin ? 'Daily Check-in Pending' : 'Check-in Completed' }}
+              {{ !hasDoneCheckin() ? 'Daily Check-in Pending' : 'Check-in Completed' }}
             </h4>
             <p class="text-[11px] text-slate-500">
-              {{ !hasDoneCheckin ? 'Tell us how you feel today.' : 'Your data is up to date.' }}
+              {{ !hasDoneCheckin() ? 'Tell us how you feel today.' : 'Your data is up to date.' }}
             </p>
           </div>
         </div>
