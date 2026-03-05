@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RegisterCompanyCredentials } from '../../models/User';
 import { MapBrowserComponent } from "../map-browser/map-browser.component";
 import { Router } from '@angular/router';
-import { IonInput, IonButton } from "@ionic/angular/standalone";
+import { IonInput, IonButton, IonInputPasswordToggle } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss'],
-  imports: [IonButton, IonInput, CommonModule, FormsModule, MapBrowserComponent]
+  imports: [IonButton, IonInput, CommonModule, FormsModule, MapBrowserComponent, IonInputPasswordToggle]
 })
 export class RegisterFormComponent {
 

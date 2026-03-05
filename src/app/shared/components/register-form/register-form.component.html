@@ -34,6 +34,7 @@
         <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
           <ion-input type="password" placeholder="**********" class="text-gray-900 w-full text-lg" [value]="password()"
             (ionInput)="password.set($any($event).target.value)" (ionBlur)="passwordTouched.set(true)">
+            <ion-input-password-toggle slot="end" class="mr-2 text-gray-400"></ion-input-password-toggle>
           </ion-input>
         </div>
         @if (passwordTouched() && !passwordValid()) {
@@ -46,6 +47,7 @@
         <div class="flex items-center w-full h-14 px-4 bg-white border border-gray-300 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-purple-200 focus-within:border-purple-500 transition-all">
           <ion-input type="password" placeholder="**********" class="text-gray-900 w-full text-lg" 
             (ionInput)="confirmPassword.set($any($event).target.value)" (ionBlur)="confirmPasswordTouched.set(true)">
+            <ion-input-password-toggle slot="end" class="mr-2 text-gray-400"></ion-input-password-toggle>
           </ion-input>
         </div>
         @if (confirmPasswordTouched() && !passwordsMatch()) {

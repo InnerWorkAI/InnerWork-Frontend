@@ -20,6 +20,7 @@
 
     <ion-input type="password" placeholder="**********" class="custom-input"
       [value]="password()" (ionInput)="password.set($any($event).target.value)">
+      <ion-input-password-toggle slot="end" class="mr-2 text-gray-400"></ion-input-password-toggle>
     </ion-input>
   </div>
 
